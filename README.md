@@ -1,6 +1,6 @@
 # AuctionShopOnline
 ## C0322G1 - member:
-- Phan Nguyễn Khánh Hằng
+- Đinh Phan Thị Khánh Hằng
 - Mai Công Phước
 - Trần Ngọc Trung
 - Trần Hồng Phong
