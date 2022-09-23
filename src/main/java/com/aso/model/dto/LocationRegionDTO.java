@@ -29,6 +29,7 @@ public class LocationRegionDTO {
 
     private String address;
 
+
     public LocationRegion toLocationRegion() {
         return new LocationRegion()
                 .setId(id)

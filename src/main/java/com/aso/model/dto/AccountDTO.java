@@ -2,6 +2,7 @@ package com.aso.model.dto;
 
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
+import com.aso.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
