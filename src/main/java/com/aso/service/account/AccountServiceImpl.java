@@ -68,6 +68,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public Optional<Account> findByIdAndDeletedFalse(Long id) {
+        return accountRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
     public Boolean existsByUsername(String username) {
         return accountRepository.existsByUsername ( username );
     }
@@ -98,8 +103,19 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public Account create(AccountDTO newAccount) {
+        return null;
+    }
+
+
+    @Override
     public void blockUser(Long userId) {
         accountRepository.blockUser ( userId );
+
+    }
+
+    public void unblockUser(Long userId){
+        accountRepository.unblockUser(userId);
     }
 
     @Override

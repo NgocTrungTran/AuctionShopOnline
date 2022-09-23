@@ -18,6 +18,9 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
 
     List<AccountDTO> findAllUsersDTODeletedFalseAndActiveFalse();
 
+
+    Optional<Account> findByIdAndDeletedFalse(Long id);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
@@ -31,7 +34,12 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
 
     Optional<Account> getByUsername(String username);
 
+    Account create(AccountDTO newAccount);
+
+
     void blockUser(Long userId);
+
+    void unblockUser(Long userId);
 
     Account findByBlockedIsFalseAndId(Long id);
 
