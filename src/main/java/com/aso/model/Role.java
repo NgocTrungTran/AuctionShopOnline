@@ -1,6 +1,7 @@
 package com.aso.model;
 
 
+import com.aso.model.dto.RoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,8 @@ public class Role {
     @OneToMany(targetEntity = Account.class, mappedBy = "role", fetch = FetchType.EAGER)
     private Set<Account> users;
 
+    public RoleDTO toRoleDTO (){
+        return new RoleDTO()
+                .setId(id);
+    }
 }

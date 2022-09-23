@@ -20,7 +20,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -35,7 +34,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -50,7 +48,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -65,7 +62,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -97,8 +93,17 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "SET a.blocked = 1 " +
             "WHERE a.id = :userId")
     void blockUser(@Param("userId") Long userId);
+
+
+    @Modifying
+    @Query("UPDATE Account AS a " +
+            "SET a.blocked = 0 " +
+            "WHERE a.id = :userId")
+    void unblockUser(@Param("userId") Long userId);
+
     @Modifying
     @Query("DELETE FROM Account AS a WHERE (a.id = :userId)")
     void deleteData(@Param("userId") Long userId);
 
+    Optional<Account> findByIdAndDeletedFalse(Long id);
 }

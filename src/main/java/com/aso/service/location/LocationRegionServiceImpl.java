@@ -19,6 +19,7 @@ public class LocationRegionServiceImpl implements LocationRegionService {
         return null;
     }
 
+
     @Override
     public Optional<LocationRegion> findById(Long id) {
         return Optional.empty ();

@@ -48,6 +48,18 @@ public class LocationRegion {
     @OneToOne(mappedBy = "locationRegion")
     private Order order;
 
+    public LocationRegion(Long id, String provinceId, String provinceName, String districtId, String districtName, String wardId, String wardName, String address) {
+        this.id = id;
+        this.provinceId = provinceId;
+        this.provinceName = provinceName;
+        this.districtId = districtId;
+        this.districtName = districtName;
+        this.wardId = wardId;
+        this.wardName = wardName;
+        this.address = address;
+
+    }
+
     public LocationRegionDTO toLocationRegionDTO() {
         return new LocationRegionDTO()
                 .setId(id)

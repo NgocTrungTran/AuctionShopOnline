@@ -58,5 +58,4 @@ public class Account extends BaseEntity{
                 .setAvatar ( avatar )
                 .setBlocked ( blocked );
     }
-
 }
