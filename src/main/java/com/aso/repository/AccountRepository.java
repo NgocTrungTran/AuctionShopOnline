@@ -20,7 +20,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -35,7 +34,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -50,7 +48,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -65,7 +62,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
-            "a.coin, " +
             "a.avatar, " +
             "a.blocked, " +
             "a.locationRegion" +
@@ -100,5 +96,4 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Modifying
     @Query("DELETE FROM Account AS a WHERE (a.id = :userId)")
     void deleteData(@Param("userId") Long userId);
-
 }

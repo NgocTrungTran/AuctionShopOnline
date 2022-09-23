@@ -13,6 +13,8 @@ import org.springframework.validation.Validator;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -31,7 +33,8 @@ public class ProductDTO implements Validator {
     private Long viewed;
 
     private Boolean action;
-
+    @Max(value = 1000)
+    @Min(value = 0)
     private Long available;
     private BigDecimal price;
 
@@ -39,7 +42,9 @@ public class ProductDTO implements Validator {
 
     private Boolean moderation;
 
-    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category) {
+    private String createdBy;
+
+    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available) {
         this.id = id;
         this.title = title;
         this.slug = slug;
@@ -48,6 +53,7 @@ public class ProductDTO implements Validator {
         this.sold = sold;
         this.viewed = viewed;
         this.category = category.toCategoryDTO ();
+        this.available = available;
     }
 
     public Product toProduct() {
@@ -71,29 +77,29 @@ public class ProductDTO implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         ProductDTO productDTO = (ProductDTO) o;
-        String price = productDTO.getPrice().toString();
+        String price = productDTO.getPrice ().toString ();
 
 
-        if (!com.aso.utils.Validation.isNumberValid(price)) {
+        if ( !com.aso.utils.Validation.isNumberValid ( price ) ) {
 
-            if (price == null || price.equals("")) {
-                errors.rejectValue("price", "400", "Price not null!");
+            if ( price == null || price.equals ( "" ) ) {
+                errors.rejectValue ( "price", "400", "Price not null!" );
             } else {
-                errors.rejectValue("price", "400", "Price invalid!");
+                errors.rejectValue ( "price", "400", "Price invalid!" );
             }
 
         } else {
-            if (price.length() > 9) {
-                errors.rejectValue("price", "400", "Max price is 100.000.000đ!");
+            if ( price.length () > 9 ) {
+                errors.rejectValue ( "price", "400", "Max price is 100.000.000đ!" );
             } else {
 
-                long validPrice = Long.parseLong(price);
-                if (validPrice < 99999) {
-                    errors.rejectValue("price", "400", "Min price is 100.000đ!");
+                long validPrice = Long.parseLong ( price );
+                if ( validPrice < 99999 ) {
+                    errors.rejectValue ( "price", "400", "Min price is 100.000đ!" );
                 }
 
-                if (validPrice > 100000000) {
-                    errors.rejectValue("price", "400", "Max price is 100.000.000đ!");
+                if ( validPrice > 100000000 ) {
+                    errors.rejectValue ( "price", "400", "Max price is 100.000.000đ!" );
                 }
             }
         }

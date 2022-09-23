@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.authorizeRequests()
-                .antMatchers("/", "/api/auth/login", "/api/auth/register", "/login", "/api/users/{username}").permitAll()
+                .antMatchers("/", "/api/auth/login", "/api/auth/register", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}").permitAll()
                 .antMatchers("/api/users/deposit").hasAnyAuthority("ADMIN")
                 .antMatchers("/assets/**").permitAll()
                 .anyRequest().authenticated()

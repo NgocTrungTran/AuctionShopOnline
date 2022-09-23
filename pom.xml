@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.tnt</groupId>
-    <artifactId>ModelShopTranTrung</artifactId>
+    <artifactId>AuctionShopOnline</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ModelShopTranTrung</name>
-    <description>ModelShopTranTrung</description>
+    <name>AuctionShopOnline</name>
+    <description>AuctionShopOnline</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -36,6 +36,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -144,6 +152,18 @@
             <version>3.0.0</version>
         </dependency>
 
+<!--        Gửi mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+        </dependency>
 
 
     </dependencies>
