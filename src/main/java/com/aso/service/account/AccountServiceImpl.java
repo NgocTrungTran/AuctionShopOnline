@@ -10,11 +10,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -33,7 +41,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account save(Account user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword ( passwordEncoder.encode ( user.getPassword () ) );
         return accountRepository.save ( user );
     }
 
@@ -89,12 +97,12 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Optional<Account> findByUsername(String username) {
-        return accountRepository.findByUsername(username);
+        return accountRepository.findByUsername ( username );
     }
 
     @Override
     public Optional<AccountDTO> findUserDTOByUsername(String username) {
-        return accountRepository.findUserDTOByUsername(username);
+        return accountRepository.findUserDTOByUsername ( username );
     }
 
     @Override
@@ -130,10 +138,10 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> accountOptional = accountRepository.findByUsername(username);
-        if (!accountOptional.isPresent()) {
-            throw new UsernameNotFoundException(username);
+        Optional<Account> accountOptional = accountRepository.findByUsername ( username );
+        if ( !accountOptional.isPresent () ) {
+            throw new UsernameNotFoundException ( username );
         }
-        return AccountPrinciple.build(accountOptional.get());
+        return AccountPrinciple.build ( accountOptional.get () );
     }
 }
