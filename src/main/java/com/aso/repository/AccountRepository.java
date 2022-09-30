@@ -104,9 +104,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Modifying
     @Query("DELETE FROM Account AS a WHERE (a.id = :userId)")
     void deleteData(@Param("userId") Long userId);
-<<<<<<< HEAD
-=======
+
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
->>>>>>> origin/development
+
 }
