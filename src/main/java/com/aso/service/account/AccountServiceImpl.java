@@ -2,13 +2,21 @@ package com.aso.service.account;
 
 import com.aso.model.Account;
 import com.aso.model.AccountPrinciple;
+import com.aso.model.LocationRegion;
+import com.aso.model.Role;
 import com.aso.model.dto.AccountDTO;
 import com.aso.repository.AccountRepository;
+import com.aso.service.gmail.MyConstants;
+import com.aso.service.location.LocationRegionService;
+import com.aso.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -22,12 +30,21 @@ import java.util.Optional;
 import java.util.Properties;
 
 @Service
+@Transactional
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private LocationRegionService locationRegionService;
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    public JavaMailSender emailSender;
 
     @Override
     public Iterable<Account> findAll() {
@@ -56,8 +73,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDTO> findAllUsersDTO() {
-        return accountRepository.findAllUsersDTO ();
+    public List<AccountDTO> findAllAccountsDTO() {
+        return accountRepository.findAllAccountsDTO ();
     }
 
     @Override
@@ -143,5 +160,25 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameNotFoundException ( username );
         }
         return AccountPrinciple.build ( accountOptional.get () );
+    }
+
+    @Override
+    public Account doCreate(AccountDTO accountDTO) {
+        Optional<Role> optionalRole = roleService.findById(accountDTO.getRole().getId());
+        LocationRegion locationRegion = accountDTO.getLocationRegion ().toLocationRegion ();
+        LocationRegion newLocationRegion = locationRegionService.save ( locationRegion );
+        accountDTO.setRole ( optionalRole.get ().toRoleDTO () );
+        accountDTO.setLocationRegion ( newLocationRegion.toLocationRegionDTO () );
+        Account account = accountDTO.toAccountAllAttribute ();
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom ( MyConstants.MY_EMAIL );
+        message.setSubject ( "Chào mừng bạn đến với Auction Shop!" );
+        message.setTo(account.getEmail ());
+        message.setSubject("Dear " + account.getFullName ());
+        message.setText("Cám ơn bạn đã tham gia và ủng hộ Auction Shop! \n" +
+                "Chúc bạn có những trải nghiệm thật thú vị.");
+        this.emailSender.send(message);
+        return save(account);
     }
 }
