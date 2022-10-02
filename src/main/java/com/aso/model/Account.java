@@ -37,7 +37,7 @@ public class Account extends BaseEntity{
     @Column(columnDefinition = "boolean default false")
     private boolean blocked = false;
 
-    private String avatar = "avatardefault.png";
+    private String avatar;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -52,7 +52,7 @@ public class Account extends BaseEntity{
                 .setId(id)
                 .setUsername ( username )
                 .setFullName ( fullName )
-                .setLocationRegion ( locationRegion.toLocationRegionDTO () )
+                .setLocationRegion ( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )

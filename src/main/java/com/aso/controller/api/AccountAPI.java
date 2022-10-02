@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -41,140 +42,133 @@ public class AccountAPI {
 
 
     @GetMapping
-    public ResponseEntity<?>getAllAccounts(){
-        try{
-            List<AccountDTO> accountDTOList= accountService.findAllUsersDTO();
+    public ResponseEntity<?> getAllAccounts() {
+        try {
+            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO ();
 
-            if(accountDTOList.isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if ( accountDTOList.isEmpty () ) {
+                return new ResponseEntity<> ( HttpStatus.NO_CONTENT );
             }
-            return new ResponseEntity<>(accountDTOList,HttpStatus.OK);
+            return new ResponseEntity<> ( accountDTOList, HttpStatus.OK );
 
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<> ( HttpStatus.BAD_REQUEST );
         }
-
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDTO accountDTO,
-                                          // LocationRegionDTO locationRegionDTO,
+                                           // LocationRegionDTO locationRegionDTO,
                                            BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors())
-            return appUtil.mapErrorToResponse(bindingResult);
+        if ( bindingResult.hasErrors () )
+            return appUtil.mapErrorToResponse ( bindingResult );
 
-        Optional<AccountDTO> optionalAccountDTO = accountService.findUserDTOByUsername(accountDTO.getUsername());
+        Optional<AccountDTO> optionalAccountDTO = accountService.findUserDTOByUsername ( accountDTO.getUsername () );
 
-        if (optionalAccountDTO.isPresent())
-            bindingResult.addError(new FieldError("username", "username", "Username này đã tồn tại!"));
+        if ( optionalAccountDTO.isPresent () )
+            bindingResult.addError ( new FieldError ( "username", "username", "Username này đã tồn tại!" ) );
 
-        Optional<Role> optionalRole = roleService.findById(accountDTO.getRole().getId());
+        if ( accountService.existsByEmail ( accountDTO.getEmail () ) )
+            bindingResult.addError ( new FieldError ( "email", "email", "Email này đã tồn tại" ) );
+        if ( accountService.existsByPhone ( accountDTO.getPhone () ) )
+            bindingResult.addError ( new FieldError ( "phone", "phone", "Số điện thoại này đã tồn tại" ) );
+        if ( bindingResult.hasErrors () )
+            return appUtil.mapErrorToResponse ( bindingResult );
 
-        if (!optionalRole.isPresent())
-            bindingResult.addError(new FieldError("role", "role", " Chức năng Role không hợp lệ ! "));
+        Optional<Role> optionalRole = roleService.findById ( accountDTO.getRole ().getId () );
 
-//        Optional<LocationRegion> optionalLocation = locationRegionService.findById(accountDTO.getLocationRegion().getId());
-//
-//        if (!optionalLocation.isPresent())
-//            bindingResult.addError(new FieldError("location", "location", " Location này không tồn tại ! "));
+        if ( !optionalRole.isPresent () ) {
+            bindingResult.addError ( new FieldError ( "role", "role", " Chức năng Role không hợp lệ ! " ) );
+        }
 
-        accountDTO.setRole(optionalRole.get().toRoleDTO());
-
-        if (accountService.existsByEmail(accountDTO.getEmail()))
-            bindingResult.addError(new FieldError("email", "email", "Email này đã tồn tại"));
-        if (accountService.existsByPhone(accountDTO.getPhone()))
-            bindingResult.addError(new FieldError("phone", "phone", "Số điện thoại này đã tồn tại"));
-        if (bindingResult.hasErrors())
-            return appUtil.mapErrorToResponse(bindingResult);
         try {
-            Account account = accountDTO.toAccount();
-            Account newAccount = accountService.save(account);
-            return  new ResponseEntity<>(newAccount.toAccountDTO(),HttpStatus.CREATED);
 
-        }catch (DataIntegrityViolationException e) {
-             throw new DataInputException("Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! ");
-         }catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            Account newAccount = accountService.doCreate ( accountDTO );
+            return new ResponseEntity<> ( newAccount.toAccountDTO (), HttpStatus.CREATED );
 
+        } catch (DataIntegrityViolationException e) {
+            throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
+        } catch (Exception e) {
+            return new ResponseEntity<> ( HttpStatus.INTERNAL_SERVER_ERROR );
+        }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> editAccount (@PathVariable Long id,
-                                             @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult)
-    {
+    public ResponseEntity<?> editAccount(@PathVariable Long id,
+                                         @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors())
-            return appUtil.mapErrorToResponse(bindingResult);
+        if ( bindingResult.hasErrors () )
+            return appUtil.mapErrorToResponse ( bindingResult );
 
-        accountDTO.setId(id);
-        if (accountService.existsByEmail(accountDTO.getEmail()))
-            bindingResult.addError(new FieldError("email","email","Email này đã tồn tại !"));
-        if (accountService.existsByPhone(accountDTO.getPhone()))
-            bindingResult.addError(new FieldError("phone","phone","Số điện thoại này đã tồn tại ! "));
-        if (accountService.existsByUsername(accountDTO.getUsername()))
-            bindingResult.addError(new FieldError("username", "username","Username này đã tồn tại !"));
+        accountDTO.setId ( id );
+        if ( accountService.existsByEmail ( accountDTO.getEmail () ) )
+            bindingResult.addError ( new FieldError ( "email", "email", "Email này đã tồn tại !" ) );
+        if ( accountService.existsByPhone ( accountDTO.getPhone () ) )
+            bindingResult.addError ( new FieldError ( "phone", "phone", "Số điện thoại này đã tồn tại ! " ) );
+        if ( accountService.existsByUsername ( accountDTO.getUsername () ) )
+            bindingResult.addError ( new FieldError ( "username", "username", "Username này đã tồn tại !" ) );
 
-        Optional<Account> accountOptional = accountService.findById(id);
+        Optional<Account> accountOptional = accountService.findById ( id );
 
 
         try {
-            accountDTO.setPassword(accountOptional.get().getPassword());
-            Account account = accountDTO.toAccount();
-            Account updatedAccount = accountService.save(account);
-            return new ResponseEntity<>(updatedAccount.toAccountDTO(),HttpStatus.OK);
+            accountDTO.setPassword ( accountOptional.get ().getPassword () );
+            Account account = accountDTO.toAccount ();
+            Account updatedAccount = accountService.save ( account );
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
 
-        }catch (DataIntegrityViolationException e) {
-            throw new DataInputException("Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! ");
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
+        } catch (Exception e) {
+            return new ResponseEntity<> ( HttpStatus.INTERNAL_SERVER_ERROR );
         }
     }
 
     @PatchMapping("/block/{id}")
     public ResponseEntity<?> blockAccount(@PathVariable Long id) {
 
-        Optional<Account> account = accountService.findById(id);
-        if (account.isPresent()) {
+        Optional<Account> account = accountService.findById ( id );
+        if ( account.isPresent () ) {
             try {
-                accountService.blockUser(id);
-                return new ResponseEntity<>(HttpStatus.OK);
+                accountService.blockUser ( id );
+                return new ResponseEntity<> ( HttpStatus.OK );
 
             } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
         }
-        return new ResponseEntity<>("Account này không tồn tại", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<> ( "Account này không tồn tại", HttpStatus.NOT_FOUND );
     }
 
     @PatchMapping("/unblock/{id}")
-    public ResponseEntity<?> unblockAccount(@PathVariable Long id){
-        Optional <Account> account = accountService.findById(id);
-        if(account.isPresent()){
-            try{
-                accountService.unblockUser(id);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> unblockAccount(@PathVariable Long id) {
+        Optional<Account> account = accountService.findById ( id );
+        if ( account.isPresent () ) {
+            try {
+                accountService.unblockUser ( id );
+                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
+            } catch (Exception e) {
+                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
         }
-        return new ResponseEntity<>("Account này không tồn tại", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<> ( "Account này không tồn tại", HttpStatus.NOT_FOUND );
     }
 
     @PatchMapping("/delete/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable Long id){
-        Optional <Account> account = accountService.findByIdAndDeletedFalse(id);
-        if(account.isPresent()){
-            try{
-                account.get().setDeleted(true);
-                accountService.save(account.get());
+    public ResponseEntity<?> deleteAccount(@PathVariable Long id) {
+        Optional<Account> account = accountService.findByIdAndDeletedFalse ( id );
+        if ( account.isPresent () ) {
+            try {
+                account.get ().setDeleted ( true );
+                accountService.save ( account.get () );
 
-            }catch (DataIntegrityViolationException e){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } catch (DataIntegrityViolationException e) {
+                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
         }
-        return new ResponseEntity<>("Account này không tồn tại", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<> ( "Account này không tồn tại", HttpStatus.NOT_FOUND );
     }
 
 }

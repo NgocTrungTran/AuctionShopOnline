@@ -5,12 +5,14 @@ import com.aso.model.dto.AccountDTO;
 import com.aso.service.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountService extends IGeneralService<Account>, UserDetailsService {
 
-    List<AccountDTO> findAllUsersDTO();
+    List<AccountDTO> findAllAccountsDTO();
 
     List<AccountDTO> findAllUsersDTODeleted();
 
@@ -44,4 +46,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     Account findByBlockedIsFalseAndId(Long id);
 
     void deleteData(Long userId);
+
+    Account doCreate(AccountDTO accountDTO);
+
 }

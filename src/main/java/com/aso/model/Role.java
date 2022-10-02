@@ -27,11 +27,13 @@ public class Role {
     private String code;
     private String name;
 
-    @OneToMany(targetEntity = Account.class, mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Account.class, mappedBy = "role", fetch = FetchType.LAZY)
     private Set<Account> users;
 
     public RoleDTO toRoleDTO (){
         return new RoleDTO()
-                .setId(id);
+                .setId(id)
+                .setCode ( code )
+                .setName ( name );
     }
 }
