@@ -69,5 +69,19 @@ public class AccountDTO {
                 ;
     }
 
+    public Account toAccountAllAttribute() {
+        return new Account()
+                .setId(id)
+                .setUsername(username)
+                .setPassword(password)
+                .setFullName ( fullName )
+                .setEmail ( email )
+                .setPhone ( phone )
+                .setAvatar ( avatar )
+                .setRole ( role.toRole () )
+                .setLocationRegion ( locationRegion.toLocationRegion () )
+                ;
+    }
+
 }
 

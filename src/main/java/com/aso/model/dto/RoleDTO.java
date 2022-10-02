@@ -16,14 +16,18 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 public class RoleDTO {
 
-    @NotNull(message = "The role is required")
     private Long id;
 
-//    private String code;
+    private String code;
+
+    private String name;
 
     public Role toRole() {
         return new Role ()
-                .setId ( id );
+                .setId ( id )
+                .setCode ( code )
+                .setName ( name )
+                ;
     }
 
 }

@@ -1,5 +1,8 @@
 package com.aso.service;
 
+import com.aso.model.Account;
+import com.aso.model.dto.AccountDTO;
+
 import java.util.Optional;
 
 public interface IGeneralService<T> {
@@ -9,4 +12,5 @@ public interface IGeneralService<T> {
     T getById(Long id);
 
     void delete(Long id);
+
 }

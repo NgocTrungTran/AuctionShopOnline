@@ -24,9 +24,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.blocked, " +
             "a.locationRegion" +
             ") " +
-            "FROM Account AS a WHERE a.deleted = false and a.role.id = 2"
+            "FROM Account AS a WHERE a.deleted = false"
     )
-    List<AccountDTO> findAllUsersDTO();
+    List<AccountDTO> findAllAccountsDTO();
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
@@ -104,9 +104,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Modifying
     @Query("DELETE FROM Account AS a WHERE (a.id = :userId)")
     void deleteData(@Param("userId") Long userId);
-<<<<<<< HEAD
-=======
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
->>>>>>> origin/development
 }
