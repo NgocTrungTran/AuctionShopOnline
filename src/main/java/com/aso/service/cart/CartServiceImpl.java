@@ -58,6 +58,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
     public void delete(Cart cart) {
         cartRepository.delete(cart);
     }

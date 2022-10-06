@@ -46,6 +46,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
     public Role findByName(String name) {
         return roleRepository.findByName(name);
     }

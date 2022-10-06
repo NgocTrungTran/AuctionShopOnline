@@ -9,4 +9,5 @@ public interface IGeneralService<T> {
     T getById(Long id);
     void softDelete(T t);
     void delete(Long id);
+    Boolean existById(Long id);
 }

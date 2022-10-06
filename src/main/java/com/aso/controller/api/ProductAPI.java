@@ -51,19 +51,19 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/trash")
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
-        List<ProductDTO> products = productService.findAllProductsDTOTrash();
-//        products.remove(productId);
-        if (products.isEmpty()) {
-            throw new DataOutputException("No data");
-        }
-        if (!validation.isIntValid(productId)) {
-            throw new DataInputException("Product ID invalid!");
-        }
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
+//    @GetMapping("/trash")
+////    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
+//        List<ProductDTO> products = productService.findAllProductsDTOTrash();
+////        products.remove(productId);
+//        if (products.isEmpty()) {
+//            throw new DataOutputException("No data");
+//        }
+//        if (!validation.isIntValid(productId)) {
+//            throw new DataInputException("Product ID invalid!");
+//        }
+//        return new ResponseEntity<>(products, HttpStatus.OK);
+//    }
 
     @GetMapping("/{productId}")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")

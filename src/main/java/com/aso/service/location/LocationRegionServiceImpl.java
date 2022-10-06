@@ -44,4 +44,9 @@ public class LocationRegionServiceImpl implements LocationRegionService {
     public void delete(Long id) {
 
     }
+
+    @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
 }

@@ -61,6 +61,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
     public List<AccountDTO> findAllUsersDTO() {
         return accountRepository.findAllUsersDTO ();
     }

@@ -46,4 +46,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     public void delete(Long id) {
 
     }
+
+    @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
 }
