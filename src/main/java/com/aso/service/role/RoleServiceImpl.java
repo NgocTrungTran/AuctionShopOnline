@@ -36,6 +36,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public void softDelete(Role role) {
+
+    }
+
+    @Override
     public void delete(Long id) {
         roleRepository.deleteById (id);
     }

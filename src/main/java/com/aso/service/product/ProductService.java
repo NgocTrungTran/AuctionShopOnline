@@ -17,4 +17,6 @@ public interface ProductService extends IGeneralService<Product> {
     List<ProductDTO> findAllProductsDTOTrash();
 
     Boolean existsByTitle(String title);
+
+    void softDelete(Product product);
 }

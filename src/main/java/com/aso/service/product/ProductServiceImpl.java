@@ -62,6 +62,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
-
+        productRepository.deleteById(id);
     }
+    @Override
+    public void softDelete(Product product) {
+        product.setDeleted(true);
+        productRepository.save(product);
+    }
+
 }

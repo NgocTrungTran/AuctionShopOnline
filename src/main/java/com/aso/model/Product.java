@@ -28,23 +28,23 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     private String title;
-    @NotNull
+//    @NotNull
     private String slug;
-    @NotNull
+//    @NotNull
     private String image;
-    @NotNull
+//    @NotNull
     private Long sold = 0L;
-    @NotNull
+//    @NotNull
     private Long viewed = 0L;
 
-    @NotNull
+//    @NotNull
     private Boolean action;
 
-    @NotNull
+//    @NotNull
     private Long available;
-    @NotNull
+//    @NotNull
     @Column(precision = 12, scale = 0)
     private BigDecimal price = new BigDecimal ( 0L );
 

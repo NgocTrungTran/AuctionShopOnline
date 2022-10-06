@@ -33,6 +33,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    public void softDelete(OrderDetail orderDetail) {
+
+    }
+
+    @Override
     public OrderDetail save(OrderDetail orderDetail) {
         return orderItemRepository.save( orderDetail );
     }

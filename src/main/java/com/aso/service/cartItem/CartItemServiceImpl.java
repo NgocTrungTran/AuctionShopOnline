@@ -56,6 +56,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    public void softDelete(CartItem cartItem) {
+
+    }
+
+    @Override
     public CartItem save(CartItem cartItem) {
         return cartItemRepository.save(cartItem);
     }

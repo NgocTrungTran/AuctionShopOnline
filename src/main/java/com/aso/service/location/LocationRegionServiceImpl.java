@@ -36,6 +36,11 @@ public class LocationRegionServiceImpl implements LocationRegionService {
     }
 
     @Override
+    public void softDelete(LocationRegion locationRegion) {
+
+    }
+
+    @Override
     public void delete(Long id) {
 
     }

@@ -7,6 +7,6 @@ public interface IGeneralService<T> {
     Optional<T> findById(Long id);
     T save(T t);
     T getById(Long id);
-
+    void softDelete(T t);
     void delete(Long id);
 }

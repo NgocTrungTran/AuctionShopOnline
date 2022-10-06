@@ -42,7 +42,7 @@ public class ProductDTO implements Validator {
 
     private Boolean moderation;
 
-    private String createdBy;
+//    private String createdBy;
 
     public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available) {
         this.id = id;

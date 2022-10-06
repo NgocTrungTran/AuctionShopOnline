@@ -51,6 +51,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void softDelete(Account account) {
+
+    }
+
+    @Override
     public void delete(Long id) {
         accountRepository.deleteById ( id );
     }

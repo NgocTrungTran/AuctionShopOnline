@@ -33,6 +33,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void softDelete(Cart cart) {
+
+    }
+
+    @Override
     public Optional<Cart> findByCreatedBy(String createdBy) {
         return cartRepository.findByCreatedBy(createdBy);
     }
