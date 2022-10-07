@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,4 +30,6 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItem;
+
+
 }

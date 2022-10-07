@@ -37,7 +37,7 @@ public class OrderDetail extends BaseEntity {
     private int quantity;
 
     @Column(precision = 12, scale = 0, nullable = false)
-    private BigDecimal amount;
+    private BigDecimal amountTransaction;
 
 
 }

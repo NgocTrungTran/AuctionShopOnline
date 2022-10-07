@@ -21,7 +21,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItem> findAllByCart(Cart cart);
 
 
-    @Query("SELECT SUM(ci.amount) FROM CartItem AS ci WHERE ci.cart.id = :cartId")
+    @Query("SELECT SUM(ci.amountTransaction) FROM CartItem AS ci WHERE ci.cart.id = :cartId")
     BigDecimal getSumAmountByCartId(@Param("cartId") Long cartId);
 
 
@@ -31,7 +31,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "ci.title, " +
             "ci.price, " +
             "ci.quantity, " +
-            "ci.amount" +
+            "ci.amountTransaction" +
             ") FROM CartItem AS ci " +
             "JOIN Product AS p " +
             "ON p.id = ci.product.id " +

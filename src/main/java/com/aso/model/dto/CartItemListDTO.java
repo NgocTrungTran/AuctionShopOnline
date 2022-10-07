@@ -30,16 +30,16 @@ public class CartItemListDTO {
 
     private int quantity;
 
-    private BigDecimal amount;
+    private BigDecimal amountTransaction;
 
     private Cart cart;
 
-    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amount) {
+    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
         this.id = id;
         this.productId = productId.toProductDTO ();
         this.title = title;
         this.price = price;
         this.quantity = quantity;
-        this.amount = amount;
+        this.amountTransaction = amountTransaction;
     }
 }

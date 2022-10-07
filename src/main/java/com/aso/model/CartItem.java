@@ -37,8 +37,8 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(precision = 12, scale = 0, nullable = false)
-    private BigDecimal amount;
+    @Column(name = "amount_transaction", precision = 12, scale = 0, nullable = false)
+    private BigDecimal amountTransaction;
 
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
@@ -54,6 +54,6 @@ public class CartItem {
                 .setTitle(title)
                 .setPrice(price)
                 .setQuantity(quantity)
-                .setAmount(amount);
+                .setAmountTransaction(amountTransaction);
     }
 }
