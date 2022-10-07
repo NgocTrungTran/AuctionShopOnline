@@ -43,6 +43,11 @@ public class CartAPI {
 
     @GetMapping
     public ResponseEntity<?> getAllCartItems() {
+        // đã test, nhưng hắn chạy vô đoạn này, mặc dù đã thêm dữ liệu đầy đủ trong DB
+//        if (!cartOptional.isPresent()) {
+//            return new ResponseEntity<>(null, HttpStatus.OK);
+//        }
+
 
         String createdBy = AppUtil.getPrincipalUsername();
 
@@ -64,6 +69,7 @@ public class CartAPI {
     }
 
     @PostMapping("/create-order")
+    // đã test, hắn chạy vào "Không có sản phẩm trong giỏ hàng"
     public ResponseEntity<?> createOrder() {
 
         String createdBy = AppUtil.getPrincipalUsername();
