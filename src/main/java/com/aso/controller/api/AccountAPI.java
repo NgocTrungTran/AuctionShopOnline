@@ -44,7 +44,7 @@ public class AccountAPI {
     @GetMapping
     public ResponseEntity<?> getAllAccounts() {
         try {
-            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO ();
+            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO();
 
             if ( accountDTOList.isEmpty () ) {
                 return new ResponseEntity<> ( HttpStatus.NO_CONTENT );

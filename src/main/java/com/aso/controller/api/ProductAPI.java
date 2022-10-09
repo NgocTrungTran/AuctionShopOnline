@@ -37,9 +37,9 @@ public class ProductAPI {
     @Autowired
     private CategoryService categoryService;
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProducts() {
-        List<ProductDTO> productDTOList = productService.findAllProductsDTO ();
+        List<ProductDTO> productDTOList = productService.findAllProductsDTO();
 
         if (productDTOList.isEmpty ()) {
             throw new DataOutputException ( "No data" );

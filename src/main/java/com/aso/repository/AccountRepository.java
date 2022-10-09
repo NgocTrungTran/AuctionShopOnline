@@ -14,15 +14,16 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> getByUsername(String username);
+
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
-            "a.username, " +
-            "a.fullName, " +
-            "a.email, " +
-            "a.phone, " +
-            "a.avatar, " +
-            "a.blocked, " +
-            "a.locationRegion" +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
             ") " +
             "FROM Account AS a WHERE a.deleted = false"
     )
