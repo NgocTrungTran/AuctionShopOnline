@@ -1,11 +1,13 @@
 package com.aso.service.cartItem;
 
 
+import com.aso.exception.DataInputException;
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
 import com.aso.model.Product;
 import com.aso.model.dto.CartItemListDTO;
 import com.aso.repository.CartItemRepository;
+import com.aso.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public List<CartItem> findAll() {
@@ -60,6 +64,10 @@ public class CartItemServiceImpl implements CartItemService {
     public void softDelete(CartItem cartItem) {
 
     }
+    @Override
+    public List<CartItemListDTO> findCartItemDTOById(String title) {
+        return cartItemRepository.findCartItemDTOById(title);
+    }
 
     @Override
     public CartItem save(CartItem cartItem) {
@@ -76,8 +84,47 @@ public class CartItemServiceImpl implements CartItemService {
         return null;
     }
 
+//    @Override
+//    public void delete(Long cartItem) {
+//        cartItemRepository.delete(cartItem);
+//    }
+
     @Override
-    public void delete(CartItem cartItem) {
-        cartItemRepository.delete(cartItem);
+    public Optional<CartItemListDTO> getCartItemDTOById(Long id) {
+        return cartItemRepository.getCartItemDTOById(id);
     }
+
+    @Override
+    public CartItem SaveIncreasing(CartItem cartItem) {
+        return null;
+    }
+
+    @Override
+    public CartItem SaveReduce(CartItem cartItem) {
+        return null;
+    }
+
+//    @Override
+//    public CartItem SaveIncreasing(CartItem cartItem) {
+//        if(new BigDecimal(3).equals(cartItem.getQuantity())){
+//            throw new DataInputException("Số lượng không lớn hơn 3 Sản phẩm!");
+//        }
+//        Optional<Product> productDTO = productRepository.findById(cartItem.getProduct().getId());
+//
+//        cartItem.setQuantity(cartItem.getQuantity().add(BigDecimal.valueOf(1)));
+//        cartItem.setQuantity(cartItem.getQuantity().add(cartItem.getPrice()));
+//        if(productDTO.get().getAvailable().compareTo((long) cartItem.getQuantity()) < 0){
+//            throw new DataInputException("Đã hết hàng!");
+//        }
+//        return cartItemRepository.save(cartItem);
+//    }
+//    @Override
+//    public CartItem SaveReduce(CartItem cartItem) {
+//        if(new BigDecimal(1).equals(cartItem.getQuantity())){
+//            throw new DataInputException("Số lượng không nhỏ hơn 1 Sản Phẩm");
+//        }
+//        cartItem.setQuantity(cartItem.getQuantity().subtract(BigDecimal.valueOf(1)));
+//        cartItem.setQuantity(cartItem.getQuantity().subtract(cartItem.getPrice()));
+//        return cartItemRepository.save(cartItem);
+//    }
 }

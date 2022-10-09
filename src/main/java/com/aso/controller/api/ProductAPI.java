@@ -123,6 +123,7 @@ public class ProductAPI {
         String checkPrice = String.valueOf(new BigDecimal(String.valueOf(productDTO.getPrice())));
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setId(0L);
+            // Note: thêm category vô đây
             Product newProduct = productService.save(productDTO.toProduct());
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.CREATED);
         }

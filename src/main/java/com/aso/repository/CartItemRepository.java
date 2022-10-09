@@ -37,4 +37,28 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "ON p.id = ci.product.id " +
             "WHERE ci.cart.id = :cartId")
     List<CartItemListDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
+
+    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+            "c.id, " +
+            "c.product , " +
+            "c.title, " +
+            "c.price ," +
+            "c.quantity, " +
+            "c.amountTransaction" +
+            " )  " +
+            "FROM CartItem AS c  WHERE c.title Like ?1 ")
+    List<CartItemListDTO> findCartItemDTOById(String title);
+
+    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+            "c.id, " +
+            "c.product , " +
+            "c.title, " +
+            "c.price ," +
+            "c.quantity, " +
+            "c.amountTransaction" +
+            " )  " +
+            "FROM CartItem c  WHERE c.id = ?1 ")
+    Optional<CartItemListDTO> getCartItemDTOById(Long id);
+
+
 }

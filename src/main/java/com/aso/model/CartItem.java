@@ -55,5 +55,6 @@ public class CartItem {
                 .setPrice(price)
                 .setQuantity(quantity)
                 .setAmountTransaction(amountTransaction);
+
     }
 }
