@@ -1,6 +1,7 @@
 package com.aso.repository;
 
 import com.aso.model.Account;
+import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -108,4 +109,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
 
+    void deleteById(Product id);
 }

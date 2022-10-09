@@ -2,6 +2,7 @@ package com.aso.service.category;
 
 
 import com.aso.model.Category;
+import com.aso.model.Product;
 import com.aso.model.dto.CategoryDTO;
 import com.aso.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Product id) {
 
     }
 

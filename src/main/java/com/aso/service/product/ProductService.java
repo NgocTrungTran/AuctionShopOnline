@@ -7,6 +7,7 @@ import com.aso.model.dto.ProductListDTO;
 import com.aso.service.IGeneralService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService extends IGeneralService<Product> {
 
@@ -19,4 +20,6 @@ public interface ProductService extends IGeneralService<Product> {
     Boolean existsByTitle(String title);
 
     void softDelete(Product product);
+    List<ProductDTO> findProductByValue(String query);
+//    Optional<ProductDTO> findProductDTOBySlug (String slug);
 }

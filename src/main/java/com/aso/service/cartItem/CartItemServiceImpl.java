@@ -3,6 +3,7 @@ package com.aso.service.cartItem;
 
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
+import com.aso.model.Product;
 import com.aso.model.dto.CartItemListDTO;
 import com.aso.repository.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Product id) {
 
     }
 

@@ -1,6 +1,7 @@
 package com.aso.repository;
 
 
+import com.aso.model.Product;
 import com.aso.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,4 +11,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Role findByName(String name);
 
+    void deleteById(Product id);
 }

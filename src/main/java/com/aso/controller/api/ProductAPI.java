@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -155,7 +156,7 @@ public class ProductAPI {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete-soft/{id}")
     // đã test ok
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
 
@@ -169,5 +170,25 @@ public class ProductAPI {
 
         }
 
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
+
+        Optional<Product> product = productService.findById(id);
+
+        if (product.isPresent()) {
+            productService.delete(product.get());
+
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else {
+            throw new DataInputException("Invalid product information");
+        }
+    }
+
+    @GetMapping("/search/{query}")
+    // đã test ok (tìm kiếm theo tên title)
+    public ResponseEntity<?> searchListProduct(@PathVariable String query) {
+        List<ProductDTO> productDTOList = productService.findProductByValue(query);
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 }

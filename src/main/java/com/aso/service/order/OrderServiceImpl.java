@@ -2,6 +2,7 @@ package com.aso.service.order;
 
 
 import com.aso.model.Order;
+import com.aso.model.Product;
 import com.aso.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Product id) {
 
     }
 

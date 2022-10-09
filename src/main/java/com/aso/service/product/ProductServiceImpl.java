@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Product id) {
         productRepository.deleteById(id);
     }
 
@@ -75,5 +75,13 @@ public class ProductServiceImpl implements ProductService {
         product.setDeleted(true);
         productRepository.save(product);
     }
+    @Override
+    public List<ProductDTO> findProductByValue(String query) {
+        return productRepository.findProductValue(query);
+    }
+//    @Override
+//    public Optional<ProductDTO> findProductDTOBySlug(String slug) {
+//        return productRepository.findProductDTOBySlug(slug);
+//    }
 
 }
