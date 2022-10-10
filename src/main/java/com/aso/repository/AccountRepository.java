@@ -1,6 +1,7 @@
 package com.aso.repository;
 
 import com.aso.model.Account;
+import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,15 +15,16 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> getByUsername(String username);
+
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
-            "a.username, " +
-            "a.fullName, " +
-            "a.email, " +
-            "a.phone, " +
-            "a.avatar, " +
-            "a.blocked, " +
-            "a.locationRegion" +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
             ") " +
             "FROM Account AS a WHERE a.deleted = false"
     )
@@ -106,4 +108,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     void deleteData(@Param("userId") Long userId);
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
+
+    void deleteById(Product id);
 }

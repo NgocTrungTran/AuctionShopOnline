@@ -1,8 +1,5 @@
 package com.aso.service;
-
-import com.aso.model.Account;
-import com.aso.model.dto.AccountDTO;
-
+import com.aso.model.Product;
 import java.util.Optional;
 
 public interface IGeneralService<T> {
@@ -10,7 +7,7 @@ public interface IGeneralService<T> {
     Optional<T> findById(Long id);
     T save(T t);
     T getById(Long id);
-
-    void delete(Long id);
-
+    void softDelete(T t);
+    void delete(Product id);
+    Boolean existById(Long id);
 }

@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,8 +44,9 @@ public class AccountAPI {
 
     @GetMapping
     public ResponseEntity<?> getAllAccounts() {
+
         try {
-            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO ();
+            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO();
 
             if ( accountDTOList.isEmpty () ) {
                 return new ResponseEntity<> ( HttpStatus.NO_CONTENT );
@@ -57,7 +59,7 @@ public class AccountAPI {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDTO accountDTO,
                                            // LocationRegionDTO locationRegionDTO,
                                            BindingResult bindingResult) {

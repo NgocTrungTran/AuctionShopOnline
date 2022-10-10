@@ -57,11 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/**");
-        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
+//        http.csrf().ignoringAntMatchers("/**");
+//        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.authorizeRequests()
-                .antMatchers("/", "/api/auth/login", "/api/auth/register","/api/accounts/**", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}", "/sendSimpleEmail").permitAll()
+//                .antMatchers("/", "/api/auth/login", "/api/auth/register","/api/accounts/**", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}", "/sendSimpleEmail").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/", "/api/**").permitAll()
                 .antMatchers("/api/users/deposit").hasAnyAuthority("ADMIN")
                 .antMatchers("/assets/**").permitAll()
                 .anyRequest().authenticated()
@@ -81,10 +84,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.cors();
+//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
+//
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.cors();
     }
 }

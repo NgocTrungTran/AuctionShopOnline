@@ -79,8 +79,7 @@ public class AccountDTO {
                 .setPhone ( phone )
                 .setAvatar ( avatar )
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationRegion.toLocationRegion () )
-                ;
+                .setLocationRegion ( locationRegion.toLocationRegion () );
     }
 
 }

@@ -2,6 +2,8 @@ package com.aso.service.category;
 
 
 import com.aso.model.Category;
+import com.aso.model.Product;
+import com.aso.model.dto.CategoryDTO;
 import com.aso.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +34,43 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void softDelete(Category category) {
+
+    }
+
+    @Override
     public Category save(Category category) {
         return categoryRepository.save ( category );
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Product id) {
 
     }
+
+    @Override
+    public List<CategoryDTO> findAllCategoryDTO() {
+        return categoryRepository.findAllCategoryDTO();
+    }
+
+    @Override
+    public Optional<CategoryDTO> findCategoryDTOById(Long id) {
+        return categoryRepository.findCategoryDTOById(id);
+    }
+
+    @Override
+    public void  deleteCategory(Long id) {
+
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean existsCategoryByTitle(String title) {
+        return categoryRepository.existsCategoryByTitle(title);
+    }
+    @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
 }
