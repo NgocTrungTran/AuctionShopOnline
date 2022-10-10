@@ -2,8 +2,12 @@ package com.aso.service.account;
 
 import com.aso.model.Account;
 import com.aso.model.AccountPrinciple;
+<<<<<<< HEAD
 import com.aso.model.LocationRegion;
 import com.aso.model.Role;
+=======
+import com.aso.model.Product;
+>>>>>>> phong-dev
 import com.aso.model.dto.AccountDTO;
 import com.aso.repository.AccountRepository;
 import com.aso.service.gmail.MyConstants;
@@ -18,16 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 @Service
 @Transactional
@@ -68,13 +64,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void softDelete(Account account) {
+
+    }
+
+    @Override
+    public void delete(Product id) {
         accountRepository.deleteById ( id );
     }
 
     @Override
+<<<<<<< HEAD
     public List<AccountDTO> findAllAccountsDTO() {
         return accountRepository.findAllAccountsDTO ();
+=======
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<AccountDTO> findAllUsersDTO() {
+        return accountRepository.findAllUsersDTO ();
+>>>>>>> phong-dev
     }
 
     @Override

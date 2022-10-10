@@ -1,0 +1,68 @@
+package com.aso.model.dto;
+
+import com.aso.model.Product;
+import com.aso.model.ProductMedia;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
+public class ProductMediaDTO {
+
+    private String id;
+
+    private String fileName;
+
+    private String fileFolder;
+
+    private String fileUrl;
+
+    private String fileType;
+
+    private String cloudId;
+
+    private Long ts ;
+
+    private ProductDTO product;
+
+    public ProductMediaDTO(String id, String fileUrl) {
+        this.id = id;
+        this.fileUrl = fileUrl;
+    }
+
+    public ProductMediaDTO(String id, Long ts , String fileUrl) {
+        this.id = id;
+        this.ts = ts;
+        this.fileUrl = fileUrl;
+    }
+
+    public ProductMediaDTO(String id, String fileName, String fileFolder, String fileUrl, String fileType, String cloudId, Long ts, Product product) {
+        this.id = id;
+        this.fileName = fileName;
+        this.fileFolder = fileFolder;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+        this.cloudId = cloudId;
+        this.ts = ts;
+        this.product = product.toProductDTO();
+    }
+
+    public ProductMedia toProductMedia() {
+       return new ProductMedia()
+               .setId(id)
+               .setCloudId(cloudId)
+               .setFileType(fileType)
+               .setFileUrl(fileUrl)
+               .setProduct(product.toProduct())
+               .setFileFolder(fileFolder)
+               .setFileName(fileName)
+               .setTs(ts)
+               ;
+   }
+}

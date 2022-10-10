@@ -1,5 +1,6 @@
 package com.aso.service.role;
 
+import com.aso.model.Product;
 import com.aso.model.Role;
 import com.aso.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void softDelete(Role role) {
+
+    }
+
+    @Override
+    public void delete(Product id) {
         roleRepository.deleteById (id);
+    }
+
+    @Override
+    public Boolean existById(Long id) {
+        return null;
     }
 
     @Override

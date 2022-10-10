@@ -2,6 +2,7 @@ package com.aso.service.product;
 
 
 import com.aso.model.Product;
+import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.repository.ProductRepository;
@@ -32,17 +33,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAllProductsDTO() {
-        return productRepository.findAllProductsDTO ();
+        return productRepository.findAllProductsDTO();
     }
 
     @Override
     public List<ProductDTO> findAllProductsDTOTrash() {
-        return productRepository.findAllProductsDTOTrash ();
+        return productRepository.findAllProductsDTOTrash();
     }
 
     @Override
     public Boolean existsByTitle(String title) {
-        return productRepository.existsByTitle ( title );
+        return productRepository.existsByTitle(title);
     }
 
     @Override
@@ -57,11 +58,45 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product product) {
-        return productRepository.save ( product );
+        return productRepository.save(product);
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void delete(Product id) {
+        productRepository.deleteById(id);
     }
+
+    @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
+    public void softDelete(Product product) {
+        product.setDeleted(true);
+        productRepository.save(product);
+    }
+
+    @Override
+    public List<ProductDTO> findAllBySearchTitle(String title) {
+        return productRepository.findAllBySearchTitle(title);
+    }
+//    @Override
+//    public Optional<ProductDTO> findProductDTOBySlug(String slug) {
+//        return productRepository.findProductDTOBySlug(slug);
+//    }
+
+    //@Override
+    public List<ProductDTO> findAllBySearchSlug(String slug) {
+        return productRepository.findAllBySearchSlug(slug);
+    }
+    @Override
+    public Optional<ProductDTO> findProductDTOBySlug(String slug) {
+        return productRepository.findProductDTOBySlug(slug);
+    }
+    @Override
+    public Optional<Product> findProductBySlug(String slug) {
+        return productRepository.findProductBySlug(slug);
+    }
+
 }

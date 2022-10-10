@@ -44,6 +44,7 @@ public class Product extends BaseEntity {
 
     @NotNull
     private Long available;
+
     @NotNull
     @Column(precision = 12, scale = 0)
     private BigDecimal price = new BigDecimal ( 0L );
@@ -51,6 +52,9 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
+
+    @NotNull
+    private String description;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean moderation = false;
@@ -72,6 +76,10 @@ public class Product extends BaseEntity {
                 .setSold ( sold )
                 .setViewed ( viewed )
                 .setPrice ( price )
-                .setCategory ( category.toCategoryDTO () );
+                .setCategory ( category.toCategoryDTO () )
+                .setDescription(description)
+                .setAvailable(available)
+                .setAction(action)
+                ;
     }
 }

@@ -1,6 +1,7 @@
 package com.aso.model.dto;
 
 import com.aso.model.Cart;
+import com.aso.model.CartItem;
 import com.aso.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,16 +31,26 @@ public class CartItemListDTO {
 
     private int quantity;
 
-    private BigDecimal amount;
+    private BigDecimal amountTransaction;
 
     private Cart cart;
 
-    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amount) {
+    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
         this.id = id;
         this.productId = productId.toProductDTO ();
         this.title = title;
         this.price = price;
         this.quantity = quantity;
-        this.amount = amount;
+        this.amountTransaction = amountTransaction;
+    }
+    public CartItem toCartItem() {
+        return new CartItem()
+                .setId(id)
+                .setProduct(productId.toProduct())
+                .setTitle(title)
+                .setPrice(price)
+                .setQuantity(quantity)
+                .setAmountTransaction(amountTransaction)
+                ;
     }
 }
