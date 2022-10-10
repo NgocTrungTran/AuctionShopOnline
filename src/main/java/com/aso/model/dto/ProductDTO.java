@@ -18,11 +18,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import java.util.Date;
-=======
-import java.util.List;
->>>>>>> phong-dev
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,12 +36,8 @@ public class ProductDTO implements Validator {
     @Max(value = 1000)
     @Min(value = 0)
     private Long available;
-<<<<<<< HEAD
     private String image;
     private Boolean moderation;
-=======
-
->>>>>>> phong-dev
     private BigDecimal price;
     private String slug;
     private Long sold;
@@ -52,15 +45,9 @@ public class ProductDTO implements Validator {
     private Long viewed;
     private CategoryDTO category;
 
-<<<<<<< HEAD
-    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String createdBy) {
-=======
-    private Boolean moderation;
-
     private String description;
 
-    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action) {
->>>>>>> phong-dev
+    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action){
         this.id = id;
         this.title = title;
         this.slug = slug;
@@ -70,11 +57,9 @@ public class ProductDTO implements Validator {
         this.viewed = viewed;
         this.category = category.toCategoryDTO ();
         this.available = available;
-<<<<<<< HEAD
-        this.createdBy = createdBy;
     }
 
-    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, String slug, Long sold, String title, Long viewed, Category category) {
+    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, String slug, Long sold, String title, Long viewed, Category category, String description) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
@@ -90,10 +75,8 @@ public class ProductDTO implements Validator {
         this.title = title;
         this.viewed = viewed;
         this.category = category.toCategoryDTO();
-=======
         this.description = description;
-        this.action=action;
->>>>>>> phong-dev
+
     }
 
     public Product toProduct() {
@@ -105,16 +88,13 @@ public class ProductDTO implements Validator {
                 .setSold ( sold )
                 .setViewed ( viewed )
                 .setImage ( image )
-                .setCategory ( category.toCategory () )
-<<<<<<< HEAD
-                .setCreatedBy(createdBy);
-=======
                 .setDescription(description)
                 .setAvailable(available)
                 .setAction(action)
+                .setCategory ( category.toCategory () )
+                .setCreatedBy(createdBy)
                 ;
 
->>>>>>> phong-dev
     }
 
     @Override

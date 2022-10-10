@@ -2,12 +2,9 @@ package com.aso.service.account;
 
 import com.aso.model.Account;
 import com.aso.model.AccountPrinciple;
-<<<<<<< HEAD
 import com.aso.model.LocationRegion;
 import com.aso.model.Role;
-=======
 import com.aso.model.Product;
->>>>>>> phong-dev
 import com.aso.model.dto.AccountDTO;
 import com.aso.repository.AccountRepository;
 import com.aso.service.gmail.MyConstants;
@@ -74,18 +71,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-<<<<<<< HEAD
-    public List<AccountDTO> findAllAccountsDTO() {
-        return accountRepository.findAllAccountsDTO ();
-=======
     public Boolean existById(Long id) {
         return null;
     }
 
     @Override
-    public List<AccountDTO> findAllUsersDTO() {
-        return accountRepository.findAllUsersDTO ();
->>>>>>> phong-dev
+    public List<AccountDTO> findAllAccountsDTO() {
+        return accountRepository.findAllAccountsDTO();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAllProductsDTOTrash() {
-        return productRepository.findAllProductsDTOTrash();
+        return null;
     }
 
     @Override

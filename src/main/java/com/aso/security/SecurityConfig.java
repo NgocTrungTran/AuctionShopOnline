@@ -60,29 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.csrf().ignoringAntMatchers("/**");
 //        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
-<<<<<<< HEAD
-//        http.authorizeRequests()
-//                .antMatchers("/", "/api/auth/login", "/api/auth/register","/api/accounts/**", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}", "/sendSimpleEmail").permitAll()
-//                .antMatchers("/api/users/deposit").hasAnyAuthority("ADMIN")
-//                .antMatchers("/**", "/api/products/**").permitAll()
-//                .antMatchers("/assets/**").permitAll();
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginProcessingUrl("/login")
-//                .loginPage("/login")
-//                .usernameParameter("username")
-//                .passwordParameter("password")
-//                .defaultSuccessUrl("/")
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login")
-//                .deleteCookies("JWT")
-//                .invalidateHttpSession(true)
-//                .and()
-//                .csrf().disable();
-=======
         http.authorizeRequests()
                 .antMatchers("/", "/api/**").permitAll()
                 .antMatchers("/api/users/deposit").hasAnyAuthority("ADMIN")
@@ -103,7 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .csrf().disable();
->>>>>>> phong-dev
 
 //        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 //                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());

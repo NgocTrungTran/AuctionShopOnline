@@ -42,13 +42,6 @@ public class ProductAPI {
 
     @Autowired
     private CategoryService categoryService;
-<<<<<<< HEAD
-    @GetMapping
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> getAllProducts() {
-        List<ProductDTO> productDTOList = productService.findAllProductsDTO();
-=======
->>>>>>> phong-dev
 
     @GetMapping
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
