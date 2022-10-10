@@ -3,23 +3,24 @@ package com.aso.controller.api;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
-import com.aso.model.Category;
 import com.aso.model.Product;
+import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
+
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,6 +31,8 @@ import java.util.Optional;
 public class ProductAPI {
     @Autowired
     private ProductService productService;
+//    @Autowired
+//    private ProductMediaService productMediaService;
 
     @Autowired
     private Validation validation;
@@ -156,7 +159,6 @@ public class ProductAPI {
             return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @DeleteMapping("/delete-soft/{id}")
     // đã test ok
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
@@ -172,6 +174,7 @@ public class ProductAPI {
         }
 
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
 
@@ -186,10 +189,65 @@ public class ProductAPI {
         }
     }
 
-    @GetMapping("/search/{query}")
+    @GetMapping("/search/{title}")
     // đã test ok (tìm kiếm theo tên title)
-    public ResponseEntity<?> searchListProduct(@PathVariable String query) {
-        List<ProductDTO> productDTOList = productService.findProductByValue(query);
+    public ResponseEntity<?> searchProductTitle(@PathVariable String title) {
+        List<ProductDTO> productDTOList = productService.findAllBySearchTitle(title);
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
+
+    // Viết thêm slug
+    @GetMapping("/search/{slug}")
+    // đã test ok (tìm kiếm theo tên slug)
+    public ResponseEntity<?> searchProductSlug(@PathVariable String slug) {
+        List<ProductDTO> productDTOList = productService.findAllBySearchSlug(slug);
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    // viết slug chưa test
+    @PutMapping("/update/{slug}")
+    public ResponseEntity<?> update(@PathVariable String slug, @Validated ProductDTO productDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return appUtil.mapErrorToResponse(bindingResult);
+
+        Optional<Product> product = productService.findProductBySlug(slug);
+
+        if (!product.isPresent()) {
+            throw new DataInputException("Invalid product id");
+        }
+
+        productDTO.setId(product.get().getId());
+
+        try {
+            productDTO.getCategory().setTitle(product.get().getCategory().getTitle());
+            productDTO.setId(product.get().getId());
+            productService.save(productDTO.toProduct());
+
+            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/product/slug/{slug}")
+    public ResponseEntity<?> findProductBySlug(@PathVariable String slug) {
+        Optional<ProductDTO> productDTOOptional = productService.findProductDTOBySlug(slug);
+        if (!productDTOOptional.isPresent()) {
+            throw new DataInputException("Product is not found");
+        }
+
+        return new ResponseEntity<>(productDTOOptional.get(), HttpStatus.OK);
+    }
+
+   // productMedia
+//   @GetMapping("/productMedia/{id}")
+//   public ResponseEntity<?> findProductMediaByIdProduct(@PathVariable String id) {
+//       List<ProductMediaDTO> productMediaDTOList = productMediaService.findAllByProductIdOrderByTsDesc(id);
+//       if (productMediaDTOList.isEmpty()) {
+//           throw new DataInputException("Product is not found");
+//       }
+//       return new ResponseEntity<>(productMediaDTOList, HttpStatus.OK);
+//   }
+
 }

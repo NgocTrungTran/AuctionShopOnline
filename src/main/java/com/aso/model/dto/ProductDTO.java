@@ -45,9 +45,9 @@ public class ProductDTO implements Validator {
 
     private Boolean moderation;
 
-//    private String createdBy;
+    private String description;
 
-    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available) {
+    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action) {
         this.id = id;
         this.title = title;
         this.slug = slug;
@@ -57,6 +57,8 @@ public class ProductDTO implements Validator {
         this.viewed = viewed;
         this.category = category.toCategoryDTO ();
         this.available = available;
+        this.description = description;
+        this.action=action;
     }
 
     public Product toProduct() {
@@ -65,8 +67,13 @@ public class ProductDTO implements Validator {
                 .setTitle ( title )
                 .setSlug ( slug )
                 .setPrice ( price )
+                .setSold ( sold )
+                .setViewed ( viewed )
                 .setImage ( image )
                 .setCategory ( category.toCategory () )
+                .setDescription(description)
+                .setAvailable(available)
+                .setAction(action)
                 ;
 
     }
