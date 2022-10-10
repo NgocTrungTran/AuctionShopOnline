@@ -54,8 +54,6 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
-
-<<<<<<< HEAD
 //    @GetMapping("/trash")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
@@ -69,11 +67,6 @@ public class ProductAPI {
 //        }
 //        return new ResponseEntity<>(products, HttpStatus.OK);
 //    }
-
-    @GetMapping("/{productId}")
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
-//    Đã test ok
-=======
     @GetMapping("/trash")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsTrash() {
@@ -88,7 +81,6 @@ public class ProductAPI {
 
     @GetMapping("/{productId}")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
->>>>>>> eaeb06ec30b16a20262cd4a474f50b24167405ce
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
 
         if (!validation.isIntValid(productId)) {
@@ -134,7 +126,6 @@ public class ProductAPI {
 //    }
 
     @PostMapping("/create")
-<<<<<<< HEAD
     // Test đã ok
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
@@ -155,27 +146,15 @@ public class ProductAPI {
 // đã test ok
     public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO,
                                     BindingResult bindingResult) {
-=======
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> doAddProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult  ) {
-        new ProductDTO ().validate(productDTO, bindingResult);
->>>>>>> eaeb06ec30b16a20262cd4a474f50b24167405ce
 
         if (bindingResult.hasErrors()) {
             return appUtil.mapErrorToResponse(bindingResult);
         }
 
         Optional<Product> p = productService.findById(id);
-
-<<<<<<< HEAD
         if (!p.isPresent()) {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
-=======
-        productDTO.getCategory().setId( 0L );
-        Category category = categoryService.save(productDTO.getCategory().toCategory());
-        productDTO.setCategory( category.toCategoryDTO () );
->>>>>>> eaeb06ec30b16a20262cd4a474f50b24167405ce
 
         try {
             productDTO.getCategory().setTitle(p.get().getCategory().getTitle());
