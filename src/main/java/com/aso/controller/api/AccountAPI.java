@@ -59,7 +59,7 @@ public class AccountAPI {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDTO accountDTO,
                                            // LocationRegionDTO locationRegionDTO,
                                            BindingResult bindingResult) {

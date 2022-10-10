@@ -33,7 +33,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
-            "p.available " +
+            "p.available, " +
+            "p.action " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false")
     List<ProductDTO> findAllProductsDTO();
@@ -47,7 +48,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
-            "p.available " +
+            "p.available, " +
+            "p.action " +
             ") " +
             "FROM Product AS p WHERE p.deleted = true ")
     List<ProductDTO> findAllProductsDTOTrash();
