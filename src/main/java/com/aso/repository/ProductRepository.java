@@ -41,37 +41,25 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.sold, " +
             "p.title, " +
             "p.viewed, " +
-<<<<<<< HEAD
-            "p.category " +
-=======
             "p.category, " +
-            "p.available, " +
-            "p.description, " +
-            "p.action " +
->>>>>>> phong-dev
+            "p.description " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false")
     List<ProductDTO> findAllProductsDTO();
 
-    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
-            "p.id, " +
-            "p.title, " +
-            "p.slug, " +
-            "p.image, " +
-            "p.price, " +
-            "p.sold, " +
-            "p.viewed, " +
-            "p.category, " +
-            "p.available, " +
-<<<<<<< HEAD
-            "p.createdBy" +
-=======
-            "p.description, " +
-            "p.action " +
->>>>>>> phong-dev
-            ") " +
-            "FROM Product AS p WHERE p.deleted = true ")
-    List<ProductDTO> findAllProductsDTOTrash();
+//    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+//            "p.id, " +
+//            "p.title, " +
+//            "p.slug, " +
+//            "p.image, " +
+//            "p.price, " +
+//            "p.sold, " +
+//            "p.viewed, " +
+//            "p.category, " +
+//            "p.available " +
+//            ") " +
+//            "FROM Product AS p WHERE p.deleted = true ")
+//    List<ProductDTO> findAllProductsDTOTrash();
 
     Boolean existsByTitle(String title);
 
@@ -201,5 +189,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product p WHERE " +
             "p.id = ?1 " +
             "And p.deleted = false")
-    Optional<ProductDTO> findProductDTOById (String id);
+    Optional<ProductDTO> findProductDTOById(String id);
 }

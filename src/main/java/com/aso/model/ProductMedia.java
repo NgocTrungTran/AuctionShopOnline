@@ -1,6 +1,5 @@
 package com.aso.model;
 
-import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductMediaDTO;
 import lombok.*;
 import lombok.ToString;
@@ -51,6 +50,7 @@ public class ProductMedia {
     @ManyToOne
     @JoinColumn(name = "cartItem_id")
     private CartItem cartItem;
+
 
     public ProductMediaDTO toProductMediaDTO() {
         return new ProductMediaDTO()
