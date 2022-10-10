@@ -49,7 +49,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/trash")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsTrash() {
         List<ProductDTO> products = productService.findAllProductsDTOTrash ();
 
@@ -61,7 +61,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/{productId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
 
         if ( !validation.isIntValid ( productId ) ) {
@@ -79,7 +79,7 @@ public class ProductAPI {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doAddProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult  ) {
         new ProductDTO ().validate(productDTO, bindingResult);
 
@@ -89,9 +89,9 @@ public class ProductAPI {
 
         String slug = Validation.makeSlug ( productDTO.getTitle () );
 
-        productDTO.getCategory ().setId ( 0L );
-        Category category = categoryService.save ( productDTO.getCategory ().toCategory () );
-        productDTO.setCategory ( category.toCategoryDTO () );
+        productDTO.getCategory().setId( 0L );
+        Category category = categoryService.save(productDTO.getCategory().toCategory());
+        productDTO.setCategory( category.toCategoryDTO () );
 
         try {
             Product product = productDTO.toProduct ();
