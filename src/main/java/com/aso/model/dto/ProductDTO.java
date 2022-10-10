@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -17,6 +18,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,26 +28,27 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class ProductDTO implements Validator {
     private Long id;
-
-    private String title;
-    private String slug;
-    private String image;
-    private Long sold;
-    private Long viewed;
-
+    private Date createdAt;
+    private String createdBy;
+    private Date updateAt;
+    private String updateBy;
     private Boolean action;
     @Max(value = 1000)
     @Min(value = 0)
     private Long available;
+    private String image;
+    private Boolean moderation;
     private BigDecimal price;
-
+    private String slug;
+    private Long sold;
+    private String title;
+    private Long viewed;
     private CategoryDTO category;
 
-    private Boolean moderation;
+    private String description;
 
-    private String createdBy;
+    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action){
 
-    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, boolean action) {
         this.id = id;
         this.title = title;
         this.slug = slug;
@@ -57,14 +61,40 @@ public class ProductDTO implements Validator {
         this.action = action;
     }
 
+    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, String slug, Long sold, String title, Long viewed, Category category, String description) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.updateAt = updateAt;
+        this.updateBy = updateBy;
+        this.action = action;
+        this.available = available;
+        this.image = image;
+        this.moderation = moderation;
+        this.price = price;
+        this.slug = slug;
+        this.sold = sold;
+        this.title = title;
+        this.viewed = viewed;
+        this.category = category.toCategoryDTO();
+        this.description = description;
+
+    }
+
     public Product toProduct() {
-        return new Product ()
+        return (Product) new Product ()
                 .setId ( id )
                 .setTitle ( title )
                 .setSlug ( slug )
                 .setPrice ( price )
+                .setSold ( sold )
+                .setViewed ( viewed )
                 .setImage ( image )
+                .setDescription(description)
+                .setAvailable(available)
+                .setAction(action)
                 .setCategory ( category.toCategory () )
+                .setCreatedBy(createdBy)
                 ;
 
     }

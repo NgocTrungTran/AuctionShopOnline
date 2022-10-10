@@ -1,6 +1,6 @@
 package com.aso.model;
 
-import com.aso.model.dto.ProductDTO;
+import com.aso.model.dto.ProductMediaDTO;
 import lombok.*;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -41,7 +41,7 @@ public class ProductMedia {
 
 
     @Column(columnDefinition = "BIGINT(20) DEFAULT 0")
-    private Long ts = new Date ().getTime();
+    private Long ts = new Date().getTime();
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -51,13 +51,17 @@ public class ProductMedia {
     @JoinColumn(name = "cartItem_id")
     private CartItem cartItem;
 
-//    public ProductDTO toProductMideiaDTO(){
-//        return new ProductDTO()
-//                .setFileProductId(id)
-//                .setFileName(fileName)
-//                .setFileFolder(fileFolder)
-//                .setFileUrl(fileUrl)
-//                .setFileType(fileType)
-//                .setCloudId(cloudId);
-//    }
+
+    public ProductMediaDTO toProductMediaDTO() {
+        return new ProductMediaDTO()
+                .setId(id)
+                .setCloudId(cloudId)
+                .setFileType(fileType)
+                .setFileUrl(fileUrl)
+                .setProduct(product.toProductDTO())
+                .setFileFolder(fileFolder)
+                .setFileName(fileName)
+                .setTs(ts)
+                ;
+    }
 }

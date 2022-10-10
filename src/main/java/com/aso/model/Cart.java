@@ -1,9 +1,11 @@
 package com.aso.model;
 
+import com.aso.model.dto.CartDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "carts")
+@Accessors(chain = true)
 public class Cart extends BaseEntity {
 
     @Id
@@ -29,4 +32,12 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItem;
+
+    public CartDTO toCartDTO(){
+        return new CartDTO()
+                .setId(id)
+                .setContent(content)
+                .setAccount(account.toAccountDTO())
+                ;
+    }
 }
