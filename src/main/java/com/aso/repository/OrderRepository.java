@@ -36,4 +36,27 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM Order AS o ")
     List<OrderDTO> findOrderDTO();
 
+    @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
+            "o.id, " +
+            "o.locationRegion, " +
+            "o.description, " +
+            "o.statusOrder, " +
+            "o.orderDetail, " +
+            "o.createdAt, " +
+            "o.updatedAt " +
+            ") " +
+            "FROM Order o where o.statusOrder = ?1")
+    List<OrderDTO> findOrderDTOByDeliver(String order);
+
+    @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
+            "o.id, " +
+            "o.locationRegion, " +
+            "o.description, " +
+            "o.statusOrder, " +
+            "o.orderDetail, " +
+            "o.createdAt, " +
+            "o.updatedAt " +
+            ") " +
+            "FROM Order o  WHERE  o.orderDetail.id = ?1  ")
+    List<OrderDTO> findAllOrderDTOByOrderDetailId(Long id);
 }

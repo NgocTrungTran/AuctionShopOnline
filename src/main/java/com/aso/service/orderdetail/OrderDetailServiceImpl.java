@@ -81,4 +81,28 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
         return orderDetailRepository.findOderByCreateMonthYearAndStatusOrderDetail(createMonth,createYear,statusOrderDetail);
     }
 
+    @Override
+    public List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(int createYear, String statusOrderDetail) {
+        return orderDetailRepository.findOderByCreateYearAndStatusOrderDetail(createYear,statusOrderDetail);
+    }
+    @Override
+    public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
+        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+        for (OrderDTO orderDTO : orderList){
+            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
+            orderRepository.save(orderDTO.toOrder());
+        }
+        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
+        return orderDetailRepository.save(orderDetail);
+    }
+    public OrderDetail deliveryOrder(OrderDetail orderDetail, String Title) {
+        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+        for (OrderDTO orderDTO : orderList){
+            orderDTO.setStatusOrder("Đang giao hàng");
+            orderRepository.save(orderDTO.toOrder());
+        }
+        orderDetail.setStatusOrderDetail("Đang giao hàng");
+        return orderDetailRepository.save(orderDetail);
+    }
+
 }

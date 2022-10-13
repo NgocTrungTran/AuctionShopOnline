@@ -60,5 +60,17 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "FROM CartItem c  WHERE c.id = ?1 ")
     Optional<CartItemListDTO> getCartItemDTOById(Long id);
 
+    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+            "c.id, " +
+            "c.product , " +
+            "c.title, " +
+            "c.price ," +
+            "c.quantity, " +
+            "c.amountTransaction" +
+            " )  " +
+
+            "FROM CartItem c  WHERE c.title Like ?1 And c.product.title like ?2  And c.deleted = false ")
+    Optional<CartItemListDTO> getCartItemDTOByCode(String userName, String code);
+
 
 }

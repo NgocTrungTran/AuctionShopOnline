@@ -44,6 +44,9 @@ public class CartItem {
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
 //    @OneToMany(mappedBy = "cartItem")
 //    private List<CartItem> cartItem;
 

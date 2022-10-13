@@ -6,6 +6,7 @@ import com.aso.model.Cart;
 import com.aso.model.CartItem;
 import com.aso.model.Product;
 import com.aso.model.dto.CartItemListDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.CartItemRepository;
 import com.aso.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,4 +128,37 @@ public class CartItemServiceImpl implements CartItemService {
 //        cartItem.setQuantity(cartItem.getQuantity().subtract(cartItem.getPrice()));
 //        return cartItemRepository.save(cartItem);
 //    }
+
+    @Override
+    public Optional<CartItemListDTO> getCartItemDTOByCode(String userName , String code) {
+        return cartItemRepository.getCartItemDTOByCode(userName,code);
+    }
+    @Override
+    public CartItem saveInDetail(CartItem cartItem) {
+        Optional<CartItemListDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());
+        cartItem.setId(cartItem1.get().getId());
+        return cartItemRepository.save(cartItem);
+    }
+
+    @Override
+    public CartItem saveOp(CartItem cartItem) {
+        return null;
+    }
+
+//    public CartItem saveOp(CartItem cartItem) {
+//        Optional<CartItemListDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());
+//        Optional<ProductDTO> productDTO = productRepository.findProductDTOById(cartItem.getProduct().getId());
+//        if(productDTO.get().getAvailable().compareTo(BigDecimal.ZERO) < 0){
+//            productDTO.get().setAvailable("Đã Hết Hàng");
+//            productRepository.save(productDTO.get().toProduct());
+//        }
+//        cartItem.setId(cartItem1.get().getId());
+//        cartItem.setQuantity(new BigDecimal(String.valueOf(cartItem1.get().getQuantity().add(BigDecimal.valueOf(1)))));
+//        cartItem.setGrandTotal(new BigDecimal(String.valueOf(cartItem.getQuantity().multiply(cartItem.getPrice()))));
+//        if(productDTO.get().getQuantity().compareTo(cartItem.getQuantity()) < 0){
+//            throw new DataInputException("Đã hết hàng!");
+//        }
+//        return cartItemRepository.save(cartItem);
+//    }
+
 }

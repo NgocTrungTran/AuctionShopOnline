@@ -36,7 +36,7 @@ public class CartItemsAPI {
 
     @GetMapping("/id/{id}")
     // đã test ok
-    public ResponseEntity<?> GetCartById(@PathVariable Long id) {
+    public ResponseEntity<?> getCartById(@PathVariable Long id) {
         try {
             Optional<CartItemListDTO> cartItemsDTO = cartItemService.getCartItemDTOById(id);
             return new ResponseEntity<>(cartItemsDTO.get(), HttpStatus.ACCEPTED);
@@ -45,28 +45,76 @@ public class CartItemsAPI {
         }
     }
 
-//    @PutMapping("/increasing")
-//    public ResponseEntity<?> increasingCart(@RequestBody CartItem cartItem, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return appUtils.mapErrorToResponse(bindingResult);
-//        }
-//        try {
-//            return new ResponseEntity<>(cartItemService.SaveIncreasing(cartItem).toCartItemListDTO(), HttpStatus.ACCEPTED);
-//        } catch (Exception e) {
-//            throw new DataInputException("Sản phẩm không đủ để thêm nữa!");
-//        }
-//    }
-//    @PutMapping("/reduce")
-//    public ResponseEntity<?> ReduceCart(@RequestBody CartItem cartItem, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return appUtils.mapErrorToResponse(bindingResult);
-//        }
-//        try {
-//            return new ResponseEntity<>(cartItemService.SaveReduce(cartItem).toCartItemListDTO(), HttpStatus.ACCEPTED);
-//
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Không thể Giảm số lượng sản phẩm", HttpStatus.NO_CONTENT);
-//        }
-//    }
+    @PutMapping("/increasing")
+    public ResponseEntity<?> increasingCart(@RequestBody CartItem cartItem, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            return new ResponseEntity<>(cartItemService.SaveIncreasing(cartItem).toCartItemListDTO(), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            throw new DataInputException("Sản phẩm không đủ để thêm nữa!");
+        }
+    }
+    @PutMapping("/reduce")
+    public ResponseEntity<?> reduceCart(@RequestBody CartItem cartItem, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            return new ResponseEntity<>(cartItemService.SaveReduce(cartItem).toCartItemListDTO(), HttpStatus.ACCEPTED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Không thể giảm số lượng sản phẩm", HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> doCreate(@RequestBody CartItemListDTO cartItemsDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            try {
+                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemsDTO.getTitle(), cartItemsDTO.getProductId().getTitle());
+                if (cartItemDTO.isPresent()) {
+//                    if (cartItemDTO.get().getProductId().getFiles().contains(cartItemsDTO.getProductId())) {
+//                        // cho nó nhảy vào catch để xử lý thêm product vào cartItem;
+//                    }
+                }
+                return new ResponseEntity<>(cartItemService.save(cartItemsDTO.toCartItem()).toCartItemListDTO(), HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(cartItemService.saveOp(cartItemsDTO.toCartItem()).toCartItemListDTO(), HttpStatus.ACCEPTED);
+            }
+        } catch (Exception e) {
+            throw new DataInputException("không đủ số lượng sản phẩm để thêm vào giỏ hàng!!");
+        }
+    }
+
+    @PostMapping("/creat-cart-in-detail")
+    public ResponseEntity<?> doCreateCartItem(@RequestBody CartItemListDTO cartItemListDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            try {
+                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemListDTO.getTitle(), cartItemListDTO.getProductId().getTitle());
+                if (cartItemDTO.isPresent()) {
+//                    if (cartItemDTO.get().getProductId().getFiles().contains(cartItemListDTO.getProductId())) {
+//                        // cho nó nhảy vào catch để xử lý thêm product vào cartItem;
+//                    }
+                }
+
+                CartItem cartItemsDTO1 = cartItemService.save(cartItemListDTO.toCartItem());
+                return new ResponseEntity<>(cartItemsDTO1.toCartItemListDTO(), HttpStatus.CREATED);
+            } catch (Exception e) {
+                CartItem cartItemsDTO1 = cartItemService.saveInDetail(cartItemListDTO.toCartItem());
+                return new ResponseEntity<>(cartItemsDTO1.toCartItemListDTO(), HttpStatus.ACCEPTED);
+            }
+        } catch (Exception e) {
+            throw new DataInputException("Không thêm vào giỏ hàng thành công");
+        }
+    }
 
 }
