@@ -2,6 +2,7 @@ package com.aso.model.dto;
 
 import com.aso.model.Category;
 import com.aso.model.Product;
+import com.aso.model.ProductMedia;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -19,6 +21,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -44,7 +47,6 @@ public class ProductDTO implements Validator {
     private String title;
     private Long viewed;
     private CategoryDTO category;
-
     private String description;
 
     public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action){

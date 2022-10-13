@@ -2,11 +2,11 @@ package com.aso.repository;
 
 
 import com.aso.model.Product;
-import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    @Query("SELECT MAX(id) FROM Product")
+    Long findTopById();
 
     @Query("SELECT NEW com.aso.model.dto.ProductListDTO (" +
             "p.id, " +

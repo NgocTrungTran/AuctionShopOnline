@@ -4,23 +4,20 @@ import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Product;
-import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
+import com.aso.service.productMedia.ProductMediaService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,8 +28,8 @@ import java.util.Optional;
 public class ProductAPI {
     @Autowired
     private ProductService productService;
-//    @Autowired
-//    private ProductMediaService productMediaService;
+    @Autowired
+    private ProductMediaService productMediaService;
 
     @Autowired
     private Validation validation;
@@ -126,7 +123,6 @@ public class ProductAPI {
 //    }
 
     @PostMapping("/create")
-    // Test đã ok
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

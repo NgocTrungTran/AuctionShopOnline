@@ -2,9 +2,9 @@ package com.aso.service.product;
 
 
 import com.aso.model.Product;
-import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
+import com.aso.repository.ProductMediaRepository;
 import com.aso.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductMediaRepository productMediaRepository;
 
 
     @Override
@@ -98,5 +101,4 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findProductBySlug(String slug) {
         return productRepository.findProductBySlug(slug);
     }
-
 }
