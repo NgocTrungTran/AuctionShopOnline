@@ -5,12 +5,6 @@ import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.service.IGeneralService;
-<<<<<<< HEAD
-=======
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
->>>>>>> development
 
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +27,5 @@ public interface ProductService extends IGeneralService<Product> {
     Optional<ProductDTO> findProductDTOBySlug (String slug);
 
     Optional<Product> findProductBySlug(String slug);
-
-<<<<<<< HEAD
-=======
     List<ProductDTO> findAllProductDTOByAvailable(String available);
-
->>>>>>> development
 }

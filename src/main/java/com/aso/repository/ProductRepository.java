@@ -10,11 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-<<<<<<< HEAD
 import org.springframework.data.repository.query.Param;
-=======
 import org.springframework.data.repository.PagingAndSortingRepository;
->>>>>>> development
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,13 +19,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-<<<<<<< HEAD
 
     @Query("SELECT MAX(id) FROM Product")
     Long findTopById();
 
-=======
->>>>>>> development
     @Query("SELECT NEW com.aso.model.dto.ProductListDTO (" +
             "p.id, " +
             "p.title, " +

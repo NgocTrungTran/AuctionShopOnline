@@ -13,15 +13,8 @@ import com.aso.service.productMedia.ProductMediaService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
-=======
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
->>>>>>> development
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +28,11 @@ import java.util.*;
 public class ProductAPI {
     @Autowired
     private ProductService productService;
-<<<<<<< HEAD
     @Autowired
     private ProductMediaService productMediaService;
-=======
 
     @Autowired
     private ProductRepository productRepository;
->>>>>>> development
 
     @Autowired
     private Validation validation;

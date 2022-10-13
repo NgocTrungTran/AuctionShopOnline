@@ -2,23 +2,15 @@ package com.aso.service.product;
 
 
 import com.aso.model.Product;
-<<<<<<< HEAD
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.repository.ProductMediaRepository;
-=======
 import com.aso.model.ProductMedia;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
-import com.aso.model.enums.FileType;
->>>>>>> development
 import com.aso.repository.ProductRepository;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,14 +24,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-
-<<<<<<< HEAD
     @Autowired
     private ProductMediaRepository productMediaRepository;
 
-
-=======
->>>>>>> development
     @Override
     public List<Product> findAll() {
 //        return productRepository.findAll();
@@ -118,12 +105,10 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findProductBySlug(String slug) {
         return productRepository.findProductBySlug(slug);
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public List<ProductDTO> findAllProductDTOByAvailable(String available) {
         return productRepository.findAllProductDTOByAvailable(available);
     }
->>>>>>> development
+
 }
