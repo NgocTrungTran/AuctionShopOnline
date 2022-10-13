@@ -135,7 +135,6 @@ public class ProductAPI {
     }
 
     @PutMapping("/edit/{id}")
-// đã test ok
     public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO,
                                     BindingResult bindingResult) {
 
@@ -160,9 +159,10 @@ public class ProductAPI {
             return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @DeleteMapping("/delete-soft/{id}")
-    // đã test ok
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
+
 
         Optional<Product> optionalProduct = productService.findById(id);
 
