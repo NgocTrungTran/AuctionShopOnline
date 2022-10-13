@@ -62,33 +62,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-//    @Override
-//    @Transactional
-//    public Order save(Order order) throws MessagingException, UnsupportedEncodingException {
-//        OrderDetail orderDetail = new OrderDetail();
-//        orderDetail.setId(0L);
-//        orderDetail.setStatusOrderDetail("abc");
-//        orderDetail.setCreatedAt(new Date());
-//        OrderDetail orderNew = orderDetailRepository.save(orderDetail);
-//        BigDecimal sum = BigDecimal.valueOf(0);
-//        List<CartItemListDTO> cartItemsDTOList = cartItemRepository.findCartItemDTOById(order.getStatusOrder());
-//        for (CartItemListDTO cartItemsDTO : cartItemsDTOList) {
-//            Optional<ProductDTO> productDTO = productRepository.findProductDTOById(cartItemsDTO.getProductId().getId());
-//            productDTO.get().setAvailable(productDTO.get().getAvailable().subtract(cartItemsDTO.getQuantity()));
-//            if (productDTO.get().getAvailable().compareTo(BigDecimal.ZERO) < 0) {
-//                cartItemRepository.deleteById(cartItemsDTO.getId());
-//                orderDetailRepository.deleteById(orderNew.getId());
-//                productDTO.get().setAvailable(Long.valueOf("Đã Hết hàng"));
-//                throw new DataInputException("Số lượng sản phẩm " + cartItemsDTO.getProductId().getTitle() + " không đủ để order!");
-//            }
-//            productRepository.save(productDTO.get().toProduct());
-//            order.setId(0L);
-//            order.setOrderDetail(orderNew);
-//
-//        }
-//        return order;
-//    }
-
     @Override
     public void delete(Product id) {
 
@@ -108,5 +81,12 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> findOrderDTO() {
         return orderRepository.findOrderDTO();
     }
-
+    @Override
+    public List<OrderDTO> findOrderDTOByDeliver(String order) {
+        return orderRepository.findOrderDTOByDeliver(order);
+    }
+    @Override
+    public List<OrderDTO> findAllOrderDTOByOrderDetailId(Long id) {
+        return orderRepository.findAllOrderDTOByOrderDetailId(id);
+    }
 }

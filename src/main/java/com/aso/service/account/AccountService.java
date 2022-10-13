@@ -2,6 +2,7 @@ package com.aso.service.account;
 
 import com.aso.model.Account;
 import com.aso.model.dto.AccountDTO;
+import com.aso.model.dto.CategoryDTO;
 import com.aso.service.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -33,6 +34,8 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     Optional<Account> findByUsername(String username);
 
     Optional<AccountDTO> findUserDTOByUsername(String username);
+    Optional<AccountDTO> findUserDTOById(Long id);
+
 
     Optional<Account> getByUsername(String username);
 

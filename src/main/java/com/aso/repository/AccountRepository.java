@@ -83,12 +83,33 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
             "a.id, " +
-            "a.username" +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
             ") " +
             "FROM Account AS a " +
             "WHERE a.username = ?1"
     )
     Optional<AccountDTO> findUserDTOByUsername(String username);
+
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
+            "a.id, " +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a " +
+            "WHERE a.id = :id"
+    )
+    Optional<AccountDTO> findUserDTOById(Long id);
 
     @Modifying
     @Query("UPDATE Account AS a " +

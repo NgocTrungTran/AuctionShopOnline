@@ -5,10 +5,16 @@ import com.aso.model.Category;
 import com.aso.model.Product;
 import com.aso.model.dto.CategoryDTO;
 import com.aso.repository.CategoryRepository;
+import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,9 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Boolean existsCategoryByTitle(String title) {
         return categoryRepository.existsCategoryByTitle(title);
     }
+
     @Override
     public Boolean existById(Long id) {
         return null;
     }
-
 }
