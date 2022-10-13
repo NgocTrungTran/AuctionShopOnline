@@ -9,15 +9,12 @@ import com.aso.repository.ProductRepository;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
+import com.aso.service.productMedia.ProductMediaService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,8 @@ import java.util.*;
 public class ProductAPI {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductMediaService productMediaService;
 
     @Autowired
     private ProductRepository productRepository;
@@ -55,7 +54,6 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
-
 //    @GetMapping("/trash")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
@@ -69,10 +67,20 @@ public class ProductAPI {
 //        }
 //        return new ResponseEntity<>(products, HttpStatus.OK);
 //    }
+    @GetMapping("/trash")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsTrash() {
+        List<ProductDTO> products = productService.findAllProductsDTOTrash ();
+
+        if (products.isEmpty ()) {
+            throw new DataOutputException ( "No data" );
+        }
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
     @GetMapping("/{productId}")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
-//    Đã test ok
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
 
         if (!validation.isIntValid(productId)) {
@@ -118,7 +126,6 @@ public class ProductAPI {
 //    }
 
     @PostMapping("/create")
-    // Test đã ok
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -143,7 +150,6 @@ public class ProductAPI {
         }
 
         Optional<Product> p = productService.findById(id);
-
         if (!p.isPresent()) {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
