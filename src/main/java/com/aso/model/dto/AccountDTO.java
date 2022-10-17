@@ -82,5 +82,20 @@ public class AccountDTO {
                 .setLocationRegion ( locationRegion.toLocationRegion () );
     }
 
+    @Override
+    public String toString() {
+        return "AccountDTO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", blocked=" + blocked +
+                ", avatar='" + avatar + '\'' +
+                ", role=" + role +
+                ", locationRegion=" + locationRegion +
+                '}';
+    }
 }
 

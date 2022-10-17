@@ -5,13 +5,10 @@ import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -122,6 +119,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product AS p WHERE  " +
             " p.slug like %?1% ")
     List<ProductDTO> findAllBySearchSlug(String slug);
+
     Optional<Product> findProductBySlug(String slug);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
@@ -157,4 +155,48 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.available >=0")
     List<ProductDTO> findAllProductDTOByAvailable(String available);
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description " +
+            ") " +
+            "FROM Product AS p WHERE p.title LIKE :keyword " +
+            "OR p.category.title LIKE :keyword " +
+            "")
+    Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description " +
+            ") " +
+            "FROM Product AS p WHERE p.deleted = false")
+    Page<ProductDTO> findAllProducts(Pageable pageable);
 }

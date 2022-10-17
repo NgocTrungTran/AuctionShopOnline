@@ -1,6 +1,5 @@
 package com.aso.controller.api;
 
-import com.aso.model.ProductMedia;
 import com.aso.model.dto.ProductMediaDTO;
 import com.aso.service.productMedia.ProductMediaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productmedia")
-public class productMediaAPI {
+public class ProductMediaAPI {
     @Autowired
     private ProductMediaServiceImpl productMediaService;
 

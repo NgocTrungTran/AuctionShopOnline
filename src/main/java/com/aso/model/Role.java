@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -35,5 +36,6 @@ public class Role {
                 .setId(id)
                 .setCode ( code )
                 .setName ( name );
+
     }
 }

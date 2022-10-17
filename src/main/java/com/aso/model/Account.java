@@ -58,4 +58,20 @@ public class Account extends BaseEntity{
                 .setAvatar ( avatar )
                 .setBlocked ( blocked );
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", blocked=" + blocked +
+                ", avatar='" + avatar + '\'' +
+                ", role=" + role +
+                ", locationRegion=" + locationRegion +
+                '}';
+    }
 }
