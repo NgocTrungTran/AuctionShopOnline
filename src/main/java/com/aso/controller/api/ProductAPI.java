@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 
 @RestController
@@ -156,17 +157,24 @@ public class ProductAPI {
         }
 
         try {
-            productDTO.getCategory().setTitle(p.get().getCategory().getTitle());
-            productDTO.setId(p.get().getId());
+            productDTO.setId(id);
+            String slug = Validation.makeSlug(productDTO.getTitle());
+            productDTO.setCreatedAt(p.get().getCreatedAt());
+            productDTO.setCreatedBy(p.get().getCreatedBy());
+            productDTO.setUpdateAt(new Date());
+            productDTO.setUpdateBy(p.get().getUpdatedBy());
+            productDTO.setSold(p.get().getSold());
+            productDTO.setSlug(slug);
+            productDTO.setViewed(p.get().getViewed());
             productService.save(productDTO.toProduct());
 
             return new ResponseEntity<>(productDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/delete-soft/{id}")
+    @PutMapping("/delete-soft/{id}")
     // đã test ok
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
 

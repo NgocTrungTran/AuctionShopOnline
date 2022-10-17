@@ -5,7 +5,6 @@ import com.aso.model.ProductMedia;
 import com.aso.model.dto.ProductMediaDTO;
 import com.aso.repository.ProductMediaRepository;
 import com.aso.repository.ProductRepository;
-import com.aso.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     private ProductMediaRepository productMediaRepository;
 
     @Override
-    public Optional<ProductMedia> findById(String id) {
+    public Optional<ProductMedia> findById(Long id) {
         return productMediaRepository.findById(id);
     }
 
@@ -56,4 +55,11 @@ public class ProductMediaServiceImpl implements ProductMediaService {
     public List<ProductMediaDTO> findAllById(Long id) {
         return productMediaRepository.findAllById(id);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        productMediaRepository.deleteById(id);
+    }
+
+
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductMediaRepository extends JpaRepository<ProductMedia, String>  {
+public interface ProductMediaRepository extends JpaRepository<ProductMedia, Long>  {
 //    Optional<ProductMedia> findByProduct(Product product);
 //    Optional<ProductMedia> findByProductProductMedia(ProductMedia productMedia);
 //
@@ -22,4 +22,7 @@ public interface ProductMediaRepository extends JpaRepository<ProductMedia, Stri
             "pm.fileUrl " +
             ") FROM ProductMedia AS pm WHERE pm.product.id = ?1")
     List<ProductMediaDTO> findAllById(Long id);
+
+//    @Query("DELETE FROM ProductMedia WHERE id = ?1")
+//    Optional<ProductMediaDTO> dele(Long id);
 }

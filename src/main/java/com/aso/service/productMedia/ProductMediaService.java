@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductMediaService {
-    Optional<ProductMedia> findById(String id);
+    Optional<ProductMedia> findById(Long id);
 
     Iterable<ProductMedia> findAll();
 
@@ -18,4 +18,6 @@ public interface ProductMediaService {
     void save(ProductMedia productMedia);
 
     List<ProductMediaDTO> findAllById(Long id);
+
+    void deleteById(Long id);
 }

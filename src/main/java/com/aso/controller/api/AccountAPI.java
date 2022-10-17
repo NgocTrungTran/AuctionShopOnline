@@ -6,9 +6,7 @@ import com.aso.model.Account;
 import com.aso.model.LocationRegion;
 import com.aso.model.Product;
 import com.aso.model.Role;
-import com.aso.model.dto.AccountDTO;
-import com.aso.model.dto.CategoryDTO;
-import com.aso.model.dto.LocationRegionDTO;
+import com.aso.model.dto.*;
 import com.aso.service.account.AccountService;
 import com.aso.service.location.LocationRegionService;
 import com.aso.service.role.RoleService;
@@ -53,7 +51,7 @@ public class AccountAPI {
     public ResponseEntity<?> getAllAccounts() {
 
         try {
-            List<AccountDTO> accountDTOList = accountService.findAllAccountsDTO();
+            List<AccountDTO> accountDTOList = accountService.findAccountDTOAll();
 
             if ( accountDTOList.isEmpty () ) {
                 return new ResponseEntity<> ( HttpStatus.NO_CONTENT );
@@ -86,13 +84,13 @@ public class AccountAPI {
         }
         Long account_id = Long.parseLong(accountId);
 
-        Optional<Account> productOptional = accountService.findById(account_id);
+        Optional<AccountDTO> productOptional = accountService.findAccountByIdDTO(account_id);
 
         if (!productOptional.isPresent()) {
             throw new ResourceNotFoundException("Account invalid");
         }
 
-        return new ResponseEntity<>(productOptional.get().toAccountDTO(), HttpStatus.OK);
+        return new ResponseEntity<>(productOptional, HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -150,12 +148,22 @@ public class AccountAPI {
             bindingResult.addError ( new FieldError ( "username", "username", "Username này đã tồn tại !" ) );
 
         Optional<Account> accountOptional = accountService.findById ( id );
-
+        Account accountOption = accountOptional.get();
 
         try {
-            accountDTO.setPassword ( accountOptional.get ().getPassword () );
-            Account account = accountDTO.toAccount ();
-            Account updatedAccount = accountService.save ( account );
+            accountOption.setCreatedAt(accountOption.getCreatedAt());
+            accountOption.setCreatedBy(accountOption.getCreatedBy());
+            accountOption.setEmail(accountDTO.getEmail());
+            accountOption.setAvatar(accountDTO.getAvatar());
+            accountOption.setFullName(accountDTO.getFullName());
+            accountOption.setPhone(accountDTO.getPhone());
+            accountOption.setUsername(accountDTO.getUsername());
+            accountOption.setLocationRegion(accountDTO.toAccountAllAttribute().getLocationRegion());
+            accountOption.setRole(accountDTO.getRole().toRole());
+
+            Account updatedAccount = accountService.save( accountOption );
+            LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion();
+            locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
 
         } catch (DataIntegrityViolationException e) {
@@ -202,12 +210,11 @@ public class AccountAPI {
             try {
                 account.get ().setDeleted ( true );
                 accountService.save ( account.get () );
-
+                return new ResponseEntity<> ( HttpStatus.OK );
             } catch (DataIntegrityViolationException e) {
                 return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
         }
         return new ResponseEntity<> ( "Account này không tồn tại", HttpStatus.NOT_FOUND );
     }
-
 }

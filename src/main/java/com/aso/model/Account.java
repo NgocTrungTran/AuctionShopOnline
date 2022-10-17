@@ -6,8 +6,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -52,10 +50,11 @@ public class Account extends BaseEntity{
                 .setId(id)
                 .setUsername ( username )
                 .setFullName ( fullName )
-                .setLocationRegion ( locationRegion.toLocationRegionDTO ())
+                .setLocationregion( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )
-                .setBlocked ( blocked );
+                .setBlocked ( blocked )
+                .setRole(role.toRoleDTO());
     }
 }

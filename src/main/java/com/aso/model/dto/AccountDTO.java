@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,32 +20,39 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class AccountDTO {
     private Long id;
-
+    private Date createdAt;
+    private String createdBy;
+    private Date updateAt;
+    private String updateBy;
     @NotBlank(message = "username not blank")
     @Size(min = 8, max = 20, message = "Username size between 8 and 20")
     private String username;
-
     @Size(min = 5, max = 30, message = "Full name size between 5 and 30")
     private String fullName;
-
     @Size(min = 5, max = 30,  message = "Email size between 5 and 30")
     private String email;
-
-    @Size(min = 9, max = 10,  message = "Phone size between 9 and 10")
     private String phone;
-
     @Size(min = 8, max = 20,  message = "Password size between 8 and 20")
     private String password;
-
     private boolean blocked;
-
     private String avatar;
-
     private RoleDTO role;
-    private LocationRegionDTO locationRegion;
+    private LocationRegionDTO locationregion;
 
+    public AccountDTO(Long id, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.blocked = blocked;
+        this.avatar = avatar;
+        this.role = role.toRoleDTO();
+        this.locationregion = locationregion.toLocationRegionDTO();
+    }
 
-    public AccountDTO(Long id, String username, String fullName, String email, String phone, String avatar, boolean blocked, LocationRegion locationRegion) {
+    public AccountDTO(Long id, String username, String fullName, String email, String phone, String avatar, boolean blocked, LocationRegion locationregion) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -53,7 +60,24 @@ public class AccountDTO {
         this.phone = phone;
         this.avatar = avatar;
         this.blocked = blocked;
-        this.locationRegion = locationRegion.toLocationRegionDTO ();
+        this.locationregion = locationregion.toLocationRegionDTO ();
+    }
+
+    public AccountDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.updateAt = updateAt;
+        this.updateBy = updateBy;
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.blocked = blocked;
+        this.avatar = avatar;
+        this.role = role.toRoleDTO();
+        this.locationregion = locationregion.toLocationRegionDTO();
     }
 
     public AccountDTO(Long id, String username) {
@@ -79,7 +103,7 @@ public class AccountDTO {
                 .setPhone ( phone )
                 .setAvatar ( avatar )
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationRegion.toLocationRegion () );
+                .setLocationRegion ( locationregion.toLocationRegion () );
     }
 
 }
