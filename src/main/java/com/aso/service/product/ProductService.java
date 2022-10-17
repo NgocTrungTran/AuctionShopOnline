@@ -5,6 +5,9 @@ import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.service.IGeneralService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +31,7 @@ public interface ProductService extends IGeneralService<Product> {
 
     Optional<Product> findProductBySlug(String slug);
     List<ProductDTO> findAllProductDTOByAvailable(String available);
+
+    Page<ProductDTO> findAllProducts(Pageable pageable);
+    Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
 }

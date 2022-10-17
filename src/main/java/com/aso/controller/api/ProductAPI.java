@@ -13,6 +13,10 @@ import com.aso.service.productMedia.ProductMediaService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -55,7 +59,32 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
-//    @GetMapping("/trash")
+
+    @GetMapping("/p")
+    public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable) {
+        Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+
+    // For searching
+    @GetMapping("/p/{keyword}")
+    public ResponseEntity<Page<ProductDTO>> getAllBookss(Pageable pageable, @PathVariable("keyword") String keyword) {
+        try {
+            keyword = "%" + keyword + "%";
+            Page<ProductDTO> productDTOList = productService.findAllProductss(pageable, keyword);
+            if (productDTOList.isEmpty()) {
+                throw new DataOutputException("Danh sách sản phẩm trống");
+            }
+            return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //    @GetMapping("/trash")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
 //        List<ProductDTO> products = productService.findAllProductsDTOTrash();
@@ -71,10 +100,10 @@ public class ProductAPI {
     @GetMapping("/trash")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsTrash() {
-        List<ProductDTO> products = productService.findAllProductsDTOTrash ();
+        List<ProductDTO> products = productService.findAllProductsDTOTrash();
 
-        if (products.isEmpty ()) {
-            throw new DataOutputException ( "No data" );
+        if (products.isEmpty()) {
+            throw new DataOutputException("No data");
         }
 
         return new ResponseEntity<>(products, HttpStatus.OK);
@@ -143,7 +172,6 @@ public class ProductAPI {
     }
 
     @PutMapping("/edit/{id}")
-// đã test ok
     public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO,
                                     BindingResult bindingResult) {
 
@@ -175,8 +203,8 @@ public class ProductAPI {
         }
     }
     @PutMapping("/delete-soft/{id}")
-    // đã test ok
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
+
 
         Optional<Product> optionalProduct = productService.findById(id);
 

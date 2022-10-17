@@ -4,9 +4,9 @@ import com.aso.exception.DataInputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
-import com.aso.model.Product;
 import com.aso.model.Role;
-import com.aso.model.dto.*;
+import com.aso.model.dto.AccountDTO;
+import com.aso.repository.AccountRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.location.LocationRegionService;
 import com.aso.service.role.RoleService;
@@ -16,14 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +30,9 @@ public class AccountAPI {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @Autowired
     AppUtil appUtil;
@@ -45,7 +45,6 @@ public class AccountAPI {
 
     @Autowired
     LocationRegionService locationRegionService;
-
 
     @GetMapping
     public ResponseEntity<?> getAllAccounts() {
