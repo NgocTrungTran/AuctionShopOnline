@@ -6,11 +6,13 @@ import com.aso.model.LocationRegion;
 import com.aso.model.Role;
 import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AccountRepository;
 import com.aso.service.gmail.MyConstants;
 import com.aso.service.location.LocationRegionService;
 import com.aso.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -202,5 +204,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<AccountDTO> findAccountByIdDTO(Long id) {
         return accountRepository.findAccountByIdDTO(id);
+    }
+
+    @Override
+    public Page<AccountDTO> findAllAccounts(Pageable pageable) {
+        return accountRepository.findAllAccounts(pageable);
+    }
+
+    @Override
+    public Page<AccountDTO> findAllAccountss(Pageable pageable, String keyword) {
+        return accountRepository.findAllAccountss(pageable, keyword);
     }
 }
