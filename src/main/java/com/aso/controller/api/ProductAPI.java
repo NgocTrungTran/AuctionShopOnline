@@ -50,7 +50,7 @@ public class ProductAPI {
 
     @GetMapping
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> getAllProducts() { //đã test ok
+    public ResponseEntity<?> getAllProducts() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTO();
 
         if (productDTOList.isEmpty()) {
