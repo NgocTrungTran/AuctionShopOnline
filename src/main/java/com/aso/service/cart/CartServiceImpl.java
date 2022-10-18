@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Optional<CartDTO> findCartDTOByIdAccountInfo(String id) {
+    public Optional<CartDTO> findCartDTOByIdAccountInfo(Long id) {
         return cartRepository.findCartDTOByIdAccountInfo(id);
     }
 }

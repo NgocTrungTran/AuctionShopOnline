@@ -30,6 +30,7 @@ public class CartDTO {
     public Cart toCart() {
         return new Cart()
                 .setId(id)
+                .setStatus ( status )
                 .setAccount(account.toAccount())
                ;
     }

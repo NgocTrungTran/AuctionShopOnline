@@ -1,7 +1,7 @@
 package com.aso.model;
 
 
-import com.aso.model.dto.CartItemListDTO;
+import com.aso.model.dto.CartItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -49,8 +48,8 @@ public class CartItem {
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
-    public CartItemListDTO toCartItemListDTO() {
-        return new CartItemListDTO()
+    public CartItemDTO toCartItemListDTO() {
+        return new CartItemDTO ()
                 .setId(id)
                 .setProduct (product.toProductDTO ())
                 .setTitle(title)

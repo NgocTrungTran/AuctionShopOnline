@@ -2,7 +2,7 @@ package com.aso.repository;
 
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
-import com.aso.model.dto.CartItemListDTO;
+import com.aso.model.dto.CartItemDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,7 +25,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     BigDecimal getSumAmountByCartId(@Param("cartId") Long cartId);
 
 
-    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+    @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
             "ci.id, " +
             "ci.product, " +
             "ci.title, " +
@@ -36,9 +36,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "JOIN Product AS p " +
             "ON p.id = ci.product.id " +
             "WHERE ci.cart.id = :cartId")
-    List<CartItemListDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
+    List<CartItemDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
 
-    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+    @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
             "c.id, " +
             "c.product , " +
             "c.title, " +
@@ -47,9 +47,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.amountTransaction" +
             " )  " +
             "FROM CartItem AS c  WHERE c.title Like ?1 ")
-    List<CartItemListDTO> findCartItemDTOById(String title);
+    List<CartItemDTO> findCartItemDTOById(String title);
 
-    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+    @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
             "c.id, " +
             "c.product , " +
             "c.title, " +
@@ -58,9 +58,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.amountTransaction" +
             " )  " +
             "FROM CartItem c  WHERE c.id = ?1 ")
-    Optional<CartItemListDTO> getCartItemDTOById(Long id);
+    Optional<CartItemDTO> getCartItemDTOById(Long id);
 
-    @Query("SELECT NEW com.aso.model.dto.CartItemListDTO(" +
+    @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
             "c.id, " +
             "c.product , " +
             "c.title, " +
@@ -69,8 +69,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.amountTransaction" +
             " )  " +
 
-            "FROM CartItem c  WHERE c.title Like ?1 And c.product.title like ?2  And c.deleted = false ")
-    Optional<CartItemListDTO> getCartItemDTOByCode(String title, String code);
+            "FROM CartItem c WHERE c.cart.account.id = ?1 And c.product.id = ?2  And c.deleted = false ")
+    Optional<CartItemDTO> getCartItemDTOByProductAndAccount(Long accountId, Long productId);
 
 
 }

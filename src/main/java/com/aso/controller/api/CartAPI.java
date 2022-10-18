@@ -30,7 +30,7 @@ public class CartAPI {
     private AccountService accountService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCartByUserName(@PathVariable String id){
+    public ResponseEntity<?> getCartByUserName(@PathVariable Long id){
         return new ResponseEntity<>(cartService.findCartDTOByIdAccountInfo(id).get().toCart(),HttpStatus.OK);
     }
 
