@@ -23,7 +23,9 @@ import java.math.BigDecimal;
 public class CartItemListDTO {
 
     private Long id;
-    private ProductDTO productId;
+
+    @Column(name = "product_id")
+    private ProductDTO product;
 
     private String title;
 
@@ -33,11 +35,11 @@ public class CartItemListDTO {
 
     private BigDecimal amountTransaction;
 
-    private Cart cart;
+    private CartDTO cart;
 
-    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
+    public CartItemListDTO(Long id, Product product, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
         this.id = id;
-        this.productId = productId.toProductDTO ();
+        this.product = product.toProductDTO ();
         this.title = title;
         this.price = price;
         this.quantity = quantity;
@@ -46,7 +48,7 @@ public class CartItemListDTO {
     public CartItem toCartItem() {
         return new CartItem()
                 .setId(id)
-                .setProduct(productId.toProduct())
+                .setProduct(product.toProduct())
                 .setTitle(title)
                 .setPrice(price)
                 .setQuantity(quantity)

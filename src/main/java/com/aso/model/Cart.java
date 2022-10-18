@@ -28,7 +28,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    private String content;
+    private String status = "Chưa thanh toán";
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItem;
@@ -36,7 +36,6 @@ public class Cart extends BaseEntity {
     public CartDTO toCartDTO(){
         return new CartDTO()
                 .setId(id)
-                .setContent(content)
                 .setAccount(account.toAccountDTO())
                 ;
     }

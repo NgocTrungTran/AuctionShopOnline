@@ -37,6 +37,8 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
+    private boolean active;
+
     @Column(name = "amount_transaction", precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 
@@ -47,13 +49,10 @@ public class CartItem {
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
-//    @OneToMany(mappedBy = "cartItem")
-//    private List<CartItem> cartItem;
-
     public CartItemListDTO toCartItemListDTO() {
         return new CartItemListDTO()
                 .setId(id)
-                .setProductId (product.toProductDTO ())
+                .setProduct (product.toProductDTO ())
                 .setTitle(title)
                 .setPrice(price)
                 .setQuantity(quantity)

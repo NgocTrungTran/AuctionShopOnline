@@ -14,5 +14,5 @@ public interface CartService extends IGeneralService<Cart> {
     Boolean existsByCreatedBy(String createdBy);
 
     void delete(Cart cart);
-    Optional<CartDTO> findCartItemDTOByIdAccountInfo(String id);
+    Optional<CartDTO> findCartDTOByIdAccountInfo(String id);
 }
