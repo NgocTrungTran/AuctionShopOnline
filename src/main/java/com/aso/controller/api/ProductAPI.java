@@ -33,6 +33,7 @@ import java.util.*;
 public class ProductAPI {
     @Autowired
     private ProductService productService;
+
     @Autowired
     private ProductMediaService productMediaService;
 
