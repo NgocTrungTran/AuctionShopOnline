@@ -52,4 +52,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
 
     Account doCreate(AccountDTO accountDTO);
 
+    List<AccountDTO> findAccountDTOAll();
+    Optional<AccountDTO> findAccountByIdDTO(Long id);
+
 }

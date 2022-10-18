@@ -5,23 +5,20 @@ import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.repository.ProductMediaRepository;
-import com.aso.model.ProductMedia;
-import com.aso.model.dto.ProductDTO;
-import com.aso.model.dto.ProductListDTO;
 import com.aso.repository.ProductRepository;
-import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class ProductServiceImpl implements ProductService {
-
+public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -111,4 +108,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllProductDTOByAvailable(available);
     }
 
-}
+    @Override
+    public Page<ProductDTO> findAllProducts(Pageable pageable) {
+        return productRepository.findAllProducts(pageable);
+    }
+
+    @Override
+    public Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword) {
+        return productRepository.findAllProductss(pageable, keyword);
+    }
+
+  }

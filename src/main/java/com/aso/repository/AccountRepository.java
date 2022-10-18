@@ -31,6 +31,46 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<AccountDTO> findAllAccountsDTO();
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a WHERE a.deleted = false"
+    )
+    List<AccountDTO> findAccountDTOAll();
+
+    @Query("SELECT new com.aso.model.dto.AccountDTO (" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a WHERE a.id = ?1"
+    )
+    Optional<AccountDTO> findAccountByIdDTO(Long id);
+
+    @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
             "a.username, " +
             "a.fullName, " +
