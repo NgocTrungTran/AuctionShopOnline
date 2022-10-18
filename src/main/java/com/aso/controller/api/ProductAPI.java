@@ -69,6 +69,19 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
+    @GetMapping("/c")
+    public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(productService.findAllProducts(PageRequest.of(
+                        pageNumber, pageSize,
+                        sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
+                )
+        ), HttpStatus.OK);
+    }
+
     // For searching
     @GetMapping("/p/{keyword}")
     public ResponseEntity<Page<ProductDTO>> getAllBookss(Pageable pageable, @PathVariable("keyword") String keyword) {
@@ -202,6 +215,7 @@ public class ProductAPI {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PutMapping("/delete-soft/{id}")
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
 
