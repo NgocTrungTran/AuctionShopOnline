@@ -43,11 +43,11 @@ public class AccountServiceImpl implements AccountService {
     public Iterable<Account> findAll() {
         return accountRepository.findAll ();
     }
-
-    @Override
-    public Optional<Account> findById(Long id) {
-        return accountRepository.findById ( id );
-    }
+//
+//    @Override
+//    public Optional<Account> findById(Long id) {
+//        return accountRepository.findById ( id );
+//    }
 
     @Override
     public Account save(Account user) {
@@ -124,7 +124,15 @@ public class AccountServiceImpl implements AccountService {
     public Optional<AccountDTO> findUserDTOByUsername(String username) {
         return accountRepository.findUserDTOByUsername ( username );
     }
+    @Override
+    public Optional<AccountDTO> findUserDTOById(Long id) {
+        return accountRepository.findUserDTOById ( id );
+    }
 
+    @Override
+    public Optional<Account> findById(Long id) {
+        return accountRepository.findById(id);
+    }
     @Override
     public Optional<Account> getByUsername(String username) {
         return accountRepository.getByUsername ( username );

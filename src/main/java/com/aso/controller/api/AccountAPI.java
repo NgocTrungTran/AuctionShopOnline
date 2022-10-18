@@ -1,15 +1,19 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
+import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
+import com.aso.model.Product;
 import com.aso.model.Role;
 import com.aso.model.dto.AccountDTO;
+import com.aso.model.dto.CategoryDTO;
 import com.aso.model.dto.LocationRegionDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.location.LocationRegionService;
 import com.aso.service.role.RoleService;
 import com.aso.utils.AppUtil;
+import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -36,6 +40,9 @@ public class AccountAPI {
     AppUtil appUtil;
 
     @Autowired
+    private Validation validation;
+
+    @Autowired
     RoleService roleService;
 
     @Autowired
@@ -56,6 +63,36 @@ public class AccountAPI {
         } catch (Exception e) {
             return new ResponseEntity<> ( HttpStatus.BAD_REQUEST );
         }
+    }
+
+    @GetMapping("/getAccount/{username}")
+    public ResponseEntity<?> getAccountByUserName(@PathVariable String username) {
+
+
+        Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
+
+        if (!accountOptional.isPresent()) {
+            throw new ResourceNotFoundException("Account invalid");
+        }
+
+        return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAccount/account/{accountId}")
+    public ResponseEntity<?> getAccountById(@PathVariable String accountId) {
+
+        if (!validation.isIntValid(accountId)) {
+            throw new DataInputException("Account ID invalid!");
+        }
+        Long account_id = Long.parseLong(accountId);
+
+        Optional<Account> productOptional = accountService.findById(account_id);
+
+        if (!productOptional.isPresent()) {
+            throw new ResourceNotFoundException("Account invalid");
+        }
+
+        return new ResponseEntity<>(productOptional.get().toAccountDTO(), HttpStatus.OK);
     }
 
     @PostMapping("/create")

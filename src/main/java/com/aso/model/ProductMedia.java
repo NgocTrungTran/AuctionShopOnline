@@ -4,7 +4,6 @@ import com.aso.model.dto.ProductMediaDTO;
 import lombok.*;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,25 +19,11 @@ import java.util.Date;
 public class ProductMedia {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
-
-    @Column(name = "file_name")
-    private String fileName;
-
-    @Column(name = "file_folder")
-    private String fileFolder;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "file_url")
     private String fileUrl;
-
-    @Column(name = "file_type")
-    private String fileType;
-
-    @Column(name = "cloud_id")
-    private String cloudId;
-
 
     @Column(columnDefinition = "BIGINT(20) DEFAULT 0")
     private Long ts = new Date().getTime();
@@ -48,19 +33,15 @@ public class ProductMedia {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "cartItem_id")
+    @JoinColumn(name = "cart_tem_id")
     private CartItem cartItem;
 
 
     public ProductMediaDTO toProductMediaDTO() {
         return new ProductMediaDTO()
                 .setId(id)
-                .setCloudId(cloudId)
-                .setFileType(fileType)
                 .setFileUrl(fileUrl)
                 .setProduct(product.toProductDTO())
-                .setFileFolder(fileFolder)
-                .setFileName(fileName)
                 .setTs(ts)
                 ;
     }

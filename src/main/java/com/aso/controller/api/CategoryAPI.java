@@ -3,11 +3,14 @@ package com.aso.controller.api;
 import com.aso.exception.EmailExistsException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Category;
-import com.aso.model.Product;
 import com.aso.model.dto.CategoryDTO;
+import com.aso.repository.CategoryRepository;
 import com.aso.service.category.CategoryService;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,11 +27,12 @@ import java.util.Optional;
 public class CategoryAPI {
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Autowired
     private AppUtil appUtils;
 
-    @GetMapping
+        @GetMapping
     private ResponseEntity<?> findAll() {
         // đã test ok
         try {
@@ -40,6 +44,7 @@ public class CategoryAPI {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/{id}")
     // đã test ok
     public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
@@ -49,9 +54,10 @@ public class CategoryAPI {
         }
         return new ResponseEntity<>(categoryDTO.get().toCategory(), HttpStatus.OK);
     }
+
     @PostMapping("/create")
     // đã test ok
-    public ResponseEntity<?> doCreate(@Valid  @RequestBody CategoryDTO categoryDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<?> doCreate(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
@@ -62,9 +68,10 @@ public class CategoryAPI {
         Category category = categoryService.save(categoryDTO.toCategory());
         return new ResponseEntity<>(category.toCategoryDTO(), HttpStatus.OK);
     }
+
     @DeleteMapping("/delete-categories/{id}")
     // đã test ok
-    public ResponseEntity<?> deleteCategory( @PathVariable Long id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
 //        categoryService.deleteCategory(id);
 //        return new ResponseEntity<>(HttpStatus.OK);
 

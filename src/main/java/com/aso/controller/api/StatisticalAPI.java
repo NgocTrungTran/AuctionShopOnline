@@ -20,10 +20,16 @@ public class StatisticalAPI {
     @Autowired
     private OrderDetailService orderDetailService;
 
-// Số liệu thống kê đơn hàng đã giao
+// Số liệu thống kê đơn hàng đã giao tháng .../ năm ...
     @GetMapping("/statistical-by-month-year/{month}/{year}")
     public ResponseEntity<?> getStatisticalByMonthYear(@PathVariable int month, @PathVariable int year, @Param("statusOrderDetail") String statusOrderDetail) {
         List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateMonthYearAndStatusOrderDetail(month, year,"Đơn hàng đã giao thành công!");
         return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
     }
+//  Số liệu thống kê của năm
+@GetMapping("/statistical-by-month-year/{year}")
+public ResponseEntity<?> getStatisticalByYear(@PathVariable int year, @Param("statusOrderDetail") String statusOrderDetail) {
+    List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateYearAndStatusOrderDetail(year,"Đơn hàng đã giao thành công!");
+    return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
+}
 }

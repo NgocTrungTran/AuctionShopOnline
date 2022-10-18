@@ -28,4 +28,10 @@ Optional<CartItemListDTO> getCartItemDTOById(Long id);
 
     CartItem SaveIncreasing(CartItem cartItem);
     CartItem SaveReduce(CartItem cartItem);
+
+    Optional<CartItemListDTO> getCartItemDTOByCode(String userName, String code);
+
+    CartItem saveInDetail(CartItem cartItem);
+
+    CartItem saveOp(CartItem cartItem);
 }

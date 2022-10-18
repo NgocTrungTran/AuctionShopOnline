@@ -1,5 +1,8 @@
 package com.aso.service;
 import com.aso.model.Product;
+
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 public interface IGeneralService<T> {
