@@ -17,9 +17,9 @@ public class ProductMediaAPI {
     @Autowired
     private ProductMediaServiceImpl productMediaService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> doMedia(@PathVariable Long id) {
-        List<ProductMediaDTO> productMediaDTO = productMediaService.findAllById(id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> doMedia(@PathVariable Long productId) {
+        List<ProductMediaDTO> productMediaDTO = productMediaService.findAllById(productId);
         return new ResponseEntity<>(productMediaDTO, HttpStatus.OK);
     }
 

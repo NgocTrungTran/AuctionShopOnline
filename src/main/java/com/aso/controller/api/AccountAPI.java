@@ -1,6 +1,7 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
@@ -14,6 +15,8 @@ import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -215,5 +218,28 @@ public class AccountAPI {
             }
         }
         return new ResponseEntity<> ( "Account này không tồn tại", HttpStatus.NOT_FOUND );
+    }
+    @GetMapping("/p")
+    public ResponseEntity<Page<AccountDTO>> getAllBooks(Pageable pageable) {
+        Page<AccountDTO> accountDTOPage = accountService.findAllAccounts(pageable);
+        if (accountDTOPage.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
+    }
+
+    // For searching
+    @GetMapping("/p/{keyword}")
+    public ResponseEntity<Page<AccountDTO>> getAllBookss(Pageable pageable, @PathVariable("keyword") String keyword) {
+        try {
+            keyword = "%" + keyword + "%";
+            Page<AccountDTO> accountDTOPage = accountService.findAllAccountss(pageable, keyword);
+            if (accountDTOPage.isEmpty()) {
+                throw new DataOutputException("Danh sách sản phẩm trống");
+            }
+            return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
