@@ -71,7 +71,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/c")
-    public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+    public ResponseEntity<Page<ProductDTO>> getAllProductsSort(Pageable pageable, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");

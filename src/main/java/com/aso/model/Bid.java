@@ -24,11 +24,11 @@ public class Bid extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account accountId;
+    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "auction_id", referencedColumnName = "id")
-    private Auction auctionId;
+    private Auction auction;
 
     private BigDecimal auctionPrice;
 }

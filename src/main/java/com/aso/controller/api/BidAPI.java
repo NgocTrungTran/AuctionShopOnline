@@ -1,8 +1,7 @@
-package auction.controllers;
+package com.aso.controller.api;
 
-import auction.entities.Bid;
-import auction.services.BidService;
-import lombok.var;
+import com.aso.model.Bid;
+import com.aso.service.bid.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
-public class BidController {
-
+@RequestMapping("/api/bids")
+public class BidAPI {
     @Autowired
     BidService bidService;
 
@@ -20,21 +18,13 @@ public class BidController {
     public List<Bid> getAllBids() {
         return bidService.getAllBids();
     }
-
-   /* @GetMapping("/api/bids/{id}")
-    public Optional<Bid> getOneBid(@PathVariable Long id) {
-        return bidService.getBidById(id);
-    }*/
-
     @PostMapping("/api/bids")
     public Bid postNewBid(@RequestBody Bid bid) {
-        var isSaved = bidService.postNewBid(bid);
         return bidService.postNewBid(bid);
     }
-
     @GetMapping("/api/bids/{auctionId}")
     public ResponseEntity<List<Bid>> getAllBidsByAuctionId(@PathVariable long auctionId) {
-        var bids = bidService.findBidsByAuctionId(auctionId);
+        List<Bid> bids = bidService.findBidsByAuctionId(auctionId);
         return ResponseEntity.ok(bids);
     }
 }

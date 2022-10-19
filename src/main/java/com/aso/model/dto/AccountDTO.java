@@ -90,7 +90,12 @@ public class AccountDTO {
                 .setId(id)
                 .setUsername(username)
                 .setPassword(password)
-                ;
+                .setFullName ( fullName )
+                .setEmail ( email )
+                .setPhone ( phone )
+                .setAvatar ( avatar )
+                .setRole ( role.toRole () )
+                .setLocationRegion ( locationregion.toLocationRegion () );
     }
 
     public Account toAccountAllAttribute() {

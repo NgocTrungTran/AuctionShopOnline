@@ -73,4 +73,5 @@ public class Account extends BaseEntity{
                 ", locationRegion=" + locationRegion +
                 '}';
     }
+
 }
