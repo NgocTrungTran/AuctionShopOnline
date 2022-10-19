@@ -49,6 +49,8 @@ public class ProductDTO implements Validator {
     private CategoryDTO category;
     private String description;
 
+    private List<String> images;
+
     public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action){
 
         this.id = id;

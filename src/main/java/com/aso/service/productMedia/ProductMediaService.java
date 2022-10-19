@@ -20,4 +20,6 @@ public interface ProductMediaService {
     List<ProductMediaDTO> findAllById(Long id);
 
     void deleteById(Long id);
+
+    void saveImages(ProductMedia productMedia);
 }
