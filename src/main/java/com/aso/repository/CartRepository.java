@@ -20,5 +20,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "c.account " +
             " )  " +
             "FROM Cart c  WHERE c.account.id = ?1 AND c.status = 'Chưa thanh toán' ")
-    Optional<CartDTO> findCartDTOByIdAccountInfo(String id);
+    Optional<CartDTO> findCartDTOByIdAccountInfo(Long accountId);
 }
