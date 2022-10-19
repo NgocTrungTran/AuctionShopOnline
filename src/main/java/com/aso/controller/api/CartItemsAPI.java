@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,7 +21,6 @@ import java.util.Optional;
 public class CartItemsAPI {
     @Autowired
     private CartItemService cartItemService;
-
     @Autowired
     private AppUtil appUtils;
 
@@ -30,16 +30,16 @@ public class CartItemsAPI {
     @Autowired
     private AccountService accountService;
 
-//    @GetMapping("/{accountId}")
-//    // đã test ok
-//    public ResponseEntity<?> getCartByTitle(@PathVariable Long accountId) {
-//        try {
-//            List<CartItemDTO> cartItemsDTO = cartItemService.findCartItemDTOById(userId);
-//            return new ResponseEntity<>(cartItemsDTO, HttpStatus.OK);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Không lấy được danh sách đơn hàng");
-//        }
-//    }
+    @GetMapping("/{accountId}")
+    // đã test ok
+    public ResponseEntity<?> getCartByTitle(@PathVariable Long accountId) {
+        try {
+            List<CartItemDTO> cartItemsDTO = cartItemService.findCartItemDTOByAccountId(accountId);
+            return new ResponseEntity<>(cartItemsDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("Không lấy được danh sách sản phảm trong giỏ hàng");
+        }
+    }
 
     @GetMapping("/id/{id}")
     // đã test ok

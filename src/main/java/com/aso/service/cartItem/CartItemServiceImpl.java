@@ -76,8 +76,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     }
     @Override
-    public List<CartItemDTO> findCartItemDTOById(String title) {
-        return cartItemRepository.findCartItemDTOById(title);
+    public List<CartItemDTO> findCartItemDTOByAccountId(Long accountId) {
+        return cartItemRepository.findCartItemDTOByAccountId(accountId);
     }
 
     @Override
