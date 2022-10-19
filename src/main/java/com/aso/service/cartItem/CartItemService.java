@@ -2,7 +2,7 @@ package com.aso.service.cartItem;
 
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
-import com.aso.model.dto.CartItemListDTO;
+import com.aso.model.dto.CartItemDTO;
 import com.aso.service.IGeneralService;
 import org.springframework.data.repository.query.Param;
 
@@ -18,18 +18,19 @@ public interface CartItemService extends IGeneralService<CartItem> {
 
     BigDecimal getSumAmountByCartId(Long cartId);
 
-    List<CartItemListDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
+    List<CartItemDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
 //
 //    void delete(Long cartItem);
 
-    List<CartItemListDTO> findCartItemDTOById(String title);
+    List<CartItemDTO> findCartItemDTOByAccountId(Long accountId);
 
-Optional<CartItemListDTO> getCartItemDTOById(Long id);
+    Optional<CartItemDTO> getCartItemDTOById(Long id);
 
-    CartItem SaveIncreasing(CartItem cartItem);
+    CartItem saveIncreasing(Long accountId, CartItemDTO cartItemDTO);
+
     CartItem SaveReduce(CartItem cartItem);
 
-    Optional<CartItemListDTO> getCartItemDTOByCode(String userName, String code);
+    Optional<CartItemDTO> getCartItemDTOByCode(String userName, String code);
 
     CartItem saveInDetail(CartItem cartItem);
 
