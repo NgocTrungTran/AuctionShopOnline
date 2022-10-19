@@ -61,5 +61,10 @@ public class ProductMediaServiceImpl implements ProductMediaService {
         productMediaRepository.deleteById(id);
     }
 
+    @Override
+    public void saveImages(ProductMedia productMedia) {
+        productMediaRepository.save(productMedia);
+    }
+
 
 }

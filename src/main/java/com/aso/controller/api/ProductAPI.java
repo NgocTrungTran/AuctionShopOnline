@@ -4,7 +4,9 @@ import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Product;
+import com.aso.model.ProductMedia;
 import com.aso.model.dto.ProductDTO;
+import com.aso.model.dto.ProductMediaDTO;
 import com.aso.repository.ProductRepository;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
@@ -164,9 +166,18 @@ public class ProductAPI {
         }
         String checkPrice = String.valueOf(new BigDecimal(String.valueOf(productDTO.getPrice())));
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
+            productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
+            productDTO.toProduct().setDeleted(false);
+            productDTO.setImages(productDTO.getImages());
             // Note: thêm category vô đây
             Product newProduct = productService.save(productDTO.toProduct());
+            for (String p: productDTO.getImages()) {
+                ProductMedia productMedia = new ProductMedia();
+                productMedia.setId(0L);
+                productMedia.setFileUrl(p);
+                productMediaService.save(productMedia);
+            }
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.CREATED);
         }
         throw new DataInputException("Tạo mới thất bại");
@@ -186,18 +197,55 @@ public class ProductAPI {
         }
 
         try {
-            productDTO.setId(id);
+//            productDTO.setId(id);
             String slug = Validation.makeSlug(productDTO.getTitle());
-            productDTO.setCreatedAt(p.get().getCreatedAt());
-            productDTO.setCreatedBy(p.get().getCreatedBy());
-            productDTO.setUpdateAt(new Date());
-            productDTO.setUpdateBy(p.get().getUpdatedBy());
-            productDTO.setSold(p.get().getSold());
-            productDTO.setSlug(slug);
-            productDTO.setViewed(p.get().getViewed());
-            productService.save(productDTO.toProduct());
+            p.get().setUpdatedAt(new Date());
+            p.get().setAction(productDTO.getAction());
+            p.get().setAvailable(productDTO.getAvailable());
+            p.get().setImage(productDTO.getImage());
+            p.get().setPrice(productDTO.getPrice());
+            p.get().setSlug(slug);
+            p.get().setTitle(productDTO.getTitle());
+            p.get().setCategory(productDTO.toProduct().getCategory());
+            p.get().setDescription(productDTO.getDescription());
 
-            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+            for (String pr: productDTO.getImages()) {
+                ProductMedia productMedia = new ProductMedia();
+                productMedia.setId(0L);
+                productMedia.setFileUrl(pr);
+                productMediaService.save(productMedia);
+            }
+
+//            productDTO.setCreatedAt(p.get().getCreatedAt());
+//            productDTO.setCreatedBy(p.get().getCreatedBy());
+//            productDTO.setUpdateAt(new Date());
+//            productDTO.setUpdateBy(p.get().getUpdatedBy());
+//            productDTO.setSold(p.get().getSold());
+//            productDTO.setSlug(slug);
+//            productDTO.setViewed(p.get().getViewed());
+
+//            Product product = new Product();
+//            product.setId(id);
+//            product.setCreatedAt(p.get().getCreatedAt());
+//            product.setCreatedBy(p.get().getCreatedBy());
+//            product.setUpdatedAt(new Date());
+//            product.setTs(p.get().getTs());
+//            product.setDeleted(p.get().isDeleted());
+//            product.setAction(productDTO.getAction());
+//            product.setAvailable(productDTO.getAvailable());
+//            product.setImage(productDTO.getImage());
+//            product.setModeration(p.get().getModeration());
+//            product.setPrice(productDTO.getPrice());
+//            product.setSlug(slug);
+//            product.setSold(0L);
+//            product.setTitle(productDTO.getTitle());
+//            product.setViewed(0L);
+//            product.setCategory(productDTO.getCategory().toCategory());
+//            product.setDescription(productDTO.getDescription());
+
+            Product newProduct = productService.save(p.get());
+
+            return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
