@@ -129,8 +129,8 @@ public class CartItemServiceImpl implements CartItemService {
 //    }
 
     @Override
-    public Optional<CartItemListDTO> getCartItemDTOByCode(String userName , String code) {
-        return cartItemRepository.getCartItemDTOByCode(userName,code);
+    public Optional<CartItemListDTO> getCartItemDTOByCode(String title , String code) {
+        return cartItemRepository.getCartItemDTOByCode(title,code);
     }
     @Override
     public CartItem saveInDetail(CartItem cartItem) {

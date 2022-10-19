@@ -1,8 +1,10 @@
 package com.aso.controller.api;
 
 
+import com.aso.model.Account;
 import com.aso.model.Cart;
 import com.aso.model.dto.CartDTO;
+import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/carts")
@@ -23,9 +26,12 @@ public class CartAPI {
     @Autowired
     private AppUtil appUtils;
 
+    @Autowired
+    private AccountService accountService;
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCartByUserName(@PathVariable String id){
-        return new ResponseEntity<>(cartService.findCartItemDTOByIdAccountInfo(id).get().toCart(),HttpStatus.OK);
+        return new ResponseEntity<>(cartService.findCartDTOByIdAccountInfo(id).get().toCart(),HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -33,9 +39,17 @@ public class CartAPI {
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
+
+        Optional<Account> accountOptional = accountService.findById ( cartDTO.getAccount ().getId () );
+
+        if ( !accountOptional.isPresent () ) {
+            return new ResponseEntity<>("Tài khoản không tồn tại",HttpStatus.NO_CONTENT);
+        }
+
         try {
-            Cart createCart = cartService.save(cartDTO.toCart());
-            return new ResponseEntity<>(createCart.toCartDTO(), HttpStatus.CREATED);
+            cartDTO.setAccount ( accountOptional.get ().toAccountDTO () );
+            cartService.save(cartDTO.toCart());
+            return new ResponseEntity<>("Tạo giỏ hàng thành công", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("không thể tạo được đơn hàng",HttpStatus.BAD_REQUEST);
         }

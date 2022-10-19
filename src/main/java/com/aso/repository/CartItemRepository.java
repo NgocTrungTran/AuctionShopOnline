@@ -70,7 +70,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             " )  " +
 
             "FROM CartItem c  WHERE c.title Like ?1 And c.product.title like ?2  And c.deleted = false ")
-    Optional<CartItemListDTO> getCartItemDTOByCode(String userName, String code);
+    Optional<CartItemListDTO> getCartItemDTOByCode(String title, String code);
 
 
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -44,6 +45,9 @@ public class Account extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
+
+    @OneToMany(mappedBy = "account")
+    private List<Cart> cart;
 
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()

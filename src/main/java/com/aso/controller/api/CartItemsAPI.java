@@ -23,16 +23,16 @@ public class CartItemsAPI {
     @Autowired
     private AppUtil appUtils;
 
-    @GetMapping("/{title}")
-    // đã test ok
-    public ResponseEntity<?> getCartByTitle(@PathVariable String title) {
-        try {
-            List<CartItemListDTO> cartItemsDTO = cartItemService.findCartItemDTOById(title);
-            return new ResponseEntity<>(cartItemsDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException("Không lấy được danh sách đơn hàng");
-        }
-    }
+//    @GetMapping("/{accountId}")
+//    // đã test ok
+//    public ResponseEntity<?> getCartByTitle(@PathVariable Long accountId) {
+//        try {
+//            List<CartItemListDTO> cartItemsDTO = cartItemService.findCartItemDTOById(userId);
+//            return new ResponseEntity<>(cartItemsDTO, HttpStatus.OK);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Không lấy được danh sách đơn hàng");
+//        }
+//    }
 
     @GetMapping("/id/{id}")
     // đã test ok
@@ -69,15 +69,15 @@ public class CartItemsAPI {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<?> doCreate(@RequestBody CartItemListDTO cartItemsDTO, BindingResult bindingResult) {
+    @PostMapping("/create")
+    public ResponseEntity<?> doCreateCart(@RequestBody CartItemListDTO cartItemsDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         try {
             try {
-                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemsDTO.getTitle(), cartItemsDTO.getProductId().getTitle());
+                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemsDTO.getTitle(), cartItemsDTO.getProduct().getTitle());
                 if (cartItemDTO.isPresent()) {
 //                    if (cartItemDTO.get().getProductId().getFiles().contains(cartItemsDTO.getProductId())) {
 //                        // cho nó nhảy vào catch để xử lý thêm product vào cartItem;
@@ -99,7 +99,7 @@ public class CartItemsAPI {
         }
         try {
             try {
-                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemListDTO.getTitle(), cartItemListDTO.getProductId().getTitle());
+                Optional<CartItemListDTO> cartItemDTO = cartItemService.getCartItemDTOByCode(cartItemListDTO.getTitle(), cartItemListDTO.getProduct().getTitle());
                 if (cartItemDTO.isPresent()) {
 //                    if (cartItemDTO.get().getProductId().getFiles().contains(cartItemListDTO.getProductId())) {
 //                        // cho nó nhảy vào catch để xử lý thêm product vào cartItem;
