@@ -24,6 +24,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,7 +99,6 @@ public class AccountAPI {
     @PostMapping("/create")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createAccount(@Validated @RequestBody AccountDTO accountDTO,
-                                           // LocationRegionDTO locationRegionDTO,
                                            BindingResult bindingResult) {
 
         if ( bindingResult.hasErrors () )
@@ -153,14 +153,15 @@ public class AccountAPI {
         Account accountOption = accountOptional.get();
 
         try {
-            accountOption.setCreatedAt(accountOption.getCreatedAt());
-            accountOption.setCreatedBy(accountOption.getCreatedBy());
+//            accountOption.setCreatedAt(accountOption.getCreatedAt());
+//            accountOption.setCreatedBy(accountOption.getCreatedBy());
+            accountOption.setUpdatedAt(new Date());
             accountOption.setEmail(accountDTO.getEmail());
             accountOption.setAvatar(accountDTO.getAvatar());
             accountOption.setFullName(accountDTO.getFullName());
             accountOption.setPhone(accountDTO.getPhone());
             accountOption.setUsername(accountDTO.getUsername());
-            accountOption.setLocationRegion(accountDTO.toAccountAllAttribute().getLocationRegion());
+            accountOption.setLocationRegion(accountDTO.toLocationRegion());
             accountOption.setRole(accountDTO.getRole().toRole());
 
             Account updatedAccount = accountService.save( accountOption );
@@ -171,7 +172,7 @@ public class AccountAPI {
         } catch (DataIntegrityViolationException e) {
             throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
         } catch (Exception e) {
-            return new ResponseEntity<> ( HttpStatus.INTERNAL_SERVER_ERROR );
+            return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR );
         }
     }
 

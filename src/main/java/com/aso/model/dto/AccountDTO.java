@@ -105,5 +105,17 @@ public class AccountDTO {
                 .setRole ( role.toRole () )
                 .setLocationRegion ( locationregion.toLocationRegion () );
     }
+
+    public LocationRegion toLocationRegion() {
+        return new LocationRegion()
+                .setId(id)
+                .setProvinceId(locationregion.getProvinceId())
+                .setProvinceName(locationregion.getProvinceName())
+                .setDistrictId(locationregion.getDistrictId())
+                .setDistrictName(locationregion.getDistrictName())
+                .setWardId(locationregion.getWardId())
+                .setWardName(locationregion.getWardName())
+                .setAddress(locationregion.getAddress());
+    }
 }
 

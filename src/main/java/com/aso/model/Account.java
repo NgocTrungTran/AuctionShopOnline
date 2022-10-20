@@ -46,7 +46,7 @@ public class Account extends BaseEntity{
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<Cart> cart;
 
     public AccountDTO toAccountDTO() {
