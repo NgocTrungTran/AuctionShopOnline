@@ -1,17 +1,18 @@
 package com.aso.service.auction;
 
 import com.aso.model.Auction;
-import com.aso.model.dto.AuctionDTO;
-import com.aso.service.IGeneralService;
+import com.aso.model.dto.AuctionRequest;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface AuctionService extends IGeneralService<Auction> {
+public interface AuctionService {
 
-    List<AuctionDTO> getAllItems();
-    boolean postNewAuction(AuctionDTO auctionDTO);
+    Auction createAuction(AuctionRequest auctionRequest);
 
-    Optional<Auction> getOneItem(Long id);
+    Auction deleteAuction(Long id);
 
+    Auction updateAuction(Long id, AuctionRequest auctionRequest);
+
+    List<AuctionRequest> getAllAuctions();
 }
+

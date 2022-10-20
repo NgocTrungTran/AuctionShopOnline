@@ -1,48 +1,52 @@
 package com.aso.controller.api;
 
-import com.aso.exception.DataInputException;
-import com.aso.exception.ResourceNotFoundException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.Auction;
-import com.aso.model.Product;
-import com.aso.model.dto.AuctionDTO;
+import com.aso.model.dto.AuctionRequest;
 import com.aso.model.dto.ProductDTO;
 import com.aso.service.auction.AuctionService;
-import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auctions")
 public class AuctionAPI {
-    @Autowired
-    AuctionService auctionService;
 
     @Autowired
-    AppUtil appUtil;
+    private AuctionService auctionService;
 
-    @GetMapping
-    public List<AuctionDTO> getAllItems() {
-        return auctionService.getAllItems();
+    @PostMapping("")
+    public ResponseEntity<Auction> createAuction(
+            @RequestBody @Valid AuctionRequest auctionRequest) {
+        return new ResponseEntity<>(auctionService.createAuction(auctionRequest),
+                HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity<Boolean> postNewAuction(@RequestBody AuctionDTO auctionDTO) {
-        boolean isSaved = auctionService.postNewAuction(auctionDTO);
-        return ResponseEntity.ok(isSaved);
+    @PutMapping("/{id}")
+    public ResponseEntity<Auction> updateAuction(@RequestBody @Valid AuctionRequest auctionRequest,
+                                                 @PathVariable Long id) {
+        return new ResponseEntity<>(auctionService.updateAuction(id, auctionRequest),
+                HttpStatus.OK);
     }
 
-    @GetMapping("/{auctionId}")
-    public ResponseEntity<?> getProductById(@PathVariable String auctionId) {
-        Long auction_id = Long.parseLong(auctionId);
-        Optional<Auction> auctionOptional = auctionService.findById(auction_id);
-        return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Auction> deleteAuction(@PathVariable Long id) {
+        return new ResponseEntity<>(auctionService.deleteAuction(id), HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllAuctions() {
+        List<AuctionRequest> auctionRequests = auctionService.getAllAuctions();
+
+        if (auctionRequests.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(auctionRequests, HttpStatus.OK);
     }
 }

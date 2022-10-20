@@ -1,12 +1,14 @@
 package com.aso.service.bid;
 
+
 import com.aso.model.Bid;
+import com.aso.model.dto.BidDTO;
 import com.aso.service.IGeneralService;
 
-import java.util.List;
-
 public interface BidService extends IGeneralService<Bid> {
-    List<Bid> getAllBids();
-    Bid postNewBid(Bid bid);
-    List<Bid> findBidsByAuctionId(long auctionID);
+
+    Bid createBid(BidDTO bidDTO, Long auctionId);
+
+    Bid deleteBid(Long auctionId, Long bidId);
+
 }

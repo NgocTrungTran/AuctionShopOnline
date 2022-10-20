@@ -1,30 +1,34 @@
 package com.aso.controller.api;
 
 import com.aso.model.Bid;
-import com.aso.service.bid.BidService;
+import com.aso.model.dto.BidDTO;
+import com.aso.service.bid.BidServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/bids")
 public class BidAPI {
     @Autowired
-    BidService bidService;
+    private BidServiceImpl bidServiceImpl;
 
-    @GetMapping("/api/bids")
-    public List<Bid> getAllBids() {
-        return bidService.getAllBids();
+    @PostMapping("/{id}/bids")
+    public ResponseEntity<Bid> createBid(@PathVariable Long id,
+                                         @RequestBody @Valid BidDTO bidDTO) {
+
+        return new ResponseEntity<>(bidServiceImpl.createBid(bidDTO, id),
+                HttpStatus.CREATED);
     }
-    @PostMapping("/api/bids")
-    public Bid postNewBid(@RequestBody Bid bid) {
-        return bidService.postNewBid(bid);
+
+    @DeleteMapping("/{id}/bids/{bidId}")
+    public ResponseEntity<Bid> deleteBid(@PathVariable Long id,
+                                         @PathVariable Long bidId) {
+
+        return new ResponseEntity<>(bidServiceImpl.deleteBid(id, bidId), HttpStatus.OK);
     }
-    @GetMapping("/api/bids/{auctionId}")
-    public ResponseEntity<List<Bid>> getAllBidsByAuctionId(@PathVariable long auctionId) {
-        List<Bid> bids = bidService.findBidsByAuctionId(auctionId);
-        return ResponseEntity.ok(bids);
-    }
+
 }
