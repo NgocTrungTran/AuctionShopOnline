@@ -138,7 +138,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product p WHERE " +
             "p.id = ?1 " +
             "And p.deleted = false")
-    Optional<ProductDTO> findProductDTOById(String id);
+    Optional<ProductDTO> findProductDTOById(Long id);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
             "p.id, " +
@@ -174,8 +174,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.category, " +
             "p.description " +
             ") " +
-            "FROM Product AS p WHERE p.deleted= false AND p.title LIKE :keyword " +
-            "OR p.category.title LIKE :keyword ORDER BY p.id DESC " +
+            "FROM Product AS p WHERE p.title LIKE :keyword " +
+            "OR p.category.title LIKE :keyword AND p.deleted= false ORDER BY p.id DESC " +
             "")
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
 
@@ -197,6 +197,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.category, " +
             "p.description " +
             ") " +
-            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id DESC")
+            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id ASC")
     Page<ProductDTO> findAllProducts(Pageable pageable);
 }

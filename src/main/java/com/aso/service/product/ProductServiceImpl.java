@@ -1,6 +1,7 @@
 package com.aso.service.product;
 
 
+import com.aso.exception.DataOutputException;
 import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
@@ -8,8 +9,12 @@ import com.aso.repository.ProductMediaRepository;
 import com.aso.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,4 +123,12 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findAllProductss(pageable, keyword);
     }
 
+    @Override
+    public ResponseEntity<Page<ProductDTO>> findAll( Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        return new ResponseEntity<>(productRepository.findAllProducts(PageRequest.of(
+                        pageNumber, pageSize,
+                        sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
+                )
+        ), HttpStatus.OK);
+    }
   }
