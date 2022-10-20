@@ -25,7 +25,7 @@ public class AppUtil {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    public static String getPrincipalUsername() {
+    public String getPrincipalUsername() {
         String userName;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

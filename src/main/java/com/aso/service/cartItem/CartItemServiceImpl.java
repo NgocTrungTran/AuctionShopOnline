@@ -3,6 +3,7 @@ package com.aso.service.cartItem;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
@@ -105,13 +106,9 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.getCartItemDTOById(id);
     }
 
-    @Override
-    public CartItem SaveReduce(CartItem cartItem) {
-        return null;
-    }
 
     @Override
-    public CartItem saveIncreasing(Long accountId, CartItemDTO cartItemDTO) {
+    public CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountId );
 
         if ( !accountOptional.isPresent () ) {
@@ -150,14 +147,6 @@ public class CartItemServiceImpl implements CartItemService {
 
         return cartItemRepository.save(cartItemDTO.toCartItem ());
     }
-//    public CartItem SaveReduce(CartItem cartItem) {
-//        if(new BigDecimal(1).equals(cartItem.getQuantity())){
-//            throw new DataInputException("Số lượng không nhỏ hơn 1 Sản Phẩm");
-//        }
-//        cartItem.setQuantity(cartItem.getQuantity().subtract(BigDecimal.valueOf(1)));
-//        cartItem.setQuantity(cartItem.getQuantity().subtract(cartItem.getPrice()));
-//        return cartItemRepository.save(cartItem);
-//    }
 
     @Override
     public Optional<CartItemDTO> getCartItemDTOByCode(String title , String code) {
@@ -175,20 +164,5 @@ public class CartItemServiceImpl implements CartItemService {
         return null;
     }
 
-//    public CartItem saveOp(CartItem cartItem) {
-//        Optional<CartItemDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());
-//        Optional<ProductDTO> productDTO = productRepository.findProductDTOById(cartItem.getProduct().getId());
-//        if(productDTO.get().getAvailable().compareTo(BigDecimal.ZERO) < 0){
-//            productDTO.get().setAvailable("Đã Hết Hàng");
-//            productRepository.save(productDTO.get().toProduct());
-//        }
-//        cartItem.setId(cartItem1.get().getId());
-//        cartItem.setQuantity(new BigDecimal(String.valueOf(cartItem1.get().getQuantity().add(BigDecimal.valueOf(1)))));
-//        cartItem.setGrandTotal(new BigDecimal(String.valueOf(cartItem.getQuantity().multiply(cartItem.getPrice()))));
-//        if(productDTO.get().getQuantity().compareTo(cartItem.getQuantity()) < 0){
-//            throw new DataInputException("Đã hết hàng!");
-//        }
-//        return cartItemRepository.save(cartItem);
-//    }
 
 }
