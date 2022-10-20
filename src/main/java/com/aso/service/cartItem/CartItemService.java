@@ -26,9 +26,7 @@ public interface CartItemService extends IGeneralService<CartItem> {
 
     Optional<CartItemDTO> getCartItemDTOById(Long id);
 
-    CartItem saveIncreasing(Long accountId, CartItemDTO cartItemDTO);
-
-    CartItem SaveReduce(CartItem cartItem);
+    CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO);
 
     Optional<CartItemDTO> getCartItemDTOByCode(String userName, String code);
 

@@ -150,7 +150,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.locationRegion " +
             ") " +
             "FROM Account AS a " +
-            "WHERE a.id = :id"
+            "WHERE a.id = ?1"
     )
     Optional<AccountDTO> findUserDTOById(Long id);
 

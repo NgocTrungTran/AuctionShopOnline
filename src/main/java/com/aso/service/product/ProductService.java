@@ -8,6 +8,7 @@ import com.aso.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,4 +35,5 @@ public interface ProductService extends IGeneralService<Product> {
 
     Page<ProductDTO> findAllProducts(Pageable pageable);
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
+    ResponseEntity<Page<ProductDTO>> findAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 }

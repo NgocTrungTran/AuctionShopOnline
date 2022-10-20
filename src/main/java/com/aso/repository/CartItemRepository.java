@@ -46,7 +46,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.quantity, " +
             "c.amountTransaction" +
             " )  " +
-            "FROM CartItem AS c  WHERE c.cart.account.id = ?1 ")
+            "FROM CartItem AS c WHERE c.cart.account.id = ?1 AND c.deleted = false")
     List<CartItemDTO> findCartItemDTOByAccountId(Long accountId);
 
     @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
