@@ -174,11 +174,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.category, " +
             "p.description " +
             ") " +
-<<<<<<< HEAD
-            "FROM Product AS p  WHERE p.title LIKE :keyword " +
-=======
             "FROM Product AS p WHERE p.title LIKE :keyword " +
->>>>>>> development
             "OR p.category.title LIKE :keyword AND p.deleted= false ORDER BY p.id DESC " +
             "")
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
