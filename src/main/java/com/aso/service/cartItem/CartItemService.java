@@ -28,6 +28,8 @@ public interface CartItemService extends IGeneralService<CartItem> {
 
     CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO);
 
+    List<CartItemDTO> doRemoveCartItems (Long accountId, List<CartItemDTO> cartItemsDTO);
+
     Optional<CartItemDTO> getCartItemDTOByCode(String userName, String code);
 
     CartItem saveInDetail(CartItem cartItem);
