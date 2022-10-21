@@ -1,6 +1,6 @@
 package com.aso.model;
 
-import com.aso.model.dto.AuctionRequest;
+import com.aso.model.dto.AuctionDTO;
 import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
 import com.aso.service.converter.AuctionTypeConverter;
@@ -12,6 +12,8 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -57,8 +59,11 @@ public class Auction extends BaseEntity{
 
     private int daysToEndTime;
 
-    public AuctionRequest toAuctionRequest(){
-        return  new AuctionRequest()
+    @OneToMany(mappedBy = "auction")
+    private List<Bid> bids;
+
+    public AuctionDTO toAuctionDTO(){
+        return  new AuctionDTO()
                 .setId(id)
                 .setEmail(email)
                 .setAccount(account.toAccountDTO())

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
-
+@Builder
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor
@@ -46,8 +46,14 @@ public class Account extends BaseEntity{
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account")
     private List<Cart> cart;
+
+    @OneToMany(mappedBy = "account")
+    private List<Auction> auctions;
+
+    @OneToMany(mappedBy = "account")
+    private List<Bid> bids;
 
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
@@ -61,6 +67,16 @@ public class Account extends BaseEntity{
                 .setBlocked ( blocked )
                 .setRole(role.toRoleDTO());
     }
+
+//    public Account toAccountRole () {
+//        return new Account()
+//                .setId(id)
+//                .setUsername(username)
+//                .setFullName(fullName)
+//                .setEmail(email)
+//                .setPhone(phone)
+//
+//    }
 
     @Override
     public String toString() {

@@ -1,18 +1,19 @@
 package com.aso.service.auction;
 
 import com.aso.model.Auction;
-import com.aso.model.dto.AuctionRequest;
+import com.aso.model.dto.AuctionDTO;
+import com.aso.service.IGeneralService;
 
 import java.util.List;
 
-public interface AuctionService {
+public interface AuctionService extends IGeneralService<Auction> {
 
-    Auction createAuction(AuctionRequest auctionRequest);
+    Auction createAuction(AuctionDTO auctionDTO);
 
-    Auction deleteAuction(Long id);
+    List<AuctionDTO> getAllAuctions();
 
-    Auction updateAuction(Long id, AuctionRequest auctionRequest);
+    void softDelete(Auction auction);
 
-    List<AuctionRequest> getAllAuctions();
+    Auction updateAuction(Long id, AuctionDTO auctionDTO);
 }
 

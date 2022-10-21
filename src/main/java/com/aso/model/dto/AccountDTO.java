@@ -3,16 +3,13 @@ package com.aso.model.dto;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
 import com.aso.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

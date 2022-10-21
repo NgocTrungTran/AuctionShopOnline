@@ -28,8 +28,8 @@ public class Role {
     private String code;
     private String name;
 
-    @OneToMany(targetEntity = Account.class, mappedBy = "role", fetch = FetchType.LAZY)
-    private Set<Account> users;
+    @OneToMany(mappedBy = "role")
+    private Set<Account> accounts;
 
     public RoleDTO toRoleDTO (){
         return new RoleDTO()
@@ -37,5 +37,13 @@ public class Role {
                 .setCode ( code )
                 .setName ( name );
 
+    }
+
+    public Role toRole () {
+        return  new Role()
+                .setId(id)
+                .setCode(code)
+                .setName(name)
+                .setAccounts(accounts);
     }
 }
