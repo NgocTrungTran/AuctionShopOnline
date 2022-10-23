@@ -1,11 +1,16 @@
 package com.aso.controller.api;
 
 import com.aso.exception.*;
+import com.aso.model.Account;
 import com.aso.model.Auction;
+import com.aso.model.Product;
 import com.aso.model.dto.AuctionDTO;
+import com.aso.model.dto.BidDTO;
 import com.aso.repository.BidRepository;
+import com.aso.service.account.AccountService;
 import com.aso.service.auction.AuctionService;
 import com.aso.service.bid.BidService;
+import com.aso.service.product.ProductService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +39,13 @@ public class AuctionAPI {
     private BidService bidService;
 
     @Autowired
-    private BidRepository bidRepository;
+    private Validation validation;
 
     @Autowired
-    private Validation validation;
+    private AccountService accountService;
+
+    @Autowired
+    private ProductService productService;
 
     @PostMapping("")
     public ResponseEntity<Auction> createAuction(
@@ -46,16 +54,16 @@ public class AuctionAPI {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllAuctions() {
-        List<AuctionDTO> auctionDTOS = auctionService.getAllAuctions();
+        @GetMapping("")
+        public ResponseEntity<?> getAllAuctions() {
+            List<AuctionDTO> auctionDTOS = auctionService.getAllAuctions();
 
-        if (auctionDTOS.isEmpty()) {
-            throw new DataOutputException("No data");
+            if (auctionDTOS.isEmpty()) {
+                throw new DataOutputException("No data");
+            }
+
+            return new ResponseEntity<>(auctionDTOS, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(auctionDTOS, HttpStatus.OK);
-    }
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<?> getAuctionById(@PathVariable String auctionId) {
@@ -73,44 +81,54 @@ public class AuctionAPI {
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
     }
 
-    @PutMapping("/delete-soft/{id}")
-    public ResponseEntity<?> doDelete(@PathVariable Long id) {
+    @PutMapping("/delete-soft/{auctionId}")
+    public ResponseEntity<?> doDelete(@PathVariable Long auctionId) {
 
-        Auction auctionToDelete = auctionService.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Phiếu mua hàng có id " + id + " không tồn tại!"));
+        Auction auctionToDelete = auctionService.findById(auctionId).orElseThrow(
+                () -> new ResourceNotFoundException("Phiếu mua hàng có id " + auctionId + " không tồn tại!"));
 
         if (auctionToDelete.getAuctionEndTime().isBefore(LocalDateTime.now())) {
             throw new IncorrectDateException(
                     "Không thể xóa phiên đấu giá đã kết thúc!");
         }
-//        long bidsForAuctionCount = bidRepository.findByRelatedOfferId(id).size();
-//
-//        if (bidsForAuctionCount != 0) {
-//            throw new IncorrectOperationException(
-//                    "Không thể xóa đấu giá có giá thầu!");
-//        }
+//        long bidsForAuctionCount = bidRepository.getAllBids().size();  // lỗi đoạn này
+        List<BidDTO> bidsForAuctionCount = bidService.findByRelatedOfferId(auctionId);
+
+        if (!bidsForAuctionCount.isEmpty()) {
+            throw new IncorrectOperationException(
+                    "Không thể xóa đấu giá có giá thầu!");
+        }
         auctionService.softDelete(auctionToDelete);
         return new ResponseEntity<>("Đã xóa thành công!", HttpStatus.OK);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody AuctionDTO auctionDTO,
+    @PutMapping("/edit/{auctionId}")
+    public ResponseEntity<?> doEdit(@PathVariable Long auctionId, @Validated @RequestBody AuctionDTO auctionDTO,
                                     BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return appUtil.mapErrorToResponse(bindingResult);
         }
 
-        Optional<Auction> auction = auctionService.findById(id);
-        if (!auction.isPresent()) {
-            return new ResponseEntity<>("Không tồn tại sản phẩm!", HttpStatus.NOT_FOUND);
+        Optional<Auction> auction = auctionService.findById(auctionId);
+        if (auction.isEmpty()) {
+            return new ResponseEntity<>("Phiên đấu giá không tồn tại!", HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Account> account = accountService.findById(auctionDTO.getAccount().getId());
+        if (account.isEmpty()) {
+            return new ResponseEntity<>("Tài khoản không tồn tại!", HttpStatus.NOT_FOUND);
+        }
+        Optional<Product> product = productService.findById(auctionDTO.getProduct().getId());
+        if (product.isEmpty()) {
+            return new ResponseEntity<>("Sản phẩm không tồn tại!", HttpStatus.NOT_FOUND);
         }
 
         try {
             auction.get().setUpdatedAt(new Date());
             auction.get().setEmail(auctionDTO.getEmail());
-            auction.get().setAccount(auctionDTO.getAccount().toAccount());
-            auction.get().setProduct(auctionDTO.getProduct().toProduct());
+            auction.get().setAccount(account.get());
+            auction.get().setProduct(product.get());
             auction.get().setAuctionType(auctionDTO.getAuctionType());
             auction.get().setItemStatus(auctionDTO.getItemStatus());
             auction.get().setStartingPrice(auctionDTO.getStartingPrice());
@@ -121,17 +139,11 @@ public class AuctionAPI {
 
             Auction newAuction = auctionService.save(auction.get());
 
-            return new ResponseEntity<>(newAuction.toAuctionDTO(), HttpStatus.OK); // Lỗi ở đoạn này
+            return new ResponseEntity<>(newAuction.toAuctionDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Auction> updateAuction(@RequestBody @Valid AuctionDTO auctionDTO,
-                                                 @PathVariable Long id) {
-        return new ResponseEntity<>(auctionService.updateAuction(id, auctionDTO),
-                HttpStatus.OK);
-    }
 }

@@ -1,6 +1,5 @@
 package com.aso.service.bid;
 
-import com.aso.events.MailSenderPublisher;
 import com.aso.exception.*;
 import com.aso.model.Account;
 import com.aso.model.Auction;
@@ -12,6 +11,8 @@ import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
 import com.aso.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,6 @@ public class BidServiceImpl implements BidService {
     private BidRepository bidRepository;
     @Autowired
     private AuctionRepository auctionRepository;
-    @Autowired
-    private MailSenderPublisher mailSenderPublisher;
 
     @Autowired
     private AccountService accountService;
@@ -71,6 +70,7 @@ public class BidServiceImpl implements BidService {
         return savedBid;
     }
 
+
     @Override
     public Iterable<Bid> findAll() {
         return null;
@@ -108,10 +108,17 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public void softDelete(Bid bid, Auction auction) {
-        bid.setDeleted(true);
-        bidRepository.save(bid);
-        auction.setDeleted(true);
-        auction.setDeleted(true);
+    public Bid deleteBid(Long auctionId, Long bidId) {
+        return null;
+    }
+
+    @Override
+    public List<BidDTO> findByRelatedOfferId(long id) {
+        return bidRepository.findByRelatedOfferId(id);
+    }
+
+    @Override
+    public List<BidDTO> getAllBids() {
+        return bidRepository.getAllBids();
     }
 }

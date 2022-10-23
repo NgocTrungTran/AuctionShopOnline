@@ -3,19 +3,17 @@ package com.aso.model.dto;
 import com.aso.model.Account;
 import com.aso.model.Auction;
 import com.aso.model.Bid;
-import com.aso.validators.PriceConstraint;
+import com.aso.utils.PriceConstraint;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @NoArgsConstructor
 //@AllArgsConstructor

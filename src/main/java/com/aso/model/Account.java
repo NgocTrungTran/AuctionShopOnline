@@ -67,31 +67,4 @@ public class Account extends BaseEntity{
                 .setBlocked ( blocked )
                 .setRole(role.toRoleDTO());
     }
-
-//    public Account toAccountRole () {
-//        return new Account()
-//                .setId(id)
-//                .setUsername(username)
-//                .setFullName(fullName)
-//                .setEmail(email)
-//                .setPhone(phone)
-//
-//    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", blocked=" + blocked +
-                ", avatar='" + avatar + '\'' +
-                ", role=" + role +
-                ", locationRegion=" + locationRegion +
-                '}';
-    }
-
 }

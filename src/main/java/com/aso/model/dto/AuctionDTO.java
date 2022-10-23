@@ -5,7 +5,7 @@ import com.aso.model.Auction;
 import com.aso.model.Product;
 import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
-import com.aso.validators.PriceConstraint;
+import com.aso.utils.PriceConstraint;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;

@@ -28,5 +28,25 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
             "FROM Auction AS a WHERE a.deleted = false ")
     List<AuctionDTO> getAllAuctions();
 
+    @Query("SELECT NEW com.aso.model.dto.AuctionDTO (" +
+            "a.id, " +
+            "a.createdAt, " +
+            "a.createdBy, " +
+            "a.updatedAt, " +
+            "a.updatedBy, " +
+            "a.email, " +
+            "a.account, " +
+            "a.product, " +
+            "a.auctionType, " +
+            "a.itemStatus, " +
+            "a.startingPrice, " +
+            "a.currentPrice, " +
+            "a.auctionEndTime, " +
+            "a.auctionStartTime, " +
+            "a.daysToEndTime" +
+            ") " +
+            "FROM Auction AS a WHERE a.deleted = false AND a.id =?1 ")
+    List<AuctionDTO> findAuctionById(Long idAuction);
+
 
 }

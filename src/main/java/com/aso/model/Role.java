@@ -38,12 +38,4 @@ public class Role {
                 .setName ( name );
 
     }
-
-    public Role toRole () {
-        return  new Role()
-                .setId(id)
-                .setCode(code)
-                .setName(name)
-                .setAccounts(accounts);
-    }
 }

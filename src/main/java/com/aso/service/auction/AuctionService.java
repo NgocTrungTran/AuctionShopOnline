@@ -14,6 +14,5 @@ public interface AuctionService extends IGeneralService<Auction> {
 
     void softDelete(Auction auction);
 
-    Auction updateAuction(Long id, AuctionDTO auctionDTO);
 }
 

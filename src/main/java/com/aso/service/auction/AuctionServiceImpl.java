@@ -43,15 +43,6 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionRepository.save(auction);
     }
     @Override
-    public Auction updateAuction(Long id, AuctionDTO auctionDTO) {
-        Auction auctionToUpdate = auctionRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Auction with id " + id + " not found"));
-
-        Optional.ofNullable(auctionDTO.getEmail()).ifPresent(auctionToUpdate::setEmail);
-
-        return auctionRepository.save(auctionToUpdate);
-    }
-    @Override
     public List<AuctionDTO> getAllAuctions() {
         return auctionRepository.getAllAuctions();
     }
@@ -68,7 +59,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Auction save(Auction auction) {
-        return null;
+        return auctionRepository.save(auction);
     }
 
     @Override
