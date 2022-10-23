@@ -1,7 +1,6 @@
 package com.aso.controller.api;
 
 
-import com.aso.exception.DataInputException;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
@@ -81,13 +80,13 @@ public class OrderAPI {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateMonthYearAndStatusOrderDetail(gregorianCalendar.get(Calendar.MONTH) + 1,gregorianCalendar.get(Calendar.YEAR),"Đang chờ duyệt");
         if (orderDetailDTOS.isEmpty()){
-            throw new RuntimeException("Không tìm thấy order!");
+            throw new RuntimeException("Không tìm thấy order");
         }
         return new ResponseEntity<>(orderDetailDTOS,HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> doCreateOrder(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
@@ -100,4 +99,63 @@ public class OrderAPI {
         }
     }
 
+    @GetMapping("/order-deliver/")
+    public ResponseEntity<?> findAllOrderDeliver(){
+        List<OrderDTO> orderDTOS = orderService.findOrderDTOByDeliver("Đã giao hàng thành công");
+        if (orderDTOS.isEmpty()){
+            throw new RuntimeException("Không tìm thấy order");
+        }
+        return new ResponseEntity<>(orderDTOS,HttpStatus.OK);
+    }
+
+    @GetMapping("/order/getOrder/{id}")
+    public ResponseEntity<?> findAllOrderByOrderDetailId(@PathVariable Long id){
+        List<OrderDTO> orderDTOS = orderService.findAllOrderDTOByOrderDetailId(id);
+        if (orderDTOS.isEmpty()){
+            throw new RuntimeException("Không tìm thấy order");
+        }
+        return new ResponseEntity<>(orderDTOS,HttpStatus.OK);
+    }
+
+    @PutMapping("/order-detail/checkout/{title}")
+    // kiểm tra trạng thái đơn hàng dã duyệt hay chưa
+    public ResponseEntity<?> checkOutOrder(@RequestBody OrderDetailDTO orderDetailDTO,@PathVariable String title, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            OrderDetail orderDetail =  orderDetailService.checkOutOrder(orderDetailDTO.toOrderDetail(),title);
+            return new ResponseEntity<>(orderDetail.toOrderDetailDTO(), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+    @PutMapping("/order-detail/delivery/{title}")
+    // kiểm tra trạng thái đơn hàng đã giao hay chưa
+    public ResponseEntity<?> doDeliveryOrder(@RequestBody OrderDetailDTO orderDetailDTO,@PathVariable String title, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            return new ResponseEntity<>(orderDetailService.deliveryOrder(orderDetailDTO.toOrderDetail(),title), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @PostMapping("/create-order-dashboard")
+    public ResponseEntity<?> doCreateOrderInDashBoard(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+
+        if (bindingResult.hasErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        try {
+            orderService.save(orderDTO.toOrder());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

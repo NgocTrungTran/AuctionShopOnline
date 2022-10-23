@@ -1,7 +1,7 @@
 package com.aso.model;
 
 
-import com.aso.model.dto.CartItemListDTO;
+import com.aso.model.dto.CartItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -37,6 +36,8 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
+    private boolean active;
+
     @Column(name = "amount_transaction", precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 
@@ -44,13 +45,13 @@ public class CartItem {
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
 
-//    @OneToMany(mappedBy = "cartItem")
-//    private List<CartItem> cartItem;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 
-    public CartItemListDTO toCartItemListDTO() {
-        return new CartItemListDTO()
+    public CartItemDTO toCartItemListDTO() {
+        return new CartItemDTO ()
                 .setId(id)
-                .setProductId (product.toProductDTO ())
+                .setProduct (product.toProductDTO ())
                 .setTitle(title)
                 .setPrice(price)
                 .setQuantity(quantity)

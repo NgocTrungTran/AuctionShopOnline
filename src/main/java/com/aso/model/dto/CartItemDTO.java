@@ -1,6 +1,5 @@
 package com.aso.model.dto;
 
-import com.aso.model.Cart;
 import com.aso.model.CartItem;
 import com.aso.model.Product;
 import lombok.AllArgsConstructor;
@@ -10,8 +9,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 
@@ -20,10 +17,12 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class CartItemListDTO {
+public class CartItemDTO {
 
     private Long id;
-    private ProductDTO productId;
+
+    @Column(name = "product_id")
+    private ProductDTO product;
 
     private String title;
 
@@ -33,11 +32,11 @@ public class CartItemListDTO {
 
     private BigDecimal amountTransaction;
 
-    private Cart cart;
+    private CartDTO cart;
 
-    public CartItemListDTO(Long id, Product productId, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
+    public CartItemDTO(Long id, Product product, String title, BigDecimal price, int quantity, BigDecimal amountTransaction) {
         this.id = id;
-        this.productId = productId.toProductDTO ();
+        this.product = product.toProductDTO ();
         this.title = title;
         this.price = price;
         this.quantity = quantity;
@@ -46,7 +45,8 @@ public class CartItemListDTO {
     public CartItem toCartItem() {
         return new CartItem()
                 .setId(id)
-                .setProduct(productId.toProduct())
+                .setCart ( cart.toCart () )
+                .setProduct(product.toProduct())
                 .setTitle(title)
                 .setPrice(price)
                 .setQuantity(quantity)

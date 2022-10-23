@@ -2,8 +2,10 @@ package com.aso.service.role;
 
 import com.aso.model.Product;
 import com.aso.model.Role;
+import com.aso.model.dto.RoleDTO;
 import com.aso.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,5 +56,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByName(String name) {
         return roleRepository.findByName(name);
+    }
+
+    @Override
+    public List<RoleDTO> findAllRole() {
+        return roleRepository.findAllRoles();
     }
 }

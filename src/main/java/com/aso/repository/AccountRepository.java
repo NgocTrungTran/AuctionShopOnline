@@ -3,6 +3,9 @@ package com.aso.repository;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
+import com.aso.model.dto.ProductDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +32,46 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "FROM Account AS a WHERE a.deleted = false"
     )
     List<AccountDTO> findAllAccountsDTO();
+
+    @Query("SELECT new com.aso.model.dto.AccountDTO (" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a WHERE a.deleted = false  ORDER BY a.id DESC "
+    )
+    List<AccountDTO> findAccountDTOAll();
+
+    @Query("SELECT new com.aso.model.dto.AccountDTO (" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a WHERE a.id = ?1"
+    )
+    Optional<AccountDTO> findAccountByIdDTO(Long id);
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
@@ -83,12 +126,33 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
             "a.id, " +
-            "a.username" +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
             ") " +
             "FROM Account AS a " +
             "WHERE a.username = ?1"
     )
     Optional<AccountDTO> findUserDTOByUsername(String username);
+
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
+            "a.id, " +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.avatar," +
+            "a.blocked," +
+            "a.locationRegion " +
+            ") " +
+            "FROM Account AS a " +
+            "WHERE a.id = ?1"
+    )
+    Optional<AccountDTO> findUserDTOById(Long id);
 
     @Modifying
     @Query("UPDATE Account AS a " +
@@ -110,4 +174,41 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByIdAndDeletedFalse(Long id);
 
     void deleteById(Product id);
+
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO(" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") FROM Account AS a WHERE a.fullName LIKE :keyword OR a.email LIKE :keyword AND a.deleted = false" +
+            " ORDER BY a.id DESC")
+    Page<AccountDTO> findAllAccountss(Pageable pageable, @Param("keyword") String keyword);
+
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO(" +
+            "a.id," +
+            "a.createdAt," +
+            "a.createdBy," +
+            "a.updatedAt," +
+            "a.updatedBy," +
+            "a.username," +
+            "a.fullName," +
+            "a.email," +
+            "a.phone," +
+            "a.password," +
+            "a.blocked," +
+            "a.avatar," +
+            "a.role," +
+            "a.locationRegion " +
+            ") FROM Account AS a WHERE a.deleted = false ORDER BY a.id DESC")
+    Page<AccountDTO> findAllAccounts(Pageable pageable);
 }

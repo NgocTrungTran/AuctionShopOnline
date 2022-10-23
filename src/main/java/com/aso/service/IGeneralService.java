@@ -1,5 +1,7 @@
 package com.aso.service;
 import com.aso.model.Product;
+import org.springframework.data.domain.Pageable;
+
 import java.util.Optional;
 
 public interface IGeneralService<T> {
@@ -10,4 +12,5 @@ public interface IGeneralService<T> {
     void softDelete(T t);
     void delete(Product id);
     Boolean existById(Long id);
+
 }

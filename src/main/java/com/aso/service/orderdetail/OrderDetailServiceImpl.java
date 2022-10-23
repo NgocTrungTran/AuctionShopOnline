@@ -4,9 +4,9 @@ import com.aso.model.OrderDetail;
 import com.aso.model.Product;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
-import com.aso.model.dto.ProductDTO;
 import com.aso.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,6 +79,30 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     @Override
     public List<OrderDetailDTO> findOderByCreateMonthYearAndStatusOrderDetail(int createMonth, int createYear, String statusOrderDetail) {
         return orderDetailRepository.findOderByCreateMonthYearAndStatusOrderDetail(createMonth,createYear,statusOrderDetail);
+    }
+
+    @Override
+    public List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(int createYear, String statusOrderDetail) {
+        return orderDetailRepository.findOderByCreateYearAndStatusOrderDetail(createYear,statusOrderDetail);
+    }
+    @Override
+    public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
+        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+        for (OrderDTO orderDTO : orderList){
+            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
+            orderRepository.save(orderDTO.toOrder());
+        }
+        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
+        return orderDetailRepository.save(orderDetail);
+    }
+    public OrderDetail deliveryOrder(OrderDetail orderDetail, String Title) {
+        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+        for (OrderDTO orderDTO : orderList){
+            orderDTO.setStatusOrder("Đang giao hàng");
+            orderRepository.save(orderDTO.toOrder());
+        }
+        orderDetail.setStatusOrderDetail("Đang giao hàng");
+        return orderDetailRepository.save(orderDetail);
     }
 
 }

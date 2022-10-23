@@ -2,11 +2,13 @@ package com.aso.repository;
 
 
 import com.aso.model.Product;
-import com.aso.model.dto.IProductDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    @Query("SELECT MAX(id) FROM Product")
+    Long findTopById();
 
     @Query("SELECT NEW com.aso.model.dto.ProductListDTO (" +
             "p.id, " +
@@ -44,7 +48,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.category, " +
             "p.description " +
             ") " +
-            "FROM Product AS p WHERE p.deleted = false")
+            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTO();
 
 //    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
@@ -79,7 +83,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.action " +
             ") " +
             "FROM Product AS p WHERE  " +
-            " p.title like %?1% ")
+            " p.title LIKE %?1% ")
     List<ProductDTO> findAllBySearchTitle(String title);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO ( " +
@@ -116,61 +120,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             " p.slug like %?1% ")
     List<ProductDTO> findAllBySearchSlug(String slug);
 
-    //    @Query("SELECT " +
-//            "pm.product.id AS id, " +
-//            "pm.product.title AS productTitle, " +
-//            "pm.product.slug AS productSlug, " +
-//            "pm.product.image AS productImage, " +
-//            "pm.product.price AS productPrice, " +
-//            "pm.product.sold AS productSold, " +
-//            "pm.product.viewed AS productViewed, " +
-//            "pm.product.category AS productCategory, " +
-//            "pm.product.available AS productAvailable, " +
-//            "pm.product.description AS productDescription, " +
-//            "pm.id AS fileId, " +
-//            "pm.fileName AS fileName, " +
-//            "pm.fileFolder AS fileFolder, " +
-//            "pm.fileUrl AS fileUrl, " +
-//            "pm.fileType AS fileType " +
-//            "FROM ProductMedia pm " +
-//            "WHERE pm.product.title LIKE %?1%"
-//    )
-//    Iterable<IProductDTO> findProductByProductName(String search);
-//    @Query("SELECT " +
-//            "pm.product.id AS id, " +
-//            "pm.product.title AS productTitle, " +
-//            "pm.product.slug AS productSlug, " +
-//            "pm.product.image AS productImage, " +
-//            "pm.product.price AS productPrice, " +
-//            "pm.product.sold AS productSold, " +
-//            "pm.product.viewed AS productViewed, " +
-//            "pm.product.category AS productCategory, " +
-//            "pm.product.available AS productAvailable, " +
-//            "pm.product.description AS productDescription, " +
-//            "pm.id AS fileId, " +
-//            "pm.fileName AS fileName, " +
-//            "pm.fileFolder AS fileFolder, " +
-//            "pm.fileUrl AS fileUrl, " +
-//            "pm.fileType AS fileType " +
-//            "FROM ProductMedia pm " +
-//            "ORDER BY pm.product.title ASC"
-//    )
-//    Iterable<IProductDTO> findAllIProductDTO();
-    @Query("SELECT NEW com.aso.model.dto.ProductDTO ( " +
-            "p.id, " +
-            "p.title, " +
-            "p.slug, " +
-            "p.image, " +
-            "p.price, " +
-            "p.sold, " +
-            "p.viewed, " +
-            "p.category, " +
-            "p.available, " +
-            "p.description, " +
-            "p.action " +
-            ") " +
-            "FROM Product AS p WHERE  " +
-            " p.slug like %?1% ")
     Optional<Product> findProductBySlug(String slug);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
@@ -189,5 +138,65 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product p WHERE " +
             "p.id = ?1 " +
             "And p.deleted = false")
-    Optional<ProductDTO> findProductDTOById(String id);
+    Optional<ProductDTO> findProductDTOById(Long id);
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.title, " +
+            "p.slug, " +
+            "p.image, " +
+            "p.price, " +
+            "p.sold, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.available, " +
+            "p.description, " +
+            "p.action " +
+            ") " +
+            "FROM Product AS p WHERE p.deleted = false AND p.available >=0")
+    List<ProductDTO> findAllProductDTOByAvailable(String available);
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description " +
+            ") " +
+            "FROM Product AS p WHERE p.title LIKE :keyword " +
+            "OR p.category.title LIKE :keyword AND p.deleted= false ORDER BY p.id DESC " +
+            "")
+    Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description " +
+            ") " +
+            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id ASC")
+    Page<ProductDTO> findAllProducts(Pageable pageable);
 }

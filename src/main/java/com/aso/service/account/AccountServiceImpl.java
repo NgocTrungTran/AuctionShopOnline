@@ -6,11 +6,14 @@ import com.aso.model.LocationRegion;
 import com.aso.model.Role;
 import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AccountRepository;
 import com.aso.service.gmail.MyConstants;
 import com.aso.service.location.LocationRegionService;
 import com.aso.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,11 +46,11 @@ public class AccountServiceImpl implements AccountService {
     public Iterable<Account> findAll() {
         return accountRepository.findAll ();
     }
-
-    @Override
-    public Optional<Account> findById(Long id) {
-        return accountRepository.findById ( id );
-    }
+//
+//    @Override
+//    public Optional<Account> findById(Long id) {
+//        return accountRepository.findById ( id );
+//    }
 
     @Override
     public Account save(Account user) {
@@ -124,7 +127,15 @@ public class AccountServiceImpl implements AccountService {
     public Optional<AccountDTO> findUserDTOByUsername(String username) {
         return accountRepository.findUserDTOByUsername ( username );
     }
+    @Override
+    public Optional<AccountDTO> findUserDTOById(Long id) {
+        return accountRepository.findUserDTOById ( id );
+    }
 
+    @Override
+    public Optional<Account> findById(Long id) {
+        return accountRepository.findById(id);
+    }
     @Override
     public Optional<Account> getByUsername(String username) {
         return accountRepository.getByUsername ( username );
@@ -168,10 +179,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account doCreate(AccountDTO accountDTO) {
         Optional<Role> optionalRole = roleService.findById(accountDTO.getRole().getId());
-        LocationRegion locationRegion = accountDTO.getLocationRegion ().toLocationRegion ();
+        LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion ();
         LocationRegion newLocationRegion = locationRegionService.save ( locationRegion );
         accountDTO.setRole ( optionalRole.get ().toRoleDTO () );
-        accountDTO.setLocationRegion ( newLocationRegion.toLocationRegionDTO () );
+        accountDTO.setLocationregion( newLocationRegion.toLocationRegionDTO () );
         Account account = accountDTO.toAccountAllAttribute ();
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -183,5 +194,25 @@ public class AccountServiceImpl implements AccountService {
                 "Chúc bạn có những trải nghiệm thật thú vị.");
         this.emailSender.send(message);
         return save(account);
+    }
+
+    @Override
+    public List<AccountDTO> findAccountDTOAll() {
+        return accountRepository.findAccountDTOAll();
+    }
+
+    @Override
+    public Optional<AccountDTO> findAccountByIdDTO(Long id) {
+        return accountRepository.findAccountByIdDTO(id);
+    }
+
+    @Override
+    public Page<AccountDTO> findAllAccounts(Pageable pageable) {
+        return accountRepository.findAllAccounts(pageable);
+    }
+
+    @Override
+    public Page<AccountDTO> findAllAccountss(Pageable pageable, String keyword) {
+        return accountRepository.findAllAccountss(pageable, keyword);
     }
 }

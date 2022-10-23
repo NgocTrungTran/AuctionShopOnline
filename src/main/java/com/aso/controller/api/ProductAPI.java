@@ -4,35 +4,43 @@ import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Product;
-import com.aso.model.dto.IProductDTO;
+import com.aso.model.ProductMedia;
 import com.aso.model.dto.ProductDTO;
+import com.aso.model.dto.ProductMediaDTO;
+import com.aso.repository.ProductRepository;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
+import com.aso.service.productMedia.ProductMediaService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductAPI {
     @Autowired
     private ProductService productService;
-//    @Autowired
-//    private ProductMediaService productMediaService;
+
+    @Autowired
+    private ProductMediaService productMediaService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private Validation validation;
@@ -45,7 +53,7 @@ public class ProductAPI {
 
     @GetMapping
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> getAllProducts() { //đã test ok
+    public ResponseEntity<?> getAllProducts() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTO();
 
         if (productDTOList.isEmpty()) {
@@ -55,7 +63,44 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-//    @GetMapping("/trash")
+    @GetMapping("/p")
+    public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable) {
+        Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/c")
+    public ResponseEntity<Page<ProductDTO>> getAllProductsSort(Pageable pageable, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(productService.findAllProducts(PageRequest.of(
+                        pageNumber, pageSize,
+                        sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
+                )
+        ), HttpStatus.OK);
+    }
+
+    // For searching
+    @GetMapping("/p/{keyword}")
+    public ResponseEntity<Page<ProductDTO>> getAllBookss(Pageable pageable, @PathVariable("keyword") String keyword) {
+        try {
+            keyword = "%" + keyword + "%";
+            Page<ProductDTO> productDTOList = productService.findAllProductss(pageable, keyword);
+            if (productDTOList.isEmpty()) {
+                throw new DataOutputException("Danh sách sản phẩm trống");
+            }
+            return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //    @GetMapping("/trash")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> getAllProductsTrash(@PathVariable String productId) {
 //        List<ProductDTO> products = productService.findAllProductsDTOTrash();
@@ -68,10 +113,20 @@ public class ProductAPI {
 //        }
 //        return new ResponseEntity<>(products, HttpStatus.OK);
 //    }
+    @GetMapping("/trash")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsTrash() {
+        List<ProductDTO> products = productService.findAllProductsDTOTrash();
+
+        if (products.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
     @GetMapping("/{productId}")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
-//    Đã test ok
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
 
         if (!validation.isIntValid(productId)) {
@@ -117,7 +172,6 @@ public class ProductAPI {
 //    }
 
     @PostMapping("/create")
-    // Test đã ok
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -125,16 +179,24 @@ public class ProductAPI {
         }
         String checkPrice = String.valueOf(new BigDecimal(String.valueOf(productDTO.getPrice())));
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
+            productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
+            productDTO.toProduct().setDeleted(false);
+            productDTO.setImages(productDTO.getImages());
             // Note: thêm category vô đây
             Product newProduct = productService.save(productDTO.toProduct());
+            for (String p: productDTO.getImages()) {
+                ProductMedia productMedia = new ProductMedia();
+                productMedia.setId(0L);
+                productMedia.setFileUrl(p);
+                productMediaService.save(productMedia);
+            }
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.CREATED);
         }
         throw new DataInputException("Tạo mới thất bại");
     }
 
     @PutMapping("/edit/{id}")
-// đã test ok
     public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO,
                                     BindingResult bindingResult) {
 
@@ -143,25 +205,69 @@ public class ProductAPI {
         }
 
         Optional<Product> p = productService.findById(id);
-
         if (!p.isPresent()) {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
 
         try {
-            productDTO.getCategory().setTitle(p.get().getCategory().getTitle());
-            productDTO.setId(p.get().getId());
-            productService.save(productDTO.toProduct());
+//            productDTO.setId(id);
+            String slug = Validation.makeSlug(productDTO.getTitle());
+            p.get().setUpdatedAt(new Date());
+            p.get().setAction(productDTO.getAction());
+            p.get().setAvailable(productDTO.getAvailable());
+            p.get().setImage(productDTO.getImage());
+            p.get().setPrice(productDTO.getPrice());
+            p.get().setSlug(slug);
+            p.get().setTitle(productDTO.getTitle());
+            p.get().setCategory(productDTO.toProduct().getCategory());
+            p.get().setDescription(productDTO.getDescription());
 
-            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+            for (String pr: productDTO.getImages()) {
+                ProductMedia productMedia = new ProductMedia();
+                productMedia.setId(0L);
+                productMedia.setFileUrl(pr);
+                productMediaService.save(productMedia);
+            }
+
+//            productDTO.setCreatedAt(p.get().getCreatedAt());
+//            productDTO.setCreatedBy(p.get().getCreatedBy());
+//            productDTO.setUpdateAt(new Date());
+//            productDTO.setUpdateBy(p.get().getUpdatedBy());
+//            productDTO.setSold(p.get().getSold());
+//            productDTO.setSlug(slug);
+//            productDTO.setViewed(p.get().getViewed());
+
+//            Product product = new Product();
+//            product.setId(id);
+//            product.setCreatedAt(p.get().getCreatedAt());
+//            product.setCreatedBy(p.get().getCreatedBy());
+//            product.setUpdatedAt(new Date());
+//            product.setTs(p.get().getTs());
+//            product.setDeleted(p.get().isDeleted());
+//            product.setAction(productDTO.getAction());
+//            product.setAvailable(productDTO.getAvailable());
+//            product.setImage(productDTO.getImage());
+//            product.setModeration(p.get().getModeration());
+//            product.setPrice(productDTO.getPrice());
+//            product.setSlug(slug);
+//            product.setSold(0L);
+//            product.setTitle(productDTO.getTitle());
+//            product.setViewed(0L);
+//            product.setCategory(productDTO.getCategory().toCategory());
+//            product.setDescription(productDTO.getDescription());
+
+            Product newProduct = productService.save(p.get());
+
+            return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/delete-soft/{id}")
-    // đã test ok
+
+    @PutMapping("/delete-soft/{id}")
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
+
 
         Optional<Product> optionalProduct = productService.findById(id);
 
@@ -196,13 +302,6 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-    // Viết thêm slug
-    @GetMapping("/search/{slug}")
-    // đã test ok (tìm kiếm theo tên slug)
-    public ResponseEntity<?> searchProductSlug(@PathVariable String slug) {
-        List<ProductDTO> productDTOList = productService.findAllBySearchSlug(slug);
-        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
-    }
     // viết slug chưa test
     @PutMapping("/update/{slug}")
     public ResponseEntity<?> update(@PathVariable String slug, @Validated ProductDTO productDTO, BindingResult bindingResult) {
@@ -225,9 +324,8 @@ public class ProductAPI {
             return new ResponseEntity<>(productDTO, HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Server ko xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Server không xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/product/slug/{slug}")
@@ -240,14 +338,13 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOOptional.get(), HttpStatus.OK);
     }
 
-   // productMedia
-//   @GetMapping("/productMedia/{id}")
-//   public ResponseEntity<?> findProductMediaByIdProduct(@PathVariable String id) {
-//       List<ProductMediaDTO> productMediaDTOList = productMediaService.findAllByProductIdOrderByTsDesc(id);
-//       if (productMediaDTOList.isEmpty()) {
-//           throw new DataInputException("Product is not found");
-//       }
-//       return new ResponseEntity<>(productMediaDTOList, HttpStatus.OK);
-//   }
-
+    @GetMapping("/product-status-available")
+    private ResponseEntity<?> findAllProductAvailable() {
+        try {
+            List<ProductDTO> productDTOS = productService.findAllProductDTOByAvailable("Sản phẩm hiện đang còn hàng");
+            return new ResponseEntity<>(productDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

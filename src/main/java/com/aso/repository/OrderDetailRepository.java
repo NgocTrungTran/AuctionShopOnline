@@ -43,4 +43,20 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "AND o.statusOrderDetail = :statusOrderDetail " +
              "")
     List<OrderDetailDTO> findOderByCreateMonthYearAndStatusOrderDetail(@Param("createMonth") int createMonth, @Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
+    @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
+            "o.id," +
+            "o.order," +
+            "o.product," +
+            "o.price," +
+            "o.quantity," +
+            "o.amountTransaction," +
+            "o.statusOrderDetail,  " +
+            "o.createdAt ," +
+            "o.updatedAt " +
+            ")  " +
+            "FROM OrderDetail o " +
+            "WHERE FUNCTION('YEAR', o.createdAt) = :createYear " +
+            "AND o.statusOrderDetail = :statusOrderDetail " +
+            "")
+    List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(@Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
 }

@@ -6,6 +6,7 @@ import com.aso.model.Product;
 import com.aso.model.dto.CartDTO;
 import com.aso.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +71,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Optional<CartDTO> findCartItemDTOByIdAccountInfo(String id) {
-        return cartRepository.findCartItemDTOByIdAccountInfo(id);
+    public Optional<CartDTO> findCartDTOByIdAccountInfo(Long id) {
+        return cartRepository.findCartDTOByIdAccountInfo(id);
     }
 }

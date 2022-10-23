@@ -1,5 +1,6 @@
 package com.aso.utils;
 
+import com.aso.exception.BlogapiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class AppUtil {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    public static String getPrincipalUsername() {
+    public String getPrincipalUsername() {
         String userName;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

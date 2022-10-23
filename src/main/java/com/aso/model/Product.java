@@ -27,7 +27,6 @@ public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     private String title;
     @NotNull
@@ -64,6 +63,9 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductMedia> productMedia;
 
 
 

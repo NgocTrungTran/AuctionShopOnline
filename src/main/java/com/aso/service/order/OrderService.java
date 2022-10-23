@@ -10,5 +10,8 @@ import java.util.List;
 public interface OrderService extends IGeneralService<Order> {
     List<OrderDTO> findOrderDTOById(String id);
     List<OrderDTO> findOrderDTO();
+    List<OrderDTO> findOrderDTOByDeliver(String order);
+    List<OrderDTO> findAllOrderDTOByOrderDetailId (Long id);
+
 
 }

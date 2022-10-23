@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -47,15 +46,36 @@ public class Account extends BaseEntity{
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private List<Cart> cart;
+
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
                 .setId(id)
                 .setUsername ( username )
                 .setFullName ( fullName )
-                .setLocationRegion ( locationRegion.toLocationRegionDTO ())
+                .setLocationregion( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )
-                .setBlocked ( blocked );
+                .setBlocked ( blocked )
+                .setRole(role.toRoleDTO());
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", blocked=" + blocked +
+                ", avatar='" + avatar + '\'' +
+                ", role=" + role +
+                ", locationRegion=" + locationRegion +
+                '}';
+    }
+
 }

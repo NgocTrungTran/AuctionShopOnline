@@ -1,19 +1,18 @@
 package com.aso.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "bids")
 @Accessors(chain = true)
 public class Bid extends BaseEntity{
@@ -24,11 +23,17 @@ public class Bid extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account accountId;
+    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "auction_id", referencedColumnName = "id")
-    private Auction auctionId;
+    private Auction auction;
 
-    private BigDecimal auctionPrice;
+    private long relatedOfferId;
+
+    private String email;
+
+    private BigDecimal bidPrice;
+
+    private LocalDateTime bidTime;
 }
