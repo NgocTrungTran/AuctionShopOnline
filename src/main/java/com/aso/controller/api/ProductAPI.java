@@ -274,7 +274,7 @@ public class ProductAPI {
             p.get().setModeration(true);
             Product newProduct = productService.save(p.get());
 
-            // thêm tạo đấu giá ở đây
+            // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
             AccountDTO accountDTO = accountService.findAccountByCreatedBy(p.get().getCreatedBy());
             if (p.get().getAction()) {
                 AuctionDTO auction = new AuctionDTO();
