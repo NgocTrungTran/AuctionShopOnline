@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuctionService extends IGeneralService<Auction> {
 
@@ -22,5 +23,7 @@ public interface AuctionService extends IGeneralService<Auction> {
     Page<AuctionDTO> findAllAuctions(Pageable pageable);
 
     Page<AuctionDTO> findAllAuctionss(Pageable pageable, @Param("keyword") String keyword);
+
+    Optional<AuctionDTO> findByAuctionByProductId(Long id);
 }
 

@@ -41,6 +41,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductListDTO> findAllProductListDTOModeration() {
+        return productRepository.findAllProductListDTOModeration();
+    }
+
+    @Override
     public List<ProductDTO> findAllProductsDTO() {
         return productRepository.findAllProductsDTO();
     }
@@ -131,4 +136,9 @@ public class ProductServiceImpl implements ProductService{
                 )
         ), HttpStatus.OK);
     }
-  }
+
+    @Override
+    public List<ProductDTO> isSlug() {
+        return productRepository.isSlug();
+    }
+}

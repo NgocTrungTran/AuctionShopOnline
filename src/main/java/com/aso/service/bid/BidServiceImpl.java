@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class BidServiceImpl implements BidService {
             throw new IncorrectPriceException(
                     "Giá dự thầu phải lớn hơn giá chào!");
         }
-        if (LocalDateTime.now().isAfter(auction.get().getAuctionEndTime())) {
+        if (new Date().after(auction.get().getAuctionEndTime())) {
             throw new IncorrectDateException("Phiên đấu giá đã kết thúc!");
         }
 

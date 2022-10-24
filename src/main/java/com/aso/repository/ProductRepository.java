@@ -29,6 +29,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product AS p")
     List<ProductListDTO> findAllProductListDTO();
+    @Query("SELECT NEW com.aso.model.dto.ProductListDTO (" +
+            "p.id, " +
+            "p.title, " +
+            "p.slug, " +
+            "p.image, " +
+            "p.price " +
+            ") " +
+            "FROM Product AS p WHERE p.moderation = false")
+    List<ProductListDTO> findAllProductListDTOModeration();
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
             "p.id, " +
@@ -202,4 +211,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.id DESC")
     Page<ProductDTO> findAllProducts(Pageable pageable);
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO ( " +
+            "p.slug " +
+            ") " +
+            "FROM Product AS p" )
+    List<ProductDTO> isSlug();
 }

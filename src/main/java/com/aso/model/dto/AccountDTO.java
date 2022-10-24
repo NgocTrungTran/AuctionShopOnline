@@ -36,6 +36,18 @@ public class AccountDTO {
     private RoleDTO role;
     private LocationRegionDTO locationregion;
 
+    public AccountDTO(Long id, String username, String fullName, String email, String phone, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.blocked = blocked;
+        this.avatar = avatar;
+        this.role = role.toRoleDTO();
+        this.locationregion = locationregion.toLocationRegionDTO();
+    }
+
     public AccountDTO(Long id, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
         this.id = id;
         this.username = username;

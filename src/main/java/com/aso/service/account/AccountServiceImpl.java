@@ -215,4 +215,9 @@ public class AccountServiceImpl implements AccountService {
     public Page<AccountDTO> findAllAccountss(Pageable pageable, String keyword) {
         return accountRepository.findAllAccountss(pageable, keyword);
     }
+
+    @Override
+    public AccountDTO findAccountByCreatedBy(String createBy) {
+        return accountRepository.findAccountByCreatedBy(createBy);
+    }
 }

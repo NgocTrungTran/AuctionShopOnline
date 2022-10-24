@@ -28,6 +28,12 @@ public class Status {
     @OneToOne(mappedBy = "status")
     private Cart cart;
 
+    @OneToOne(mappedBy = "status")
+    private Order order;
+
+    @OneToOne(mappedBy = "status")
+    private OrderDetail orderDetail;
+
     public StatusDTO toStatusDTO() {
         return new StatusDTO ()
                 .setId ( id )
