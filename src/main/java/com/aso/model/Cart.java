@@ -28,7 +28,9 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    private String status = "Chưa thanh toán";
+    @OneToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
+    private Status status;
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItem;

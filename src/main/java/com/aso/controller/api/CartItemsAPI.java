@@ -2,6 +2,7 @@ package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
+import com.aso.model.Account;
 import com.aso.model.CartItem;
 import com.aso.model.Product;
 import com.aso.model.dto.CartItemDTO;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +58,7 @@ public class CartItemsAPI {
     }
     @GetMapping("/reduce/{cartItemId}")
     public ResponseEntity<?> reduceCartItem(@PathVariable Long cartItemId) {
+        List<String> errors = new ArrayList<> ();
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
             if ( !cartItemOptional.isPresent () ) {
@@ -68,7 +71,8 @@ public class CartItemsAPI {
             CartItem newCartItem = cartItemOptional.get ();
 
             if ( checkQuantity ) {
-                return new ResponseEntity<>("Số lượng sản phẩm không thể nhỏ hơn 1", HttpStatus.NO_CONTENT);
+                errors.add ( "Số lượng đặt hàng không hợp lệ" );
+                return new ResponseEntity<>( errors, HttpStatus.BAD_REQUEST);
             }
 
             newCartItem.setQuantity ( currentQuantity - 1 );
@@ -109,7 +113,7 @@ public class CartItemsAPI {
     public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
-            if ( !cartItemOptional.isPresent () ) {
+            if ( cartItemOptional.isEmpty () ) {
                 throw new DataOutputException ( "Không tồn tại sản phẩm này trong giỏ hàng" );
             }
             CartItem newCartItem = cartItemOptional.get ();
@@ -122,7 +126,25 @@ public class CartItemsAPI {
             return new ResponseEntity<>(cartItemsDTO , HttpStatus.ACCEPTED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Không thể giảm số lượng sản phẩm", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Không thể xóa sản phẩm ra khỏi giỏ hàng", HttpStatus.NO_CONTENT);
+        }
+    }
+    @PutMapping("/remove-list/{accountId}")
+    public ResponseEntity<?> removeCartItems(@PathVariable Long accountId, @RequestBody List<CartItemDTO> cartItems) {
+        try {
+            Optional<Account> accountOptional = accountService.findById ( accountId );
+            if ( accountOptional.isEmpty () ) {
+                return new ResponseEntity<>("Tài khoản không tồn tại", HttpStatus.NO_CONTENT);
+            }
+            if ( cartItems.isEmpty () ) {
+                return new ResponseEntity<>("Danh sách rỗng", HttpStatus.NO_CONTENT);
+            }
+            List<CartItemDTO> newCartItems = cartItemService.doRemoveCartItems ( accountId, cartItems );
+
+            return new ResponseEntity<>( newCartItems, HttpStatus.ACCEPTED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Không thể thực hiện thao tác", HttpStatus.NO_CONTENT);
         }
     }
 
