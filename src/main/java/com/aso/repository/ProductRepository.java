@@ -46,7 +46,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.title, " +
             "p.viewed, " +
             "p.category, " +
-            "p.description " +
+            "p.description," +
+            "p.countday " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTO();
@@ -172,14 +173,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.title, " +
             "p.viewed, " +
             "p.category, " +
-            "p.description " +
+            "p.description," +
+            "p.countday " +
             ") " +
-<<<<<<< HEAD
-            "FROM Product AS p  WHERE p.title LIKE :keyword " +
-=======
             "FROM Product AS p WHERE p.title LIKE :keyword " +
->>>>>>> development
-            "OR p.category.title LIKE :keyword AND p.deleted= false ORDER BY p.id DESC " +
+            "OR p.category.title LIKE :keyword AND p.deleted= false AND p.moderation = true ORDER BY p.id DESC " +
             "")
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
 
@@ -199,8 +197,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.title, " +
             "p.viewed, " +
             "p.category, " +
-            "p.description " +
+            "p.description," +
+            "p.countday " +
             ") " +
-            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id ASC")
+            "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.id DESC")
     Page<ProductDTO> findAllProducts(Pageable pageable);
 }

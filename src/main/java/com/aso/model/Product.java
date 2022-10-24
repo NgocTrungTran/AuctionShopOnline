@@ -48,6 +48,9 @@ public class Product extends BaseEntity {
     @Column(precision = 12, scale = 0)
     private BigDecimal price = new BigDecimal ( 0L );
 
+    @Column(name = "countday")
+    private String countday;
+
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
@@ -82,6 +85,7 @@ public class Product extends BaseEntity {
                 .setDescription(description)
                 .setAvailable(available)
                 .setAction(action)
+                .setCountday(countday)
                 ;
     }
 }

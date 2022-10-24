@@ -183,6 +183,9 @@ public class ProductAPI {
             productDTO.setId(0L);
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
+            if (!productDTO.getAction()) {
+                productDTO.setCountday(null);
+            }
             // Note: thêm category vô đây
             Product newProduct = productService.save(productDTO.toProduct());
             for (String p: productDTO.getImages()) {
@@ -221,6 +224,10 @@ public class ProductAPI {
             p.get().setTitle(productDTO.getTitle());
             p.get().setCategory(productDTO.toProduct().getCategory());
             p.get().setDescription(productDTO.getDescription());
+            p.get().setCountday(productDTO.getCountday());
+            if (!productDTO.getAction()) {
+                p.get().setCountday(null);
+            }
 
             for (String pr: productDTO.getImages()) {
                 ProductMedia productMedia = new ProductMedia();
@@ -260,6 +267,22 @@ public class ProductAPI {
 
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
 
+        } catch (Exception e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/moderation/{id}")
+    public ResponseEntity<?> doModeration(@PathVariable Long id) {
+        Optional<Product> p = productService.findById(id);
+        if (!p.isPresent()) {
+            return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
+        }
+        try {
+            p.get().setModeration(false);
+            Product newProduct = productService.save(p.get());
+            // thêm tạo đấu giá ở đây
+            return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }

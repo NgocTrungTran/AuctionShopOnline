@@ -47,8 +47,9 @@ public class Auction extends BaseEntity{
     @Convert(converter = ItemStatusConverter.class)
     private ItemStatus itemStatus;
 
+    @Column(precision = 12, scale = 0)
     private BigDecimal startingPrice;
-
+    @Column(precision = 12, scale = 0)
     private BigDecimal currentPrice;
 
     private LocalDateTime auctionEndTime;

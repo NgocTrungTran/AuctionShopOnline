@@ -48,6 +48,7 @@ public class ProductDTO implements Validator {
     private Long viewed;
     private CategoryDTO category;
     private String description;
+    private String countday;
 
     private List<String> images;
 
@@ -65,7 +66,7 @@ public class ProductDTO implements Validator {
         this.action = action;
     }
 
-    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, String slug, Long sold, String title, Long viewed, Category category, String description) {
+    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, String slug, Long sold, String title, Long viewed, Category category, String description, String countday) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
@@ -82,7 +83,7 @@ public class ProductDTO implements Validator {
         this.viewed = viewed;
         this.category = category.toCategoryDTO();
         this.description = description;
-
+        this.countday = countday;
     }
 
     public Product toProduct() {
@@ -96,6 +97,7 @@ public class ProductDTO implements Validator {
                 .setImage ( image )
                 .setDescription(description)
                 .setAvailable(available)
+                .setCountday(countday)
                 .setAction(action)
                 .setCategory ( category.toCategory () )
                 .setCreatedBy(createdBy)
