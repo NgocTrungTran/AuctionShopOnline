@@ -236,7 +236,7 @@ public class AccountAPI {
             keyword = "%" + keyword + "%";
             Page<AccountDTO> accountDTOPage = accountService.findAllAccountss(pageable, keyword);
             if (accountDTOPage.isEmpty()) {
-                throw new DataOutputException("Danh sách sản phẩm trống");
+                throw new DataOutputException("Danh sách tài khoản trống");
             }
             return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
         } catch (Exception e) {
