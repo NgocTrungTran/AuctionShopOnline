@@ -183,7 +183,7 @@ public class ProductAPI {
             productDTO.setId(0L);
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
-            if (!productDTO.getAction()) {
+            if (productDTO.getAction()) {
                 productDTO.setCountday(null);
             }
             // Note: thêm category vô đây
@@ -225,7 +225,7 @@ public class ProductAPI {
             p.get().setCategory(productDTO.toProduct().getCategory());
             p.get().setDescription(productDTO.getDescription());
             p.get().setCountday(productDTO.getCountday());
-            if (!productDTO.getAction()) {
+            if (productDTO.getAction()) {
                 p.get().setCountday(null);
             }
 
@@ -235,33 +235,6 @@ public class ProductAPI {
                 productMedia.setFileUrl(pr);
                 productMediaService.save(productMedia);
             }
-
-//            productDTO.setCreatedAt(p.get().getCreatedAt());
-//            productDTO.setCreatedBy(p.get().getCreatedBy());
-//            productDTO.setUpdateAt(new Date());
-//            productDTO.setUpdateBy(p.get().getUpdatedBy());
-//            productDTO.setSold(p.get().getSold());
-//            productDTO.setSlug(slug);
-//            productDTO.setViewed(p.get().getViewed());
-
-//            Product product = new Product();
-//            product.setId(id);
-//            product.setCreatedAt(p.get().getCreatedAt());
-//            product.setCreatedBy(p.get().getCreatedBy());
-//            product.setUpdatedAt(new Date());
-//            product.setTs(p.get().getTs());
-//            product.setDeleted(p.get().isDeleted());
-//            product.setAction(productDTO.getAction());
-//            product.setAvailable(productDTO.getAvailable());
-//            product.setImage(productDTO.getImage());
-//            product.setModeration(p.get().getModeration());
-//            product.setPrice(productDTO.getPrice());
-//            product.setSlug(slug);
-//            product.setSold(0L);
-//            product.setTitle(productDTO.getTitle());
-//            product.setViewed(0L);
-//            product.setCategory(productDTO.getCategory().toCategory());
-//            product.setDescription(productDTO.getDescription());
 
             Product newProduct = productService.save(p.get());
 
