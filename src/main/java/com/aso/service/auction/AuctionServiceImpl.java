@@ -1,15 +1,16 @@
 package com.aso.service.auction;
 
-import com.aso.exception.IncorrectDateException;
-import com.aso.exception.IncorrectOperationException;
-import com.aso.exception.IncorrectPriceException;
-import com.aso.exception.ResourceNotFoundException;
+import com.aso.exception.*;
 import com.aso.model.Auction;
-import com.aso.model.dto.AuctionRequest;
+import com.aso.model.Product;
+import com.aso.model.dto.AuctionDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
-import com.aso.service.mapper.AuctionDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -27,9 +28,8 @@ public class AuctionServiceImpl implements AuctionService {
     @Autowired
     private BidRepository bidRepository;
     @Override
-    public Auction createAuction(AuctionRequest auctionRequest) {
-
-        Auction auction = AuctionDtoMapper.mapAuctionRequestToAuction(auctionRequest);
+    public Auction createAuction(AuctionDTO auctionDTO) {
+        Auction auction = auctionRepository.save(auctionDTO.toAuction());
 
         if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
             throw new IncorrectDateException("Thời gian kết thúc phiên đấu giá không được ở trong quá khứ!");
@@ -46,40 +46,55 @@ public class AuctionServiceImpl implements AuctionService {
 
         return auctionRepository.save(auction);
     }
-
     @Override
-    public Auction deleteAuction(Long id) {
-        Auction auctionToDelete = auctionRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Phiếu mua hàng có id " + id + " không tồn tại!"));
-
-        if (auctionToDelete.getAuctionEndTime().isBefore(LocalDateTime.now())) {
-            throw new IncorrectDateException("\n" +
-                    "Không thể xóa phiên đấu giá đã kết thúc!");
-        }
-        long bidsForAuctionCount = bidRepository.findByRelatedOfferId(id).size();
-
-        if (bidsForAuctionCount != 0) {
-            throw new IncorrectOperationException("\n" +
-                    "Không thể xóa đấu giá có giá thầu!");
-        }
-        auctionRepository.deleteById(id);
-        return auctionToDelete;
-    }
-
-    @Override
-    public Auction updateAuction(Long id, AuctionRequest auctionRequest) {
-        Auction auctionToUpdate = auctionRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Đấu giá có id " + id + " không tồn tại!"));
-
-        Optional.ofNullable(auctionRequest.getEmail()).ifPresent(auctionToUpdate::setEmail);
-
-        return auctionRepository.save(auctionToUpdate);
-    }
-
-    @Override
-    public List<AuctionRequest> getAllAuctions() {
+    public List<AuctionDTO> getAllAuctions() {
         return auctionRepository.getAllAuctions();
     }
 
+    @Override
+    public Iterable<Auction> findAll() {
+        return null;
+    }
+
+    @Override
+    public Optional<Auction> findById(Long id) {
+        return auctionRepository.findById(id);
+    }
+
+    @Override
+    public Auction save(Auction auction) {
+        return auctionRepository.save(auction);
+    }
+
+    @Override
+    public Auction getById(Long id) {
+        return null;
+    }
+
+    @Override
+    public void softDelete(Auction auction) {
+        auction.setDeleted(true);
+        auctionRepository.save(auction);
+    }
+
+    @Override
+    public void delete(Product id) {
+
+    }
+
+    @Override
+    public Boolean existById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Page<AuctionDTO> findAllAuctionss(Pageable pageable, @Param("keyword") String keyword) {
+        return auctionRepository.findAllAuctionss(pageable, keyword);
+    }
+
+    @Override
+    public Page<AuctionDTO> findAllAuctions(Pageable pageable ) {
+        return auctionRepository.findAllAuctions(pageable);
+    }
 }
 

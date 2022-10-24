@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "order_items")
+@Table(name = "orders_detail")
 @Accessors(chain = true)
 public class OrderDetail extends BaseEntity {
 

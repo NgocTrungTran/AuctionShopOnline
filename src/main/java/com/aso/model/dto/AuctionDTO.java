@@ -5,11 +5,10 @@ import com.aso.model.Auction;
 import com.aso.model.Product;
 import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
-import com.aso.validators.PriceConstraint;
+import com.aso.utils.PriceConstraint;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.validation.Validator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -20,14 +19,13 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.aso.utils.AppConstants.MAX_AUCTION_LENGTH_IN_DAYS;
-
+@Builder
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-//@Builder
 @Accessors(chain = true)
-public class AuctionRequest {
+public class AuctionDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,7 +65,7 @@ public class AuctionRequest {
     @Max(value = MAX_AUCTION_LENGTH_IN_DAYS, message = "Thời gian kết thúc phiên đấu giá không thể dài hơn" + MAX_AUCTION_LENGTH_IN_DAYS)
     private int daysToEndTime;
 
-    public AuctionRequest(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String email, Account account, Product product, AuctionType auctionType, ItemStatus itemStatus, BigDecimal startingPrice, BigDecimal currentPrice, LocalDateTime auctionEndTime, LocalDateTime auctionStartTime, int daysToEndTime) {
+    public AuctionDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String email, Account account, Product product, AuctionType auctionType, ItemStatus itemStatus, BigDecimal startingPrice, BigDecimal currentPrice, LocalDateTime auctionEndTime, LocalDateTime auctionStartTime, int daysToEndTime) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;

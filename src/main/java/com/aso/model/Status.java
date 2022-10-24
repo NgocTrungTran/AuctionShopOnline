@@ -1,7 +1,6 @@
 package com.aso.model;
 
-
-import com.aso.model.dto.RoleDTO;
+import com.aso.model.dto.StatusDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,33 +8,30 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(name = "status")
 @Accessors(chain = true)
-public class Role {
-
+public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
+
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private Set<Account> accounts;
+    @OneToOne(mappedBy = "status")
+    private Cart cart;
 
-    public RoleDTO toRoleDTO (){
-        return new RoleDTO()
-                .setId(id)
+    public StatusDTO toStatusDTO() {
+        return new StatusDTO ()
+                .setId ( id )
                 .setCode ( code )
                 .setName ( name );
-
     }
 }

@@ -70,6 +70,9 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private List<ProductMedia> productMedia;
 
+    @OneToMany(mappedBy = "product")
+    private  List<Auction> auctions;
+
 
 
     public ProductDTO toProductDTO() {

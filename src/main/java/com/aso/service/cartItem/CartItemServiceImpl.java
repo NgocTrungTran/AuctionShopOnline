@@ -3,7 +3,6 @@ package com.aso.service.cartItem;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
-import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
 import com.aso.model.Cart;
 import com.aso.model.CartItem;
@@ -111,13 +110,13 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountId );
 
-        if ( !accountOptional.isPresent () ) {
+        if ( accountOptional.isEmpty () ) {
             throw new AccountInputException ("Tài khoản không tồn tại");
         }
 
         Optional<Product> product = productRepository.findById(cartItemDTO.getProduct().getId());
 
-        if ( !product.isPresent () ) {
+        if ( product.isEmpty () ) {
             throw new DataInputException("Sản phẩm không tồn tại!");
         } else {
             cartItemDTO.setProduct ( product.get ().toProductDTO () );
@@ -125,7 +124,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         Optional<CartDTO> cartDTOOptional = cartService.findCartDTOByIdAccountInfo ( accountId );
 
-        if ( !cartDTOOptional.isPresent () ) {
+        if ( cartDTOOptional.isEmpty () ) {
             Cart cart = new Cart ();
             cart.setAccount ( accountOptional.get () );
             Cart newCart = cartService.save ( cart );
@@ -146,6 +145,22 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
 
         return cartItemRepository.save(cartItemDTO.toCartItem ());
+    }
+
+    @Override
+    public List<CartItemDTO> doRemoveCartItems(Long accountId, List<CartItemDTO> cartItemsDTO) {
+
+        for (CartItemDTO cartItem: cartItemsDTO) {
+            Optional<CartItem> cartItemOptional = cartItemRepository.findById ( cartItem.getId () );
+            if ( cartItemOptional.isEmpty () ) {
+                throw new Error ( "Sản phẩm " + cartItem.getTitle () + " không tồn tại trong giỏ hàng." );
+            }
+            CartItem newCartItem = cartItemOptional.get ();
+            newCartItem.setDeleted ( true );
+            cartItemRepository.save ( newCartItem );
+        }
+
+        return cartItemRepository.findCartItemDTOByAccountId ( accountId );
     }
 
     @Override

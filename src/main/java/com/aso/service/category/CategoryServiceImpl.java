@@ -4,9 +4,12 @@ package com.aso.service.category;
 import com.aso.model.Category;
 import com.aso.model.Product;
 import com.aso.model.dto.CategoryDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Override
     public List<Category> findAll() {
         return null;
@@ -26,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> findById(Long id) {
-        return categoryRepository.findById ( id );
+        return categoryRepository.findById(id);
     }
 
     @Override
@@ -36,12 +40,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void softDelete(Category category) {
-
+        category.setDeleted(true);
+        categoryRepository.save(category);
     }
 
     @Override
     public Category save(Category category) {
-        return categoryRepository.save ( category );
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void  deleteCategory(Long id) {
+    public void deleteCategory(Long id) {
 
         categoryRepository.deleteById(id);
     }
@@ -73,5 +78,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Boolean existById(Long id) {
         return null;
+    }
+
+    @Override
+    public Page<CategoryDTO> findAllCategoryDTOPage(Pageable pageable) {
+        return categoryRepository.findAllCategoryDTOPage(pageable);
+    }
+    @Override
+    public Page<CategoryDTO> getAllCategroys(Pageable pageable, @Param("keyword") String keyword) {
+        return categoryRepository.getAllCategroys(pageable, keyword);
     }
 }
