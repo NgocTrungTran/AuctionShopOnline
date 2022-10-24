@@ -49,7 +49,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.role," +
             "a.locationRegion " +
             ") " +
-            "FROM Account AS a WHERE a.deleted = false  ORDER BY a.id DESC "
+            "FROM Account AS a WHERE a.deleted = false ORDER BY a.id DESC "
     )
     List<AccountDTO> findAccountDTOAll();
 
@@ -83,8 +83,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.blocked, " +
             "a.locationRegion" +
             ") " +
-            "FROM Account AS a WHERE a.deleted = true and a.role.id = 2"
-    )
+            "FROM Account AS a WHERE a.deleted = true and a.role.id = 2")
     List<AccountDTO> findAllUsersDTODeleted();
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
@@ -172,6 +171,20 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     void deleteData(@Param("userId") Long userId);
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
+
+    @Query("SELECT new com.aso.model.dto.AccountDTO(" +
+            "a.id, " +
+            "a.username, " +
+            "a.fullName, " +
+            "a.email, " +
+            "a.phone, " +
+            "a.blocked, " +
+            "a.avatar, " +
+            "a.role, " +
+            "a.locationRegion" +
+            ") " +
+            "FROM Account AS a WHERE a.createdBy = ?1")
+    AccountDTO findAccountByCreatedBy(String createBy);
 
     void deleteById(Product id);
 

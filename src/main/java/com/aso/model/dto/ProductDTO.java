@@ -52,6 +52,7 @@ public class ProductDTO implements Validator {
 
     private List<String> images;
 
+
     public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, Category category, Long available, String description, boolean action){
 
         this.id = id;
@@ -103,6 +104,10 @@ public class ProductDTO implements Validator {
                 .setCreatedBy(createdBy)
                 ;
 
+    }
+
+    public ProductDTO(String slug) {
+        this.slug = slug;
     }
 
     @Override

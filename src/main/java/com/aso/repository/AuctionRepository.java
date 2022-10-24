@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("SELECT NEW com.aso.model.dto.AuctionDTO (" +
@@ -90,4 +91,24 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
             ") " +
             "FROM Auction AS a WHERE a.email LIKE :keyword AND a.deleted = false  ")
     Page<AuctionDTO> findAllAuctionss(Pageable pageable, @Param("keyword") String keyword);
+
+    @Query("SELECT NEW com.aso.model.dto.AuctionDTO (" +
+            "a.id, " +
+            "a.createdAt, " +
+            "a.createdBy, " +
+            "a.updatedAt, " +
+            "a.updatedBy, " +
+            "a.email, " +
+            "a.account, " +
+            "a.product, " +
+            "a.auctionType, " +
+            "a.itemStatus, " +
+            "a.startingPrice, " +
+            "a.currentPrice, " +
+            "a.auctionEndTime, " +
+            "a.auctionStartTime, " +
+            "a.daysToEndTime" +
+            ") " +
+            "FROM Auction AS a WHERE a.product.id = ?1")
+    Optional<AuctionDTO> findByAuctionByProductId(Long id);
 }

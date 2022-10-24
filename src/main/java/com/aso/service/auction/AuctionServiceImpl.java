@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +32,11 @@ public class AuctionServiceImpl implements AuctionService {
     public Auction createAuction(AuctionDTO auctionDTO) {
         Auction auction = auctionRepository.save(auctionDTO.toAuction());
 
-        if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
+        if (auction.getAuctionEndTime().before(new Date())) {
             throw new IncorrectDateException("Thời gian kết thúc phiên đấu giá không được ở trong quá khứ!");
         }
 
-        if (auction.getAuctionEndTime().minusDays(1).compareTo(auction.getAuctionStartTime()) < 0) {
+        if (auction.getAuctionEndTime().compareTo(auction.getAuctionStartTime()) < 0) {
             throw new IncorrectDateException(
                     "Thời gian kết thúc phiên đấu giá phải sau thời gian bắt đầu ít nhất 1 ngày!");
         }
@@ -90,6 +91,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Page<AuctionDTO> findAllAuctionss(Pageable pageable, @Param("keyword") String keyword) {
         return auctionRepository.findAllAuctionss(pageable, keyword);
+    }
+
+    @Override
+    public Optional<AuctionDTO> findByAuctionByProductId(Long id) {
+        return auctionRepository.findByAuctionByProductId(id);
     }
 
     @Override

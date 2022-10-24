@@ -54,9 +54,9 @@ public class Auction extends BaseEntity{
     @Column(precision = 12, scale = 0)
     private BigDecimal currentPrice;
 
-    private LocalDateTime auctionEndTime;
+    private Date auctionEndTime;
 
-    private LocalDateTime auctionStartTime;
+    private Date auctionStartTime;
 
     private int daysToEndTime;
 

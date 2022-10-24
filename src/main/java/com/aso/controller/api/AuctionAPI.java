@@ -82,13 +82,23 @@ public class AuctionAPI {
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
     }
 
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> getAuctionByProductId(@PathVariable Long productId) {
+        Optional<AuctionDTO> auctionDTO = auctionService.findByAuctionByProductId(productId);
+
+        if (auctionDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Auction invalid!");
+        }
+        return new ResponseEntity<>(auctionDTO.get(), HttpStatus.OK);
+    }
+
     @PutMapping("/delete-soft/{auctionId}")
     public ResponseEntity<?> doDelete(@PathVariable Long auctionId) {
 
         Auction auctionToDelete = auctionService.findById(auctionId).orElseThrow(
                 () -> new ResourceNotFoundException("Phiếu mua hàng có id " + auctionId + " không tồn tại!"));
 
-        if (auctionToDelete.getAuctionEndTime().isBefore(LocalDateTime.now())) {
+        if (auctionToDelete.getAuctionEndTime().before(new Date())) {
             throw new IncorrectDateException(
                     "Không thể xóa phiên đấu giá đã kết thúc!");
         }
