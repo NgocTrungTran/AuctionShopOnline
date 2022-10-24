@@ -3,11 +3,16 @@ package com.aso.controller.api;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
+import com.aso.model.Auction;
 import com.aso.model.Product;
 import com.aso.model.ProductMedia;
-import com.aso.model.dto.ProductDTO;
-import com.aso.model.dto.ProductMediaDTO;
+import com.aso.model.dto.*;
+import com.aso.model.enums.AuctionType;
+import com.aso.model.enums.ItemStatus;
+import com.aso.repository.AuctionRepository;
 import com.aso.repository.ProductRepository;
+import com.aso.service.account.AccountService;
+import com.aso.service.auction.AuctionService;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
@@ -33,6 +38,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/products")
 public class ProductAPI {
+
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private ProductService productService;
 
@@ -40,8 +48,7 @@ public class ProductAPI {
     private ProductMediaService productMediaService;
 
     @Autowired
-    private ProductRepository productRepository;
-
+    private AuctionService auctionService;
     @Autowired
     private Validation validation;
 
@@ -55,6 +62,17 @@ public class ProductAPI {
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProducts() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTO();
+
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    @GetMapping("/moderation")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsModeration() {
+        List<ProductListDTO> productDTOList = productService.findAllProductListDTOModeration();
 
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");
@@ -181,9 +199,10 @@ public class ProductAPI {
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
+            productDTO.setCreatedBy("Phuoc");
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
-            if (productDTO.getAction()) {
+            if (!productDTO.getAction()) {
                 productDTO.setCountday(null);
             }
             // Note: thêm category vô đây
@@ -252,9 +271,33 @@ public class ProductAPI {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
         try {
-            p.get().setModeration(false);
+            p.get().setModeration(true);
             Product newProduct = productService.save(p.get());
+
             // thêm tạo đấu giá ở đây
+            AccountDTO accountDTO = accountService.findAccountByCreatedBy(p.get().getCreatedBy());
+            if (p.get().getAction()) {
+                AuctionDTO auction = new AuctionDTO();
+                auction.setId(0L);
+                auction.setEmail(accountDTO.getEmail());
+                auction.setCreatedAt(new Date());
+                auction.setCreatedBy(p.get().getCreatedBy());
+                auction.setAccount(accountDTO);
+                auction.setProduct(p.get().toProductDTO());
+                auction.setAuctionType(AuctionType.BIDDING);
+                auction.setItemStatus(ItemStatus.NEW);
+                auction.setStartingPrice(p.get().getPrice());
+                auction.setCurrentPrice(p.get().getPrice());
+                auction.setAuctionStartTime(new Date());
+                Date dt = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(dt);
+                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
+                dt = c.getTime();
+                auction.setAuctionEndTime(dt);
+                auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));
+                auctionService.createAuction(auction);
+            }
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);

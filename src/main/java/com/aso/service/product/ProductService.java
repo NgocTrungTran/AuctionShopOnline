@@ -16,6 +16,7 @@ import java.util.Optional;
 public interface ProductService extends IGeneralService<Product> {
 
     List<ProductListDTO> findAllProductListDTO();
+    List<ProductListDTO> findAllProductListDTOModeration();
 
     List<ProductDTO> findAllProductsDTO();
 
@@ -36,4 +37,5 @@ public interface ProductService extends IGeneralService<Product> {
     Page<ProductDTO> findAllProducts(Pageable pageable);
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
     ResponseEntity<Page<ProductDTO>> findAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    List<ProductDTO> isSlug();
 }

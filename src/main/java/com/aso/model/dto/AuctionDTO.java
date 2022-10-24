@@ -57,15 +57,15 @@ public class AuctionDTO {
 
     private BigDecimal currentPrice;
 
-    private LocalDateTime auctionEndTime;
+    private Date auctionEndTime;
 
-    private LocalDateTime auctionStartTime;
+    private Date auctionStartTime;
 
     @Min(value = 1, message = "Thời gian kết thúc phiên đấu giá phải được cung cấp!")
     @Max(value = MAX_AUCTION_LENGTH_IN_DAYS, message = "Thời gian kết thúc phiên đấu giá không thể dài hơn" + MAX_AUCTION_LENGTH_IN_DAYS)
     private int daysToEndTime;
 
-    public AuctionDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String email, Account account, Product product, AuctionType auctionType, ItemStatus itemStatus, BigDecimal startingPrice, BigDecimal currentPrice, LocalDateTime auctionEndTime, LocalDateTime auctionStartTime, int daysToEndTime) {
+    public AuctionDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String email, Account account, Product product, AuctionType auctionType, ItemStatus itemStatus, BigDecimal startingPrice, BigDecimal currentPrice, Date auctionEndTime, Date auctionStartTime, int daysToEndTime) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;

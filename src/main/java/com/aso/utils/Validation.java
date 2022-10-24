@@ -1,17 +1,24 @@
 package com.aso.utils;
 
+import com.aso.model.dto.ProductDTO;
+import com.aso.service.product.ProductService;
 import com.aso.utils.IValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 @Component
 public class Validation implements IValidation {
+
+    @Autowired
+    private static ProductService productService;
     public static final String NUMBER_REGEX = "^\\d+$";
 
     public static final String LETTER_WITHOUT_NUMBER_REGEX = "([A-Z]+[a-z]*[ ]?)+$";
@@ -68,5 +75,14 @@ public class Validation implements IValidation {
             return false;
         }
         return true;
+    }
+    public static boolean isSlug(String slug) {
+        List<ProductDTO> productDTOList = productService.isSlug();
+        for (ProductDTO p: productDTOList) {
+            if (p.getSlug().equals(slug)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
