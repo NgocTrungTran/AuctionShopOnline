@@ -110,13 +110,13 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountId );
 
-        if ( !accountOptional.isPresent () ) {
+        if ( accountOptional.isEmpty () ) {
             throw new AccountInputException ("Tài khoản không tồn tại");
         }
 
         Optional<Product> product = productRepository.findById(cartItemDTO.getProduct().getId());
 
-        if ( !product.isPresent () ) {
+        if ( product.isEmpty () ) {
             throw new DataInputException("Sản phẩm không tồn tại!");
         } else {
             cartItemDTO.setProduct ( product.get ().toProductDTO () );
@@ -124,7 +124,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         Optional<CartDTO> cartDTOOptional = cartService.findCartDTOByIdAccountInfo ( accountId );
 
-        if ( !cartDTOOptional.isPresent () ) {
+        if ( cartDTOOptional.isEmpty () ) {
             Cart cart = new Cart ();
             cart.setAccount ( accountOptional.get () );
             Cart newCart = cartService.save ( cart );

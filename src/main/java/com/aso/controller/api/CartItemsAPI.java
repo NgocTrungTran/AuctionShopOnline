@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,7 @@ public class CartItemsAPI {
     }
     @GetMapping("/reduce/{cartItemId}")
     public ResponseEntity<?> reduceCartItem(@PathVariable Long cartItemId) {
+        List<String> errors = new ArrayList<> ();
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
             if ( !cartItemOptional.isPresent () ) {
@@ -69,7 +71,8 @@ public class CartItemsAPI {
             CartItem newCartItem = cartItemOptional.get ();
 
             if ( checkQuantity ) {
-                return new ResponseEntity<>("Số lượng sản phẩm không thể nhỏ hơn 1", HttpStatus.NO_CONTENT);
+                errors.add ( "Số lượng đặt hàng không hợp lệ" );
+                return new ResponseEntity<>( errors, HttpStatus.BAD_REQUEST);
             }
 
             newCartItem.setQuantity ( currentQuantity - 1 );
