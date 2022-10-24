@@ -19,7 +19,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "od.price," +
             "od.quantity," +
             "od.amountTransaction," +
-            "od.statusOrderDetail,  " +
+            "od.status,  " +
             "od.createdAt ," +
             "od.updatedAt " +
             ") " +
@@ -33,14 +33,14 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "o.price," +
             "o.quantity," +
             "o.amountTransaction," +
-            "o.statusOrderDetail,  " +
+            "o.status,  " +
             "o.createdAt ," +
             "o.updatedAt " +
             ")  " +
             "FROM OrderDetail o " +
             "WHERE FUNCTION('MONTH', o.createdAt) = :createMonth " +
             "AND FUNCTION('YEAR', o.createdAt) = :createYear " +
-            "AND o.statusOrderDetail = :statusOrderDetail " +
+            "AND o.status = :statusOrderDetail " +
              "")
     List<OrderDetailDTO> findOderByCreateMonthYearAndStatusOrderDetail(@Param("createMonth") int createMonth, @Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
     @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
@@ -50,13 +50,13 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "o.price," +
             "o.quantity," +
             "o.amountTransaction," +
-            "o.statusOrderDetail,  " +
+            "o.status,  " +
             "o.createdAt ," +
             "o.updatedAt " +
             ")  " +
             "FROM OrderDetail o " +
             "WHERE FUNCTION('YEAR', o.createdAt) = :createYear " +
-            "AND o.statusOrderDetail = :statusOrderDetail " +
+            "AND o.status = :statusOrderDetail " +
             "")
     List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(@Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
 }

@@ -3,6 +3,7 @@ package com.aso.model.dto;
 import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
+import com.aso.model.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,13 +28,25 @@ public class OrderDetailDTO {
     private int quantity;
     private BigDecimal amountTransaction;
 
-    private String statusOrderDetail;
+    private StatusDTO status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Date createdAt;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Date updatedAt;
+
+    public OrderDetailDTO(Long id, Order order, Product product, BigDecimal price, int quantity, BigDecimal amountTransaction, Status status, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.order = order;
+        this.product = product;
+        this.price = price;
+        this.quantity = quantity;
+        this.amountTransaction = amountTransaction;
+        this.status = status.toStatusDTO ();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public OrderDetail toOrderDetail(){
         return new OrderDetail()
@@ -43,7 +56,7 @@ public class OrderDetailDTO {
                 .setPrice(price)
                 .setQuantity(quantity)
                 .setAmountTransaction(amountTransaction)
-                .setStatusOrderDetail(statusOrderDetail)
+                .setStatus (status.toStatus ())
                 ;
     }
 }

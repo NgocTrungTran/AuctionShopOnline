@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.id, " +
             "o.locationRegion, " +
             "o.description, " +
-            "o.statusOrder, " +
+            "o.status, " +
             "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
@@ -28,7 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.id, " +
             "o.locationRegion, " +
             "o.description, " +
-            "o.statusOrder, " +
+            "o.status, " +
             "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
@@ -40,19 +40,19 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.id, " +
             "o.locationRegion, " +
             "o.description, " +
-            "o.statusOrder, " +
+            "o.status, " +
             "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
             ") " +
-            "FROM Order o where o.statusOrder = ?1")
+            "FROM Order o where o.status = ?1")
     List<OrderDTO> findOrderDTOByDeliver(String order);
 
     @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
             "o.id, " +
             "o.locationRegion, " +
             "o.description, " +
-            "o.statusOrder, " +
+            "o.status, " +
             "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +

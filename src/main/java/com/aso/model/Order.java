@@ -25,13 +25,21 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String fullName;
+
+    private String phone;
+
+    private String email;
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
     private String description;
 
-    private String statusOrder;
+    @OneToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "orderDetail_id")
@@ -41,7 +49,7 @@ public class Order extends BaseEntity {
         return new OrderDTO()
                 .setId(id)
                 .setDescription(description)
-                .setStatusOrder(statusOrder)
+                .setStatus (status.toStatusDTO ())
                 .setLocationRegion(locationRegion.toLocationRegionDTO())
                 .setOrderDetail(orderDetail.toOrderDetailDTO())
                 ;

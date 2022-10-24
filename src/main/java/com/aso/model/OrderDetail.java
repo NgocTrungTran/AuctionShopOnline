@@ -42,7 +42,9 @@ public class OrderDetail extends BaseEntity {
     @Column(precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 
-    private String statusOrderDetail;
+    @OneToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 7")
+    private Status status;
 
     public OrderDetailDTO toOrderDetailDTO() {
     return new OrderDetailDTO()
@@ -52,7 +54,7 @@ public class OrderDetail extends BaseEntity {
             .setPrice(price)
             .setQuantity(quantity)
             .setAmountTransaction(amountTransaction)
-            .setStatusOrderDetail(statusOrderDetail)
+            .setStatus (status.toStatusDTO ())
             ;
     }
 }

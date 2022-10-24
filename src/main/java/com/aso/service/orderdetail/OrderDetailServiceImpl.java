@@ -87,22 +87,24 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     }
     @Override
     public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
-        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
-        for (OrderDTO orderDTO : orderList){
-            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
-            orderRepository.save(orderDTO.toOrder());
-        }
-        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
-        return orderDetailRepository.save(orderDetail);
+//        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+//        for (OrderDTO orderDTO : orderList){
+//            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
+//            orderRepository.save(orderDTO.toOrder());
+//        }
+//        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
+//        return orderDetailRepository.save(orderDetail);
+        return null;
     }
     public OrderDetail deliveryOrder(OrderDetail orderDetail, String Title) {
-        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
-        for (OrderDTO orderDTO : orderList){
-            orderDTO.setStatusOrder("Đang giao hàng");
-            orderRepository.save(orderDTO.toOrder());
-        }
-        orderDetail.setStatusOrderDetail("Đang giao hàng");
-        return orderDetailRepository.save(orderDetail);
+//        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+//        for (OrderDTO orderDTO : orderList){
+//            orderDTO.setStatusOrder("Đang giao hàng");
+//            orderRepository.save(orderDTO.toOrder());
+//        }
+//        orderDetail.setStatusOrderDetail("Đang giao hàng");
+//        return orderDetailRepository.save(orderDetail);
+        return null;
     }
 
 }
