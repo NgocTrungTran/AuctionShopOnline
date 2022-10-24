@@ -3,11 +3,11 @@ package com.aso.controller.api;
 import com.aso.exception.*;
 import com.aso.model.Auction;
 import com.aso.model.Bid;
-import com.aso.model.dto.AuctionDTO;
 import com.aso.model.dto.BidDTO;
 import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
 import com.aso.service.bid.BidService;
+import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,9 @@ public class BidAPI {
 
     @Autowired
     private AuctionRepository auctionRepository;
+
+    @Autowired
+    private Validation validation;
 
 
     @PostMapping("/{auctionId}/bids")
@@ -79,5 +82,21 @@ public class BidAPI {
             throw new DataOutputException("Danh sách đấu thầu trống!");
         }
         return new ResponseEntity<>(bids, HttpStatus.OK);
+    }
+
+    @GetMapping("/{bidId}")
+    public ResponseEntity<?> getBidById(@PathVariable String bidId) {
+
+        if (!validation.isIntValid(bidId)) {
+            throw new DataInputException("Auction ID invalid!");
+        }
+
+        Long bid_id = Long.parseLong(bidId);
+        Optional<Bid> bidOptional = bidService.findById(bid_id);
+
+        if (bidOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Bid invalid!");
+        }
+        return new ResponseEntity<>(bidOptional.get().toBidDTO(), HttpStatus.OK);
     }
 }

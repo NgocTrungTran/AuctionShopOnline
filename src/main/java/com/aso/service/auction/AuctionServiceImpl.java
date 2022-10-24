@@ -4,9 +4,13 @@ import com.aso.exception.*;
 import com.aso.model.Auction;
 import com.aso.model.Product;
 import com.aso.model.dto.AuctionDTO;
+import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -83,5 +87,14 @@ public class AuctionServiceImpl implements AuctionService {
         return null;
     }
 
+    @Override
+    public Page<AuctionDTO> findAllAuctionss(Pageable pageable, @Param("keyword") String keyword) {
+        return auctionRepository.findAllAuctionss(pageable, keyword);
+    }
+
+    @Override
+    public Page<AuctionDTO> findAllAuctions(Pageable pageable ) {
+        return auctionRepository.findAllAuctions(pageable);
+    }
 }
 

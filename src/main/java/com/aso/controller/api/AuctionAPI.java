@@ -6,7 +6,6 @@ import com.aso.model.Auction;
 import com.aso.model.Product;
 import com.aso.model.dto.AuctionDTO;
 import com.aso.model.dto.BidDTO;
-import com.aso.repository.BidRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.auction.AuctionService;
 import com.aso.service.bid.BidService;
@@ -14,6 +13,8 @@ import com.aso.service.product.ProductService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -54,16 +55,16 @@ public class AuctionAPI {
                 HttpStatus.CREATED);
     }
 
-        @GetMapping("")
-        public ResponseEntity<?> getAllAuctions() {
-            List<AuctionDTO> auctionDTOS = auctionService.getAllAuctions();
+    @GetMapping("")
+    public ResponseEntity<?> getAllAuctions() {
+        List<AuctionDTO> auctionDTOS = auctionService.getAllAuctions();
 
-            if (auctionDTOS.isEmpty()) {
-                throw new DataOutputException("No data");
-            }
-
-            return new ResponseEntity<>(auctionDTOS, HttpStatus.OK);
+        if (auctionDTOS.isEmpty()) {
+            throw new DataOutputException("No data");
         }
+
+        return new ResponseEntity<>(auctionDTOS, HttpStatus.OK);
+    }
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<?> getAuctionById(@PathVariable String auctionId) {
@@ -75,7 +76,7 @@ public class AuctionAPI {
         Long auction_id = Long.parseLong(auctionId);
         Optional<Auction> auctionOptional = auctionService.findById(auction_id);
 
-        if (!auctionOptional.isPresent()) {
+        if (auctionOptional.isEmpty()) {
             throw new ResourceNotFoundException("Auction invalid!");
         }
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
@@ -91,7 +92,7 @@ public class AuctionAPI {
             throw new IncorrectDateException(
                     "Không thể xóa phiên đấu giá đã kết thúc!");
         }
-//        long bidsForAuctionCount = bidRepository.getAllBids().size();  // lỗi đoạn này
+
         List<BidDTO> bidsForAuctionCount = bidService.findByRelatedOfferId(auctionId);
 
         if (!bidsForAuctionCount.isEmpty()) {
@@ -146,4 +147,26 @@ public class AuctionAPI {
         }
     }
 
+    @GetMapping("/p")
+    public ResponseEntity<Page<AuctionDTO>> getAllAuctions(Pageable pageable) {
+        Page<AuctionDTO> auctionDTOPage = auctionService.findAllAuctions(pageable);
+        if (auctionDTOPage.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+        return new ResponseEntity<>(auctionDTOPage, HttpStatus.OK);
+    }
+
+    @GetMapping("/p/{keyword}")
+    public ResponseEntity<Page<AuctionDTO>> getAllAuctionsSearch(Pageable pageable, @PathVariable("keyword") String keyword) {
+        try {
+            keyword = "%" + keyword + "%";
+            Page<AuctionDTO> auctionDTOPage = auctionService.findAllAuctionss(pageable, keyword);
+            if (auctionDTOPage.isEmpty()) {
+                throw new DataOutputException("Danh sách sản phẩm trống");
+            }
+            return new ResponseEntity<>(auctionDTOPage, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

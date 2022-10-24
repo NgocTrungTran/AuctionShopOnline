@@ -107,7 +107,7 @@ public class CategoryAPI {
     }
 
     @GetMapping("/g")
-    public ResponseEntity<Page<CategoryDTO>> getAllCagetory(Pageable pageable) {
+    public ResponseEntity<Page<CategoryDTO>> getAllCategory(Pageable pageable) {
         Page<CategoryDTO> categoryDTOPage = categoryService.findAllCategoryDTOPage(pageable);
         if (categoryDTOPage.isEmpty()) {
             throw new DataOutputException("No data");
@@ -116,7 +116,7 @@ public class CategoryAPI {
     }
 
     @GetMapping("/g/{keyword}")
-    public ResponseEntity<Page<CategoryDTO>> getAllCategroys(Pageable pageable, @PathVariable("keyword") String keyword) {
+    public ResponseEntity<Page<CategoryDTO>> getAllCategorys(Pageable pageable, @PathVariable("keyword") String keyword) {
         try {
             keyword = "%" + keyword + "%";
             Page<CategoryDTO> categoryDTOPage = categoryService.getAllCategroys(pageable, keyword);
