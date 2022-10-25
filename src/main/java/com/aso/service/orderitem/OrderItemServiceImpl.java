@@ -3,9 +3,6 @@ package com.aso.service.orderitem;
 
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
-import com.aso.repository.OrderItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +12,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class OrderItemServiceImpl implements OrderItemService {
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
 
     @Override
     public List<OrderDetail> findAll() {
@@ -41,7 +35,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderDetail save(OrderDetail orderDetail) {
-        return orderItemRepository.save( orderDetail );
+        return null;
     }
 
     @Override
