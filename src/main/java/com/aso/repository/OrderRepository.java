@@ -20,9 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.locationRegion, " +
             "o.description, " +
             "o.account, " +
-            "o.status, " +
-            "o.createdAt, " +
-            "o.updatedAt " +
+            "o.status " +
             ") " +
             "FROM Order AS o  WHERE o.id = ?1 ")
     List<OrderDTO> findOrderDTOById(String id);
@@ -34,9 +32,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.locationRegion, " +
             "o.description, " +
             "o.account, " +
-            "o.status, " +
-            "o.createdAt, " +
-            "o.updatedAt " +
+            "o.status " +
             ") " +
             "FROM Order AS o " +
             "WHERE o.account.username = ?1")
@@ -50,9 +46,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.locationRegion, " +
             "o.description, " +
             "o.account, " +
-            "o.status, " +
-            "o.createdAt, " +
-            "o.updatedAt " +
+            "o.status " +
             ") " +
             "FROM Order AS o ")
     List<OrderDTO> findOrderDTO();
@@ -65,9 +59,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.locationRegion, " +
             "o.description, " +
             "o.account, " +
-            "o.status, " +
-            "o.createdAt, " +
-            "o.updatedAt " +
+            "o.status " +
             ") " +
             "FROM Order o where o.status = ?1")
     List<OrderDTO> findOrderDTOByDeliver(String order);
@@ -80,9 +72,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.locationRegion, " +
             "o.description, " +
             "o.account, " +
-            "o.status, " +
-            "o.createdAt, " +
-            "o.updatedAt " +
+            "o.status " +
             ") " +
             "FROM Order o")
     List<OrderDTO> findAllOrderDTOByOrderDetailId(Long id);

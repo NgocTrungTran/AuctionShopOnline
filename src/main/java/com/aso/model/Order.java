@@ -58,6 +58,7 @@ public class Order extends BaseEntity {
                 .setDescription(description)
                 .setAccount ( account.toAccountDTO () )
                 .setStatus (status.toStatusDTO ())
+                .setCreatedBy ( getCreatedBy () )
                 ;
     }
 }
