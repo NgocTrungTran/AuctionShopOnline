@@ -22,16 +22,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderAPI {
     @Autowired
     private AppUtil appUtils;
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private CartRepository cartRepository;
 
     @Autowired
     private OrderDetailService orderDetailService;
@@ -59,7 +56,7 @@ public class OrderAPI {
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> findAllOrderDetailById(@PathVariable Long id){
         Optional<OrderDetail> orderDetailDTOS = orderDetailService.findById(id);
-        if (!orderDetailDTOS.isPresent()){
+        if ( orderDetailDTOS.isEmpty () ){
             throw new RuntimeException("Không tìm thấy order");
         }
         return new ResponseEntity<>(orderDetailDTOS.get().toOrderDetailDTO(),HttpStatus.OK);
@@ -145,15 +142,19 @@ public class OrderAPI {
 
     }
 
-    @PostMapping("/create-order-dashboard")
-    public ResponseEntity<?> doCreateOrderInDashBoard(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+    @PostMapping("/checkout")
+    public ResponseEntity<?> doCreateOrderInDashBoard(String username,
+                                                      @RequestBody OrderDTO orderDTO,
+                                                      @RequestBody List<OrderDetailDTO> orderDetailDTOList,
+                                                      BindingResult bindingResult
+    ) throws MessagingException, UnsupportedEncodingException {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         try {
-            orderService.save(orderDTO.toOrder());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            List<OrderDetailDTO> orderDetailDTOS = orderService.doCreateOrder ( username, orderDTO, orderDetailDTOList );
+            return new ResponseEntity<>(orderDetailDTOS, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
