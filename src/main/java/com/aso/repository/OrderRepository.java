@@ -14,22 +14,43 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
             "o.id, " +
+            "o.fullName, " +
+            "o.phone, " +
+            "o.email, " +
             "o.locationRegion, " +
             "o.description, " +
+            "o.account, " +
             "o.status, " +
-            "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
             ") " +
             "FROM Order AS o  WHERE o.id = ?1 ")
     List<OrderDTO> findOrderDTOById(String id);
+    @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
+            "o.id, " +
+            "o.fullName, " +
+            "o.phone, " +
+            "o.email, " +
+            "o.locationRegion, " +
+            "o.description, " +
+            "o.account, " +
+            "o.status, " +
+            "o.createdAt, " +
+            "o.updatedAt " +
+            ") " +
+            "FROM Order AS o " +
+            "WHERE o.account.username = ?1")
+    List<OrderDTO> findOrderDTOByUsername(String username);
 
     @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
             "o.id, " +
+            "o.fullName, " +
+            "o.phone, " +
+            "o.email, " +
             "o.locationRegion, " +
             "o.description, " +
+            "o.account, " +
             "o.status, " +
-            "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
             ") " +
@@ -38,10 +59,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
             "o.id, " +
+            "o.fullName, " +
+            "o.phone, " +
+            "o.email, " +
             "o.locationRegion, " +
             "o.description, " +
+            "o.account, " +
             "o.status, " +
-            "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
             ") " +
@@ -50,13 +74,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.OrderDTO(" +
             "o.id, " +
+            "o.fullName, " +
+            "o.phone, " +
+            "o.email, " +
             "o.locationRegion, " +
             "o.description, " +
+            "o.account, " +
             "o.status, " +
-            "o.orderDetail, " +
             "o.createdAt, " +
             "o.updatedAt " +
             ") " +
-            "FROM Order o  WHERE  o.orderDetail.id = ?1  ")
+            "FROM Order o")
     List<OrderDTO> findAllOrderDTOByOrderDetailId(Long id);
 }

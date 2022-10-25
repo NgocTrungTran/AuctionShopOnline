@@ -1,11 +1,14 @@
 package com.aso.service.order;
 
 
+import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.model.Account;
 import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
 import com.aso.model.dto.OrderDTO;
+import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private AccountRepository accountRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
     @Autowired
@@ -75,6 +81,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> findOrderDTOByUsername(String username) {
+        return orderRepository.findOrderDTOByUsername ( username );
+    }
+
+    @Override
     public List<OrderDTO> findOrderDTO() {
         return orderRepository.findOrderDTO();
     }
@@ -85,5 +96,31 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> findAllOrderDTOByOrderDetailId(Long id) {
         return orderRepository.findAllOrderDTOByOrderDetailId(id);
+    }
+
+    @Override
+    public List<OrderDetailDTO> doCreateOrder(String username, OrderDTO orderDTO, List<OrderDetailDTO> orderDetailDTOList) {
+        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
+        Optional<Account> accountOptional = accountRepository.findByUsername ( username );
+        if ( accountOptional.isEmpty () ) {
+            throw new AccountInputException ( "Tài khoản không tồn tại" );
+        }
+
+        Order order = orderRepository.save ( orderDTO.toOrder () );
+
+        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
+            Optional<Product> optionalProduct = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
+            if ( optionalProduct.isEmpty () ) {
+                throw new DataInputException ( "Sản phẩm không tồn tại" );
+            }
+
+            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
+            orderDetail.setProduct ( optionalProduct.get () );
+
+            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+            orderDetailDTOS.add ( newOrderDetail.toOrderDetailDTO () );
+        }
+
+        return orderDetailDTOS;
     }
 }
