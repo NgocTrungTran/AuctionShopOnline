@@ -1,5 +1,6 @@
 package com.aso.service.account;
 
+import com.aso.exception.DataInputException;
 import com.aso.model.Account;
 import com.aso.model.AccountPrinciple;
 import com.aso.model.LocationRegion;
@@ -178,11 +179,27 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account doCreate(AccountDTO accountDTO) {
+
+        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
+        if (checkUsername) {
+            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
+        }
+
+        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
+        if (checkEmail) {
+            throw new DataInputException( "Email này đã tồn tại!");
+        }
+
+        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
+        if (checkPhone) {
+            throw new DataInputException( "Số điện thoại này đã tồn tại!");
+        }
+
         Optional<Role> optionalRole = roleService.findById(accountDTO.getRole().getId());
-        LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion ();
+        LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion ();
         LocationRegion newLocationRegion = locationRegionService.save ( locationRegion );
         accountDTO.setRole ( optionalRole.get ().toRoleDTO () );
-        accountDTO.setLocationregion( newLocationRegion.toLocationRegionDTO () );
+        accountDTO.setLocationRegion( newLocationRegion.toLocationRegionDTO () );
         Account account = accountDTO.toAccountAllAttribute ();
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -193,6 +210,33 @@ public class AccountServiceImpl implements AccountService {
         message.setText("Cám ơn bạn đã tham gia và ủng hộ Auction Shop! \n" +
                 "Chúc bạn có những trải nghiệm thật thú vị.");
         this.emailSender.send(message);
+        return save(account);
+    }
+    @Override
+    public Account doRegister(AccountDTO accountDTO) {
+
+        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
+        if (checkUsername) {
+            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
+        }
+
+        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
+        if (checkEmail) {
+            throw new DataInputException( "Email này đã tồn tại!");
+        }
+
+        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
+        if (checkPhone) {
+            throw new DataInputException( "Số điện thoại này đã tồn tại!");
+        }
+
+        Optional<Role> optionalRole = roleService.findById(2L);
+        LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion ();
+        LocationRegion newLocationRegion = locationRegionService.save ( locationRegion );
+        accountDTO.setRole ( optionalRole.get ().toRoleDTO () );
+        accountDTO.setLocationRegion( newLocationRegion.toLocationRegionDTO () );
+        Account account = accountDTO.toAccountAllAttribute ();
+
         return save(account);
     }
 

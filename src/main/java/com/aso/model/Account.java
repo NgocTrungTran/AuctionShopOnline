@@ -60,7 +60,7 @@ public class Account extends BaseEntity{
                 .setId(id)
                 .setUsername ( username )
                 .setFullName ( fullName )
-                .setLocationregion( locationRegion.toLocationRegionDTO ())
+                .setLocationRegion( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )

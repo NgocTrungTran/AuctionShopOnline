@@ -165,7 +165,7 @@ public class AccountAPI {
             accountOption.setRole(accountDTO.getRole().toRole());
 
             Account updatedAccount = accountService.save( accountOption );
-            LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion();
+            LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion();
             locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
 

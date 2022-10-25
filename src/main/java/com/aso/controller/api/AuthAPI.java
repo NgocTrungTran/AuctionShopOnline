@@ -8,6 +8,7 @@ import com.aso.model.JwtResponse;
 import com.aso.model.Role;
 import com.aso.model.dto.AccountDTO;
 import com.aso.service.account.AccountService;
+import com.aso.service.gmail.MyConstants;
 import com.aso.service.jwt.JwtService;
 import com.aso.service.role.RoleService;
 import com.aso.utils.AppUtil;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,7 +49,8 @@ public class AuthAPI {
 
     @Autowired
     private RoleService roleService;
-
+    @Autowired
+    public JavaMailSender emailSender;
     @Autowired
     private AppUtil appUtils;
 
@@ -56,19 +60,17 @@ public class AuthAPI {
         if (bindingResult.hasErrors())
             return appUtils.mapErrorToResponse(bindingResult);
 
-        Optional<AccountDTO> optUser = accountService.findUserDTOByUsername(accountDTO.getUsername());
-
-        if (optUser.isPresent()) {
-            throw new AttributesExistsException ("Username already exists");
-        }
-
         try {
-            Account account = accountDTO.toAccount ();
-            Optional<Role> role = roleService.findById ( 2L );
-            account.setRole ( role.get () );
-            accountService.save(account);
-
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            Account account = accountService.doRegister(accountDTO);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom ( MyConstants.MY_EMAIL );
+            message.setSubject ( "Chào mừng bạn đến với Auction Shop!" );
+            message.setTo(account.getEmail ());
+            message.setSubject("Dear " + account.getFullName ());
+            message.setText("Cám ơn bạn đã tham gia và ủng hộ Auction Shop! \n" +
+                    "Chúc bạn có những trải nghiệm thật thú vị.");
+            this.emailSender.send(message);
+            return new ResponseEntity<>(HttpStatus.CREATED);
 
         } catch (DataIntegrityViolationException e) {
             throw new DataInputException("Account information is not valid, please check the information again");

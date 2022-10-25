@@ -55,6 +55,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     void deleteData(Long userId);
 
     Account doCreate(AccountDTO accountDTO);
+    Account doRegister(AccountDTO accountDTO);
 
     List<AccountDTO> findAccountDTOAll();
     Optional<AccountDTO> findAccountByIdDTO(Long id);
