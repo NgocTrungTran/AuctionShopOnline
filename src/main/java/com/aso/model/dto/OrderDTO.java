@@ -35,16 +35,11 @@ public class OrderDTO {
     private AccountDTO account;
     private StatusDTO status;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
-    private Date createdAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
-    private Date updatedAt;
-
-
     private OrderDetailDTO orderDetail;
 
-    public OrderDTO(Long id, String fullName, String phone, String email, LocationRegion locationRegion, String description, Account account, Status status, Date createdAt, Date updatedAt) {
+    private String createdBy;
+
+    public OrderDTO(Long id, String fullName, String phone, String email, LocationRegion locationRegion, String description, Account account, Status status) {
         this.id = id;
         this.fullName = fullName;
         this.phone = phone;
@@ -53,12 +48,10 @@ public class OrderDTO {
         this.description = description;
         this.account = account.toAccountDTO ();
         this.status = status.toStatusDTO ();
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public Order toOrder() {
-        return new Order ()
+        return (Order) new Order ()
                 .setId ( id )
                 .setFullName ( fullName )
                 .setPhone ( phone )
@@ -67,6 +60,7 @@ public class OrderDTO {
                 .setDescription ( description )
                 .setAccount ( account.toAccount () )
                 .setStatus ( status.toStatus () )
+                .setCreatedBy ( createdBy )
                 ;
 
     }

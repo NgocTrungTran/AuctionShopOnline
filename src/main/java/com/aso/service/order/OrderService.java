@@ -15,5 +15,5 @@ public interface OrderService extends IGeneralService<Order> {
     List<OrderDTO> findOrderDTOByDeliver(String order);
     List<OrderDTO> findAllOrderDTOByOrderDetailId (Long id);
 
-    List<OrderDetailDTO> doCreateOrder (String username, OrderDTO orderDTO, List<OrderDetailDTO> orderDetailDTOList);
+    OrderDTO doCheckoutOrder (Long accountId, OrderDTO orderDTO);
 }
