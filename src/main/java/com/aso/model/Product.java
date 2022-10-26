@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -61,17 +62,17 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "boolean default false")
     private Boolean moderation = false;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderDetail> orderDetails;
+    @OneToMany(mappedBy = "product", targetEntity = OrderDetail.class, fetch = FetchType.EAGER)
+    private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "product")
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "product", targetEntity = CartItem.class, fetch = FetchType.EAGER)
+    private Set<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductMedia> productMedia;
+    @OneToMany(mappedBy = "product", targetEntity = ProductMedia.class, fetch = FetchType.EAGER)
+    private Set<ProductMedia> productMedia;
 
-    @OneToMany(mappedBy = "product")
-    private  List<Auction> auctions;
+    @OneToMany(mappedBy = "product", targetEntity = Auction.class, fetch = FetchType.EAGER)
+    private  Set<Auction> auctions;
 
 
 

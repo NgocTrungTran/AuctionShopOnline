@@ -63,6 +63,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public void removeById(Auction auction) {
+
+    }
+
+    @Override
     public Auction save(Auction auction) {
         return auctionRepository.save(auction);
     }

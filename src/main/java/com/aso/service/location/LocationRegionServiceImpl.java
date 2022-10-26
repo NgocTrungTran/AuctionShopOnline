@@ -28,6 +28,11 @@ public class LocationRegionServiceImpl implements LocationRegionService {
     }
 
     @Override
+    public void removeById(LocationRegion locationRegion) {
+
+    }
+
+    @Override
     public LocationRegion save(LocationRegion locationRegion) {
         return locationRegionRepository.save ( locationRegion );
     }

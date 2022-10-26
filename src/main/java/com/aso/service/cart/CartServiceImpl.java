@@ -71,6 +71,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void removeById(Cart cart) {
+
+    }
+
+    @Override
     public Optional<CartDTO> findCartDTOByIdAccountInfo(Long id) {
         return cartRepository.findCartDTOByIdAccountInfo(id);
     }

@@ -2,21 +2,13 @@ package com.aso.service.order;
 
 
 import com.aso.exception.AccountInputException;
-import com.aso.exception.DataInputException;
 import com.aso.model.*;
-import com.aso.model.dto.LocationRegionDTO;
-import com.aso.model.dto.OrderDTO;
-import com.aso.model.dto.OrderDetailDTO;
-import com.aso.model.dto.ProductDTO;
+import com.aso.model.dto.*;
 import com.aso.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> findById(Long id) {
-        return Optional.empty();
+        return orderRepository.findById ( id );
     }
 
     @Override
@@ -78,8 +70,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> findOrderDTOById(String id) {
-        return orderRepository.findOrderDTOById(id);
+    public OrderDTO findOrderDTOById(Long orderId) {
+        return orderRepository.findOrderDTOById(orderId);
     }
 
     @Override
@@ -101,35 +93,38 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void removeById(Order order) {
+        orderRepository.save ( order );
+    }
+
+    @Override
     public OrderDTO doCheckoutOrder(Long accountId, OrderDTO orderDTO) {
 //        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
         Optional<Account> accountOptional = accountRepository.findById ( accountId );
         if ( accountOptional.isEmpty () ) {
             throw new AccountInputException ( "Tài khoản không tồn tại" );
         }
-        Optional<Status> status = statusRepository.findById ( 7L );
+        StatusDTO status = statusRepository.findStatusDTOById ( 7L );
 
         LocationRegion newLocationRegion = locationRegionRepository.save ( orderDTO.getLocationRegion ().toLocationRegion () );
         orderDTO.setLocationRegion ( newLocationRegion.toLocationRegionDTO () );
 
         orderDTO.setAccount ( accountOptional.get ().toAccountDTO () );
-        orderDTO.setStatus ( status.get ().toStatusDTO () );
+        orderDTO.setStatus ( status );
         orderDTO.setCreatedBy ( accountOptional.get ().getUsername () );
         Order order = orderRepository.save ( orderDTO.toOrder () );
 
-//        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
-//            Optional<Product> optionalProduct = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
-//            if ( optionalProduct.isEmpty () ) {
-//                throw new DataInputException ( "Sản phẩm không tồn tại" );
-//            }
-//
-//            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
-//            orderDetail.setProduct ( optionalProduct.get () );
-//
-//            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
-//            orderDetailDTOS.add ( newOrderDetail.toOrderDetailDTO () );
-//        }
-
         return order.toOrderDTO ();
+    }
+
+    @Override
+    public void doRemoveOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById ( orderId );
+        StatusDTO status = statusRepository.findStatusDTOById ( 6L );
+        Order order = orderOptional.get ();
+        order.setDeleted ( true );
+        order.setStatus ( status.toStatus () );
+
+        orderRepository.save ( order );
     }
 }

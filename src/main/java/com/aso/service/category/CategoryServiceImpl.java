@@ -34,6 +34,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void removeById(Category category) {
+
+    }
+
+    @Override
     public Category getById(Long id) {
         return null;
     }

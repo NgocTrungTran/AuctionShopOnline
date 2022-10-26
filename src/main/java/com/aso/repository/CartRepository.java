@@ -20,6 +20,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "c.status, " +
             "c.account " +
             " )  " +
-            "FROM Cart c  WHERE c.account.id = ?1 AND c.status.id = 1 ")
+            "FROM Cart c  WHERE c.account.id = ?1 AND c.status.id = 2 ")
     Optional<CartDTO> findCartDTOByIdAccountInfo(Long accountId);
 }

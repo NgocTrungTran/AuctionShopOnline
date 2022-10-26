@@ -137,6 +137,12 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> findById(Long id) {
         return accountRepository.findById(id);
     }
+
+    @Override
+    public void removeById(Account account) {
+
+    }
+
     @Override
     public Optional<Account> getByUsername(String username) {
         return accountRepository.getByUsername ( username );

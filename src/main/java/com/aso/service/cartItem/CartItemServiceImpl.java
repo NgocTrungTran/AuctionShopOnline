@@ -3,14 +3,13 @@ package com.aso.service.cartItem;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
-import com.aso.model.Account;
-import com.aso.model.Cart;
-import com.aso.model.CartItem;
-import com.aso.model.Product;
+import com.aso.model.*;
 import com.aso.model.dto.CartDTO;
 import com.aso.model.dto.CartItemDTO;
+import com.aso.model.dto.StatusDTO;
 import com.aso.repository.CartItemRepository;
 import com.aso.repository.ProductRepository;
+import com.aso.repository.StatusRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private StatusRepository statusRepository;
 
     @Override
     public List<CartItem> findAll() {
@@ -126,10 +127,12 @@ public class CartItemServiceImpl implements CartItemService {
 
         if ( cartDTOOptional.isEmpty () ) {
             Cart cart = new Cart ();
+            StatusDTO status = statusRepository.findStatusDTOById ( 2L );
             cart.setAccount ( accountOptional.get () );
-            Cart newCart = cartService.save ( cart );
+            cart.setStatus ( status.toStatus () );
 
-            cartItemDTO.setCart ( newCart.toCartDTO () );
+            cartItemDTO.setCart ( cartService.save ( cart ).toCartDTO () );
+
         } else {
             cartItemDTO.setCart ( cartDTOOptional.get () );
         }
@@ -145,6 +148,11 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
 
         return cartItemRepository.save(cartItemDTO.toCartItem ());
+    }
+
+    @Override
+    public void removeById(CartItem cartItem) {
+
     }
 
     @Override
