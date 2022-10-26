@@ -1,14 +1,17 @@
 package com.aso.service.orderdetail;
 
+import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
+import com.aso.model.dto.StatusDTO;
 import com.aso.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +34,8 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private StatusRepository statusRepository;
 
 
     @Override
@@ -85,6 +89,27 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     public List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(int createYear, String statusOrderDetail) {
         return orderDetailRepository.findOderByCreateYearAndStatusOrderDetail(createYear,statusOrderDetail);
     }
+
+    @Override
+    public List<OrderDetailDTO> doCreateOrderDetail(Long orderId, List<OrderDetailDTO> orderDetailDTOList) {
+        List<OrderDetailDTO> newOrderDetailDTOList = new ArrayList<> ();
+        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
+            Optional<Order> orderOptional = orderRepository.findById ( orderId );
+            Optional<Product> productOptional = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
+            StatusDTO status = statusRepository.findStatusDTOById ( 8L );
+
+            orderDetailDTO.setOrder (orderOptional.get ().toOrderDTO ());
+            orderDetailDTO.setProduct (productOptional.get ().toProductDTO () );
+            orderDetailDTO.setStatus ( status );
+
+
+           OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetailDTO.toOrderDetail () );
+           newOrderDetailDTOList.add ( newOrderDetail.toOrderDetailDTO () );
+        }
+
+        return newOrderDetailDTOList;
+    }
+
     @Override
     public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
 //        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());

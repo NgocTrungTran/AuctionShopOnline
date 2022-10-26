@@ -2,6 +2,7 @@ package com.aso.service.status;
 
 import com.aso.model.Product;
 import com.aso.model.Status;
+import com.aso.model.dto.StatusDTO;
 import com.aso.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,10 @@ public class StatusServiceImpl implements StatusService{
     @Override
     public Boolean existById(Long id) {
         return null;
+    }
+
+    @Override
+    public StatusDTO findOrderDTOById(Long id) {
+        return statusRepository.findStatusDTOById ( id );
     }
 }

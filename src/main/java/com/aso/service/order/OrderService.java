@@ -9,7 +9,7 @@ import com.aso.service.IGeneralService;
 import java.util.List;
 
 public interface OrderService extends IGeneralService<Order> {
-    List<OrderDTO> findOrderDTOById(String id);
+    OrderDTO findOrderDTOById(Long orderId);
     List<OrderDTO> findOrderDTOByUsername(String username);
     List<OrderDTO> findOrderDTO();
     List<OrderDTO> findOrderDTOByDeliver(String order);

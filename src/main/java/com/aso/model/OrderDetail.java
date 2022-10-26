@@ -49,8 +49,8 @@ public class OrderDetail extends BaseEntity {
     public OrderDetailDTO toOrderDetailDTO() {
     return new OrderDetailDTO()
             .setId(id)
-            .setOrder(order)
-            .setProduct(product)
+            .setOrder(order.toOrderDTO ())
+            .setProduct(product.toProductDTO ())
             .setPrice(price)
             .setQuantity(quantity)
             .setAmountTransaction(amountTransaction)

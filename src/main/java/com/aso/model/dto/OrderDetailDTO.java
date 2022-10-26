@@ -22,8 +22,8 @@ import java.util.Date;
 @Accessors(chain = true)
 public class OrderDetailDTO {
     private Long id;
-    private Order order;
-    private Product product;
+    private OrderDTO order;
+    private ProductDTO product;
     private BigDecimal price;
     private int quantity;
     private BigDecimal amountTransaction;
@@ -38,8 +38,8 @@ public class OrderDetailDTO {
 
     public OrderDetailDTO(Long id, Order order, Product product, BigDecimal price, int quantity, BigDecimal amountTransaction, Status status, Date createdAt, Date updatedAt) {
         this.id = id;
-        this.order = order;
-        this.product = product;
+        this.order = order.toOrderDTO ();
+        this.product = product.toProductDTO ();
         this.price = price;
         this.quantity = quantity;
         this.amountTransaction = amountTransaction;
@@ -51,8 +51,8 @@ public class OrderDetailDTO {
     public OrderDetail toOrderDetail(){
         return new OrderDetail()
                 .setId(id)
-                .setOrder(order)
-                .setProduct(product)
+                .setOrder(order.toOrder ())
+                .setProduct(product.toProduct ())
                 .setPrice(price)
                 .setQuantity(quantity)
                 .setAmountTransaction(amountTransaction)

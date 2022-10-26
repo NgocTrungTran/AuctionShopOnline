@@ -39,7 +39,7 @@ public class OrderDTO {
 
     private String createdBy;
 
-    public OrderDTO(Long id, String fullName, String phone, String email, LocationRegion locationRegion, String description, Account account, Status status) {
+    public OrderDTO(Long id, String fullName, String phone, String email, LocationRegion locationRegion, String description, Account account, Status status, String createdBy) {
         this.id = id;
         this.fullName = fullName;
         this.phone = phone;
@@ -48,6 +48,7 @@ public class OrderDTO {
         this.description = description;
         this.account = account.toAccountDTO ();
         this.status = status.toStatusDTO ();
+        this.createdBy = createdBy;
     }
 
     public Order toOrder() {

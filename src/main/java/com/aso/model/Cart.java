@@ -29,7 +29,7 @@ public class Cart extends BaseEntity {
     private Account account;
 
     @OneToOne
-    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 
     @OneToMany(mappedBy = "cart")
@@ -38,6 +38,7 @@ public class Cart extends BaseEntity {
     public CartDTO toCartDTO(){
         return new CartDTO()
                 .setId(id)
+                .setStatus ( status.toStatusDTO () )
                 .setAccount(account.toAccountDTO())
                 ;
     }

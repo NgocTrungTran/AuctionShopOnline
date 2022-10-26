@@ -44,11 +44,9 @@ public class OrderAPI {
     }
     @GetMapping("/{id}")
     // ok
-    public ResponseEntity<?> findOrderByUserName(@PathVariable String id) {
-        List<OrderDTO> orderList = orderService.findOrderDTOById(id);
-        if (orderList.isEmpty()){
-            throw new RuntimeException("Không tìm thấy order");
-        }
+    public ResponseEntity<?> findOrderByUserName(@PathVariable Long id) {
+        OrderDTO orderList = orderService.findOrderDTOById(id);
+
         return new ResponseEntity<>(orderList,HttpStatus.OK);
     }
 
@@ -155,7 +153,11 @@ public class OrderAPI {
             OrderDTO newOrderDTO = orderService.doCheckoutOrder ( accountId, orderDTO );
             return new ResponseEntity<>(newOrderDTO, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Lỗi không xác định",HttpStatus.NO_CONTENT);
         }
     }
+
+
+
+
 }
