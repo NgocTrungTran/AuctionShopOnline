@@ -180,20 +180,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account doCreate(AccountDTO accountDTO) {
 
-//        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
-//        if (checkUsername) {
-//            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
-//        }
-//
-//        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
-//        if (checkEmail) {
-//            throw new DataInputException( "Email này đã tồn tại!");
-//        }
-//
-//        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
-//        if (checkPhone) {
-//            throw new DataInputException( "Số điện thoại này đã tồn tại!");
-//        }
+        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
+        if (checkUsername) {
+            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
+        }
+
+        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
+        if (checkEmail) {
+            throw new DataInputException( "Email này đã tồn tại!");
+        }
+
+        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
+        if (checkPhone) {
+            throw new DataInputException( "Số điện thoại này đã tồn tại!");
+        }
 
         Optional<Role> optionalRole = roleService.findById(accountDTO.getRole().getId());
         LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion ();
@@ -215,20 +215,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account doRegister(AccountDTO accountDTO) {
 
-//        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
-//        if (checkUsername) {
-//            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
-//        }
-//
-//        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
-//        if (checkEmail) {
-//            throw new DataInputException( "Email này đã tồn tại!");
-//        }
-//
-//        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
-//        if (checkPhone) {
-//            throw new DataInputException( "Số điện thoại này đã tồn tại!");
-//        }
+        boolean checkUsername = accountRepository.existsByUsername(accountDTO.getUsername());
+        if (checkUsername) {
+            throw new DataInputException( "Tên đăng nhập này đã tồn tại!");
+        }
+
+        boolean checkEmail = accountRepository.existsByEmail(accountDTO.getEmail());
+        if (checkEmail) {
+            throw new DataInputException( "Email này đã tồn tại!");
+        }
+
+        boolean checkPhone = accountRepository.existsByPhone(accountDTO.getPhone());
+        if (checkPhone) {
+            throw new DataInputException( "Số điện thoại này đã tồn tại!");
+        }
 
         Optional<Role> optionalRole = roleService.findById(2L);
         LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion ();

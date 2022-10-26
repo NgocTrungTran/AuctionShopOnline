@@ -77,42 +77,42 @@ public class AuthAPI {
         }
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody Account account) {
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken (account.getUsername(), account.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            String jwt = jwtService.generateTokenLogin(authentication);
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            Account currentUser = accountService.getByUsername(account.getUsername()).get ();
-//
-//            JwtResponse jwtResponse = new JwtResponse(
-//                    jwt,
-//                    currentUser.getId(),
-//                    userDetails.getUsername(),
-//                    currentUser.getUsername(),
-//                    userDetails.getAuthorities()
-//            );
-//
-//            ResponseCookie springCookie = ResponseCookie.from("JWT", jwt)
-//                    .httpOnly(false)
-//                    .secure(false)
-//                    .path("/")
-//                    .maxAge(60 * 60 * 1000)
-//                    .domain("localhost")
-//                    .build();
-//
-//            System.out.println(jwtResponse);
-//
-//            return ResponseEntity
-//                    .ok()
-//                    .header( HttpHeaders.SET_COOKIE, springCookie.toString())
-//                    .body(jwtResponse);
-//        } catch (Exception e) {
-//            e.printStackTrace ();
-//            throw new ResourceNotFoundException ( "Login information is incorrect" );
-//        }
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Account account) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken (account.getUsername(), account.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jwtService.generateTokenLogin(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Account currentUser = accountService.getByUsername(account.getUsername()).get ();
+
+            JwtResponse jwtResponse = new JwtResponse(
+                    jwt,
+                    currentUser.getId(),
+                    userDetails.getUsername(),
+                    currentUser.getUsername(),
+                    userDetails.getAuthorities()
+            );
+
+            ResponseCookie springCookie = ResponseCookie.from("JWT", jwt)
+                    .httpOnly(false)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(60 * 60 * 1000)
+                    .domain("localhost")
+                    .build();
+
+            System.out.println(jwtResponse);
+
+            return ResponseEntity
+                    .ok()
+                    .header( HttpHeaders.SET_COOKIE, springCookie.toString())
+                    .body(jwtResponse);
+        } catch (Exception e) {
+            e.printStackTrace ();
+            throw new ResourceNotFoundException ( "Login information is incorrect" );
+        }
+    }
 }
