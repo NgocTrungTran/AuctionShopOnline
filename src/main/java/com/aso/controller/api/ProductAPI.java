@@ -75,7 +75,7 @@ public class ProductAPI {
         List<ProductListDTO> productDTOList = productService.findAllProductListDTOModeration();
 
         if (productDTOList.isEmpty()) {
-            throw new DataOutputException("No data");
+            return new ResponseEntity<>(productDTOList, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
@@ -272,6 +272,7 @@ public class ProductAPI {
         }
         try {
             p.get().setModeration(true);
+            p.get().setCreatedBy("Phuoc");
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
@@ -281,7 +282,7 @@ public class ProductAPI {
                 auction.setId(0L);
                 auction.setEmail(accountDTO.getEmail());
                 auction.setCreatedAt(new Date());
-                auction.setCreatedBy(p.get().getCreatedBy());
+                auction.setCreatedBy(accountDTO.getCreatedBy());
                 auction.setAccount(accountDTO);
                 auction.setProduct(p.get().toProductDTO());
                 auction.setAuctionType(AuctionType.BIDDING);
