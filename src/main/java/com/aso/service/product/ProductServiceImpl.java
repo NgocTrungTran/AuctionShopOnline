@@ -66,6 +66,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public void removeById(Product product) {
+
+    }
+
+    @Override
     public Product getById(Long id) {
         return null;
     }

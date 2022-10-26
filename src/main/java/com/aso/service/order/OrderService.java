@@ -16,4 +16,6 @@ public interface OrderService extends IGeneralService<Order> {
     List<OrderDTO> findAllOrderDTOByOrderDetailId (Long id);
 
     OrderDTO doCheckoutOrder (Long accountId, OrderDTO orderDTO);
+
+    void doRemoveOrder(Long id);
 }

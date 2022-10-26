@@ -43,7 +43,7 @@ public class OrderDetail extends BaseEntity {
     private BigDecimal amountTransaction;
 
     @OneToOne
-    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 7")
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 
     public OrderDetailDTO toOrderDetailDTO() {

@@ -25,13 +25,13 @@ public class Status {
 
     private String name;
 
-    @OneToOne(mappedBy = "status")
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
-    @OneToOne(mappedBy = "status")
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
     private Order order;
 
-    @OneToOne(mappedBy = "status")
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderDetail orderDetail;
 
     public StatusDTO toStatusDTO() {

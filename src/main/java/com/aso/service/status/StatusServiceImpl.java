@@ -27,6 +27,11 @@ public class StatusServiceImpl implements StatusService{
     }
 
     @Override
+    public void removeById(Status status) {
+
+    }
+
+    @Override
     public Status save(Status status) {
         return statusRepository.save ( status );
     }

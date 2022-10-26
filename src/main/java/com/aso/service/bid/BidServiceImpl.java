@@ -83,6 +83,11 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
+    public void removeById(Bid bid) {
+
+    }
+
+    @Override
     public Bid save(Bid bid) {
         return null;
     }

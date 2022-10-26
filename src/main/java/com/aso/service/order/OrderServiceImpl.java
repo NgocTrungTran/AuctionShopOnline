@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> findById(Long id) {
-        return Optional.empty();
+        return orderRepository.findById ( id );
     }
 
     @Override
@@ -93,6 +93,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void removeById(Order order) {
+        orderRepository.save ( order );
+    }
+
+    @Override
     public OrderDTO doCheckoutOrder(Long accountId, OrderDTO orderDTO) {
 //        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
         Optional<Account> accountOptional = accountRepository.findById ( accountId );
@@ -110,5 +115,16 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.save ( orderDTO.toOrder () );
 
         return order.toOrderDTO ();
+    }
+
+    @Override
+    public void doRemoveOrder(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById ( orderId );
+        StatusDTO status = statusRepository.findStatusDTOById ( 6L );
+        Order order = orderOptional.get ();
+        order.setDeleted ( true );
+        order.setStatus ( status.toStatus () );
+
+        orderRepository.save ( order );
     }
 }

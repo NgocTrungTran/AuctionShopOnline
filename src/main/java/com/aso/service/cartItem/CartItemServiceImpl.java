@@ -151,6 +151,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    public void removeById(CartItem cartItem) {
+
+    }
+
+    @Override
     public List<CartItemDTO> doRemoveCartItems(Long accountId, List<CartItemDTO> cartItemsDTO) {
 
         for (CartItemDTO cartItem: cartItemsDTO) {

@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -45,8 +46,8 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
     private Status status;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetail;
+    @OneToMany(mappedBy = "order", targetEntity = OrderDetail.class, fetch = FetchType.EAGER)
+    private Set<OrderDetail> orderDetail;
 
     public OrderDTO toOrderDTO() {
         return new OrderDTO()

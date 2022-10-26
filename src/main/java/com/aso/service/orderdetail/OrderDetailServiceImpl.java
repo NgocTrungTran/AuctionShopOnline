@@ -55,6 +55,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     }
 
     @Override
+    public void removeById(OrderDetail orderDetail) {
+        orderDetailRepository.save ( orderDetail );
+    }
+
+    @Override
     public OrderDetail getById(Long id) {
         return null;
     }
@@ -102,8 +107,12 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
             orderDetailDTO.setProduct (productOptional.get ().toProductDTO () );
             orderDetailDTO.setStatus ( status );
 
+            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
 
-           OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetailDTO.toOrderDetail () );
+
+
+
+           OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
            newOrderDetailDTOList.add ( newOrderDetail.toOrderDetailDTO () );
         }
 
