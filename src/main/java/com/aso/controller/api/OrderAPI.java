@@ -22,16 +22,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderAPI {
     @Autowired
     private AppUtil appUtils;
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private CartRepository cartRepository;
 
     @Autowired
     private OrderDetailService orderDetailService;
@@ -59,7 +56,7 @@ public class OrderAPI {
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> findAllOrderDetailById(@PathVariable Long id){
         Optional<OrderDetail> orderDetailDTOS = orderDetailService.findById(id);
-        if (!orderDetailDTOS.isPresent()){
+        if ( orderDetailDTOS.isEmpty () ){
             throw new RuntimeException("Không tìm thấy order");
         }
         return new ResponseEntity<>(orderDetailDTOS.get().toOrderDetailDTO(),HttpStatus.OK);
@@ -145,15 +142,18 @@ public class OrderAPI {
 
     }
 
-    @PostMapping("/create-order-dashboard")
-    public ResponseEntity<?> doCreateOrderInDashBoard(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+    @PostMapping("/checkout/{accountId}")
+    public ResponseEntity<?> doCreateOrderInDashBoard(@PathVariable Long accountId,
+                                                      @RequestBody OrderDTO orderDTO,
+                                                      BindingResult bindingResult
+    ) throws MessagingException, UnsupportedEncodingException {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         try {
-            orderService.save(orderDTO.toOrder());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            OrderDTO newOrderDTO = orderService.doCheckoutOrder ( accountId, orderDTO );
+            return new ResponseEntity<>(newOrderDTO, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

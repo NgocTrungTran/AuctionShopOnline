@@ -37,21 +37,28 @@ public class Order extends BaseEntity {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
+
     @OneToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
     private Status status;
 
-    @ManyToOne
-    @JoinColumn(name = "orderDetail_id")
-    private OrderDetail orderDetail;
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetail;
 
     public OrderDTO toOrderDTO() {
         return new OrderDTO()
                 .setId(id)
-                .setDescription(description)
-                .setStatus (status.toStatusDTO ())
+                .setFullName ( fullName )
+                .setPhone ( phone )
+                .setEmail ( email )
                 .setLocationRegion(locationRegion.toLocationRegionDTO())
-                .setOrderDetail(orderDetail.toOrderDetailDTO())
+                .setDescription(description)
+                .setAccount ( account.toAccountDTO () )
+                .setStatus (status.toStatusDTO ())
+                .setCreatedBy ( getCreatedBy () )
                 ;
     }
 }

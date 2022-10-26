@@ -50,6 +50,9 @@ public class Account extends BaseEntity{
     private List<Cart> cart;
 
     @OneToMany(mappedBy = "account")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "account")
     private List<Auction> auctions;
 
     @OneToMany(mappedBy = "account")
