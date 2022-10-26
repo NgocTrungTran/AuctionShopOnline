@@ -11,24 +11,26 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 
      @Query("SELECT NEW com.aso.model.dto.BidDTO (" +
              "b.id, " +
+             "b.createdAt, " +
+             "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
              "b.account, " +
              "b.auction, " +
-             "b.deleted, " +
-             "b.bidTime " +
+             "b.deleted " +
              ") " +
              "FROM Bid AS b WHERE b.deleted = false ")
      List<BidDTO> getAllBids();
 
      @Query("SELECT NEW com.aso.model.dto.BidDTO (" +
              "b.id, " +
+             "b.createdAt, " +
+             "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
              "b.account, " +
              "b.auction, " +
-             "b.deleted, " +
-             "b.bidTime " +
+             "b.deleted " +
              ") " +
              "FROM Bid AS b WHERE b.deleted = false AND b.bidPrice = 0")
      List<BidDTO> getAllBidsByBidPrice(Long id);
@@ -36,13 +38,14 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 
      @Query("SELECT NEW com.aso.model.dto.BidDTO (" +
              "b.id, " +
+             "b.createdAt, " +
+             "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
              "b.account, " +
              "b.auction, " +
-             "b.deleted, " +
-             "b.bidTime " +
+             "b.deleted " +
              ") " +
-             "FROM Bid AS b WHERE b.deleted = false AND b.auction.id = ?1 ")
+             "FROM Bid AS b WHERE b.deleted = false AND b.auction.id = ?1 ORDER BY b.id DESC")
      List<BidDTO> findByRelatedOfferId(long id);
 }

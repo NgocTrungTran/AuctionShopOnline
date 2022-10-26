@@ -35,15 +35,15 @@ public class BidAPI {
     private Validation validation;
 
 
-    @PostMapping("/{auctionId}/bids")
-    public ResponseEntity<?> createBid(@PathVariable Long auctionId,
-                                       @RequestBody @Valid BidDTO bidDTO) {
+    @PostMapping("/create")
+    public ResponseEntity<?> createBid(
+            @RequestBody @Valid BidDTO bidDTO) {
 
-        return new ResponseEntity<>(bidService.createBid(bidDTO, auctionId).toBidDTO(), HttpStatus.CREATED);
+        return new ResponseEntity<>(bidService.createBid(bidDTO).toBidDTO(), HttpStatus.CREATED);
     }
 
     @PutMapping("/delete-soft/{bidId}")
-    public ResponseEntity<Bid> deleteBid( @PathVariable Long bidId) {
+    public ResponseEntity<Bid> deleteBid(@PathVariable Long bidId) {
 
         Bid bidToDelete = bidRepository.findById(bidId).orElseThrow(
                 () -> new ResourceNotFoundException("Phiếu đấu giá có id " + bidId + " không tồn tại!"));
@@ -98,5 +98,15 @@ public class BidAPI {
             throw new ResourceNotFoundException("Bid invalid!");
         }
         return new ResponseEntity<>(bidOptional.get().toBidDTO(), HttpStatus.OK);
+    }
+
+    @GetMapping("/auction/{auctionId}")
+    public ResponseEntity<?> getBidByauctionId(@PathVariable Long auctionId) {
+        List<BidDTO> bidDTO = bidService.findByRelatedOfferId(auctionId);
+
+        if (bidDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Bid invalid!");
+        }
+        return new ResponseEntity<>(bidDTO, HttpStatus.OK);
     }
 }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "bids")
 @Accessors(chain = true)
-public class Bid{
+public class Bid extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +32,9 @@ public class Bid{
 
     private String email;
 
+    @Column(precision = 12, scale = 0)
     private BigDecimal bidPrice;
 
-    private LocalDateTime bidTime;
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted = false;
@@ -46,7 +46,6 @@ public class Bid{
                 .setBidPrice(bidPrice)
                 .setAccount(account.toAccountDTO())
                 .setAuction(auction.toAuctionDTO())
-                .setBidTime(bidTime)
                 .setDeleted(deleted)
                 ;
     }

@@ -35,7 +35,7 @@ public class BidServiceImpl implements BidService {
     private AccountService accountService;
 
     @Override
-    public Bid createBid(BidDTO bidDTO, Long auctionId) {
+    public Bid createBid(BidDTO bidDTO) {
         Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
         if (account.isEmpty()) {
             throw new DataInputException("Tài khoản không tồn tại!");
@@ -47,6 +47,7 @@ public class BidServiceImpl implements BidService {
         }
         bidDTO.setAccount(account.get().toAccountDTO());
         bidDTO.setAuction(auction.get().toAuctionDTO());
+
         Bid bid = bidDTO.toBid();
 
         Bid savedBid = null;
@@ -65,6 +66,7 @@ public class BidServiceImpl implements BidService {
         auction.get().setCurrentPrice(bid.getBidPrice());
         auction.get().setAuctionType(AuctionType.BIDDING);
         auctionRepository.save(auction.get());
+        bid.setCreatedBy(account.get().getCreatedBy());
         bid.setAuction(auction.get());
         savedBid = bidRepository.save(bid);
 
