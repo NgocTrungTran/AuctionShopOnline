@@ -142,10 +142,9 @@ public class OrderAPI {
 
     }
 
-    @PostMapping("/checkout")
-    public ResponseEntity<?> doCreateOrderInDashBoard(String username,
+    @PostMapping("/checkout/{accountId}")
+    public ResponseEntity<?> doCreateOrderInDashBoard(@PathVariable Long accountId,
                                                       @RequestBody OrderDTO orderDTO,
-                                                      @RequestBody List<OrderDetailDTO> orderDetailDTOList,
                                                       BindingResult bindingResult
     ) throws MessagingException, UnsupportedEncodingException {
 
@@ -153,8 +152,8 @@ public class OrderAPI {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         try {
-            List<OrderDetailDTO> orderDetailDTOS = orderService.doCreateOrder ( username, orderDTO, orderDetailDTOList );
-            return new ResponseEntity<>(orderDetailDTOS, HttpStatus.CREATED);
+            OrderDTO newOrderDTO = orderService.doCheckoutOrder ( accountId, orderDTO );
+            return new ResponseEntity<>(newOrderDTO, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BidService extends IGeneralService<Bid> {
 
-    Bid createBid(BidDTO bidDTO, Long auctionId);
+    Bid createBid(BidDTO bidDTO);
 
     List<BidDTO> getAllBids();
 

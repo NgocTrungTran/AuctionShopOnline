@@ -3,10 +3,8 @@ package com.aso.service.order;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
-import com.aso.model.Account;
-import com.aso.model.Order;
-import com.aso.model.OrderDetail;
-import com.aso.model.Product;
+import com.aso.model.*;
+import com.aso.model.dto.LocationRegionDTO;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.ProductDTO;
@@ -30,6 +28,10 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private StatusRepository statusRepository;
+    @Autowired
+    private LocationRegionRepository locationRegionRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
     @Autowired
@@ -99,28 +101,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDetailDTO> doCreateOrder(String username, OrderDTO orderDTO, List<OrderDetailDTO> orderDetailDTOList) {
-        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
-        Optional<Account> accountOptional = accountRepository.findByUsername ( username );
+    public OrderDTO doCheckoutOrder(Long accountId, OrderDTO orderDTO) {
+//        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
+        Optional<Account> accountOptional = accountRepository.findById ( accountId );
         if ( accountOptional.isEmpty () ) {
             throw new AccountInputException ( "Tài khoản không tồn tại" );
         }
+        Optional<Status> status = statusRepository.findById ( 7L );
 
+        LocationRegion newLocationRegion = locationRegionRepository.save ( orderDTO.getLocationRegion ().toLocationRegion () );
+        orderDTO.setLocationRegion ( newLocationRegion.toLocationRegionDTO () );
+
+        orderDTO.setAccount ( accountOptional.get ().toAccountDTO () );
+        orderDTO.setStatus ( status.get ().toStatusDTO () );
+        orderDTO.setCreatedBy ( accountOptional.get ().getUsername () );
         Order order = orderRepository.save ( orderDTO.toOrder () );
 
-        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
-            Optional<Product> optionalProduct = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
-            if ( optionalProduct.isEmpty () ) {
-                throw new DataInputException ( "Sản phẩm không tồn tại" );
-            }
+//        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
+//            Optional<Product> optionalProduct = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
+//            if ( optionalProduct.isEmpty () ) {
+//                throw new DataInputException ( "Sản phẩm không tồn tại" );
+//            }
+//
+//            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
+//            orderDetail.setProduct ( optionalProduct.get () );
+//
+//            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+//            orderDetailDTOS.add ( newOrderDetail.toOrderDetailDTO () );
+//        }
 
-            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
-            orderDetail.setProduct ( optionalProduct.get () );
-
-            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
-            orderDetailDTOS.add ( newOrderDetail.toOrderDetailDTO () );
-        }
-
-        return orderDetailDTOS;
+        return order.toOrderDTO ();
     }
 }

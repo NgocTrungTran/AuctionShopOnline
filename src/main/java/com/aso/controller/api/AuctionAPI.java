@@ -22,7 +22,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +81,7 @@ public class AuctionAPI {
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/auction/{productId}")
     public ResponseEntity<?> getAuctionByProductId(@PathVariable Long productId) {
         Optional<AuctionDTO> auctionDTO = auctionService.findByAuctionByProductId(productId);
 
