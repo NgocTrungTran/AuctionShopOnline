@@ -34,7 +34,7 @@ public class AccountDTO {
     private boolean blocked;
     private String avatar;
     private RoleDTO role;
-    private LocationRegionDTO locationregion;
+    private LocationRegionDTO locationRegion;
 
     public AccountDTO(Long id, String username, String fullName, String email, String phone, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
         this.id = id;
@@ -45,7 +45,7 @@ public class AccountDTO {
         this.blocked = blocked;
         this.avatar = avatar;
         this.role = role.toRoleDTO();
-        this.locationregion = locationregion.toLocationRegionDTO();
+        this.locationRegion = locationregion.toLocationRegionDTO();
     }
 
     public AccountDTO(Long id, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
@@ -58,7 +58,7 @@ public class AccountDTO {
         this.blocked = blocked;
         this.avatar = avatar;
         this.role = role.toRoleDTO();
-        this.locationregion = locationregion.toLocationRegionDTO();
+        this.locationRegion = locationregion.toLocationRegionDTO();
     }
 
     public AccountDTO(Long id, String username, String fullName, String email, String phone, String avatar, boolean blocked, LocationRegion locationregion) {
@@ -69,7 +69,7 @@ public class AccountDTO {
         this.phone = phone;
         this.avatar = avatar;
         this.blocked = blocked;
-        this.locationregion = locationregion.toLocationRegionDTO ();
+        this.locationRegion = locationregion.toLocationRegionDTO ();
     }
 
     public AccountDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, Role role, LocationRegion locationregion) {
@@ -86,7 +86,7 @@ public class AccountDTO {
         this.blocked = blocked;
         this.avatar = avatar;
         this.role = role.toRoleDTO();
-        this.locationregion = locationregion.toLocationRegionDTO();
+        this.locationRegion = locationregion.toLocationRegionDTO();
     }
 
     public AccountDTO(Long id, String username) {
@@ -104,7 +104,7 @@ public class AccountDTO {
                 .setPhone ( phone )
                 .setAvatar ( avatar )
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationregion.toLocationRegion () );
+                .setLocationRegion ( locationRegion.toLocationRegion () );
     }
 
     public Account toAccountAllAttribute() {
@@ -117,19 +117,19 @@ public class AccountDTO {
                 .setPhone ( phone )
                 .setAvatar ( avatar )
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationregion.toLocationRegion () );
+                .setLocationRegion ( locationRegion.toLocationRegion () );
     }
 
     public LocationRegion toLocationRegion() {
         return new LocationRegion()
                 .setId(id)
-                .setProvinceId(locationregion.getProvinceId())
-                .setProvinceName(locationregion.getProvinceName())
-                .setDistrictId(locationregion.getDistrictId())
-                .setDistrictName(locationregion.getDistrictName())
-                .setWardId(locationregion.getWardId())
-                .setWardName(locationregion.getWardName())
-                .setAddress(locationregion.getAddress());
+                .setProvinceId(locationRegion.getProvinceId())
+                .setProvinceName(locationRegion.getProvinceName())
+                .setDistrictId(locationRegion.getDistrictId())
+                .setDistrictName(locationRegion.getDistrictName())
+                .setWardId(locationRegion.getWardId())
+                .setWardName(locationRegion.getWardName())
+                .setAddress(locationRegion.getAddress());
     }
 }
 

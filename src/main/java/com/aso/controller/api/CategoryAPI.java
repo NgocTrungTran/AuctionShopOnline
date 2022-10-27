@@ -5,16 +5,14 @@ import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Category;
 import com.aso.model.dto.CategoryDTO;
-import com.aso.model.dto.ProductDTO;
 import com.aso.repository.CategoryRepository;
 import com.aso.service.category.CategoryService;
+import com.aso.service.product.ProductService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,8 +31,6 @@ import java.util.Optional;
 public class CategoryAPI {
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private CategoryRepository categoryRepository;
     @Autowired
     private AppUtil appUtils;
 

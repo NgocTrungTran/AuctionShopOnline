@@ -22,6 +22,8 @@ public class Bid extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String createdBy;
+
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
@@ -35,6 +37,8 @@ public class Bid extends BaseEntity {
     @Column(precision = 12, scale = 0)
     private BigDecimal bidPrice;
 
+    @Column(precision = 12, scale = 0, name="estimate_price")
+    private BigDecimal estimatePrice = new BigDecimal ( 0L );
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted = false;
@@ -42,8 +46,11 @@ public class Bid extends BaseEntity {
     public BidDTO toBidDTO(){
         return new BidDTO()
                 .setId(id)
+                .setCreatedAt(account.getCreatedAt())
+                .setCreatedBy(account.getUsername())
                 .setEmail(email)
                 .setBidPrice(bidPrice)
+                .setEstimatePrice(estimatePrice)
                 .setAccount(account.toAccountDTO())
                 .setAuction(auction.toAuctionDTO())
                 .setDeleted(deleted)

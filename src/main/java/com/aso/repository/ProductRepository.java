@@ -51,6 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +
@@ -86,6 +87,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -103,6 +105,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -122,6 +125,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -141,6 +145,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -159,6 +164,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -180,6 +186,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +
@@ -189,8 +196,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.countday " +
             ") " +
             "FROM Product AS p WHERE p.title LIKE :keyword " +
-            "OR p.category.title LIKE :keyword AND p.deleted= false AND p.moderation = true ORDER BY p.id DESC " +
-            "")
+            "OR p.category.title LIKE :keyword AND p.deleted= false AND p.moderation = true ORDER BY p.id DESC "
+            )
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
@@ -204,6 +211,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +

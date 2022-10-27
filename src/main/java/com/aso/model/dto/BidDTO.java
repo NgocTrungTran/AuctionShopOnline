@@ -36,6 +36,8 @@ public class BidDTO {
     @PriceConstraint
     private BigDecimal bidPrice;
 
+    private BigDecimal estimatePrice;
+
     private AccountDTO account;
 
     private AuctionDTO auction;
@@ -43,12 +45,13 @@ public class BidDTO {
     private boolean deleted = false;
 
 
-    public BidDTO(Long id, Date createdAt, String createdBy, String email, BigDecimal bidPrice, Account account, Auction auction, boolean deleted) {
+    public BidDTO(Long id, Date createdAt, String createdBy, String email, BigDecimal bidPrice, BigDecimal estimatePrice, Account account, Auction auction, boolean deleted) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
         this.email = email;
         this.bidPrice = bidPrice;
+        this.estimatePrice = estimatePrice;
         this.account = account.toAccountDTO();
         this.auction = auction.toAuctionDTO();
         this.deleted = deleted;
@@ -57,8 +60,10 @@ public class BidDTO {
     public Bid toBid(){
         return new Bid()
                 .setId(id)
+                .setCreatedBy(account.getCreatedBy())
                 .setEmail(email)
                 .setBidPrice(bidPrice)
+                .setEstimatePrice(estimatePrice)
                 .setAccount(account.toAccount())
                 .setAuction(auction.toAuction())
                 .setDeleted(deleted)

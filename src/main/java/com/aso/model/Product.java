@@ -49,6 +49,9 @@ public class Product extends BaseEntity {
     @Column(precision = 12, scale = 0)
     private BigDecimal price = new BigDecimal ( 0L );
 
+    @Column(precision = 12, scale = 0, name="estimate_price")
+    private BigDecimal estimatePrice = new BigDecimal ( 0L );
+
     @Column(name = "countday")
     private String countday;
 
@@ -85,8 +88,10 @@ public class Product extends BaseEntity {
                 .setSold ( sold )
                 .setViewed ( viewed )
                 .setPrice ( price )
+                .setEstimatePrice(estimatePrice)
                 .setCategory ( category.toCategoryDTO () )
                 .setDescription(description)
+                .setModeration(moderation)
                 .setAvailable(available)
                 .setAction(action)
                 .setCountday(countday)

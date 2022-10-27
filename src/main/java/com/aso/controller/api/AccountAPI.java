@@ -72,7 +72,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
 
-        if (!accountOptional.isPresent()) {
+        if (accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account invalid");
         }
 
@@ -89,7 +89,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> productOptional = accountService.findAccountByIdDTO(account_id);
 
-        if (!productOptional.isPresent()) {
+        if (productOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account invalid");
         }
 
@@ -118,7 +118,7 @@ public class AccountAPI {
 
         Optional<Role> optionalRole = roleService.findById ( accountDTO.getRole ().getId () );
 
-        if ( !optionalRole.isPresent () ) {
+        if (optionalRole.isEmpty()) {
             bindingResult.addError ( new FieldError ( "role", "role", " Chức năng Role không hợp lệ ! " ) );
         }
 
@@ -165,7 +165,7 @@ public class AccountAPI {
             accountOption.setRole(accountDTO.getRole().toRole());
 
             Account updatedAccount = accountService.save( accountOption );
-            LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion();
+            LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion();
             locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
 
