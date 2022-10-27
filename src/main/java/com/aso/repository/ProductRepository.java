@@ -50,6 +50,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +
@@ -85,6 +86,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -102,6 +104,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -119,6 +122,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -138,6 +142,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -156,6 +161,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.slug, " +
             "p.image, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.sold, " +
             "p.viewed, " +
             "p.category, " +
@@ -177,6 +183,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +
@@ -201,6 +208,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.moderation, " +
             "p.price, " +
+            "p.estimatePrice, " +
             "p.slug, " +
             "p.sold, " +
             "p.title, " +

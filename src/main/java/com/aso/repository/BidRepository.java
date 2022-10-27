@@ -15,6 +15,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
              "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
+             "b.estimatePrice, " +
              "b.account, " +
              "b.auction, " +
              "b.deleted " +
@@ -28,6 +29,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
              "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
+             "b.estimatePrice, " +
              "b.account, " +
              "b.auction, " +
              "b.deleted " +
@@ -35,17 +37,17 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
              "FROM Bid AS b WHERE b.deleted = false AND b.bidPrice = 0")
      List<BidDTO> getAllBidsByBidPrice(Long id);
 
-
      @Query("SELECT NEW com.aso.model.dto.BidDTO (" +
              "b.id, " +
              "b.createdAt, " +
              "b.createdBy, " +
              "b.email, " +
              "b.bidPrice, " +
+             "b.estimatePrice, " +
              "b.account, " +
              "b.auction, " +
              "b.deleted " +
              ") " +
              "FROM Bid AS b WHERE b.deleted = false AND b.auction.id = ?1 ORDER BY b.id DESC")
-     List<BidDTO> findByRelatedOfferId(long id);
+     List<BidDTO> findByRelatedOfferId(Long id);
 }

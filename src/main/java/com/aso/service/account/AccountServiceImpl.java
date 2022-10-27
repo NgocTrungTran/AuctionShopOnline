@@ -267,7 +267,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO findAccountByCreatedBy(String createBy) {
-        return accountRepository.findAccountByCreatedBy(createBy);
+    public AccountDTO findAccountByUsername(String createBy) {
+        return accountRepository.findAccountByUsername(createBy);
     }
 }

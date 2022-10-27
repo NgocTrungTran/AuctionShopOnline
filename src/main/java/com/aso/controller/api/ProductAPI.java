@@ -4,6 +4,7 @@ import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Auction;
+import com.aso.model.Bid;
 import com.aso.model.Product;
 import com.aso.model.ProductMedia;
 import com.aso.model.dto.*;
@@ -13,6 +14,7 @@ import com.aso.repository.AuctionRepository;
 import com.aso.repository.ProductRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.auction.AuctionService;
+import com.aso.service.bid.BidService;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
@@ -54,6 +56,9 @@ public class ProductAPI {
 
     @Autowired
     private AppUtil appUtil;
+
+    @Autowired
+    private BidService bidService;
 
     @Autowired
     private CategoryService categoryService;
@@ -276,13 +281,13 @@ public class ProductAPI {
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
-            AccountDTO accountDTO = accountService.findAccountByCreatedBy(p.get().getCreatedBy());
+            AccountDTO accountDTO = accountService.findAccountByUsername(newProduct.getCreatedBy());
             if (p.get().getAction()) {
                 AuctionDTO auction = new AuctionDTO();
                 auction.setId(0L);
                 auction.setEmail(accountDTO.getEmail());
                 auction.setCreatedAt(new Date());
-                auction.setCreatedBy(accountDTO.getCreatedBy());
+                auction.setCreatedBy(accountDTO.getUsername());
                 auction.setAccount(accountDTO);
                 auction.setProduct(p.get().toProductDTO());
                 auction.setAuctionType(AuctionType.BIDDING);
@@ -297,7 +302,15 @@ public class ProductAPI {
                 dt = c.getTime();
                 auction.setAuctionEndTime(dt);
                 auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));
-                auctionService.createAuction(auction);
+                Auction auc = auctionService.createAuction(auction);
+                Bid bid = new Bid();
+                bid.setCreatedBy(accountDTO.getUsername());
+                bid.setAccount(accountDTO.toAccount());
+                bid.setAuction(auc);
+                bid.setBidPrice(p.get().getPrice());
+                bid.setEmail(accountDTO.getEmail());
+                bid.setEstimatePrice(p.get().getEstimatePrice());
+                bidService.save(bid);
             }
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
         } catch (Exception e) {
