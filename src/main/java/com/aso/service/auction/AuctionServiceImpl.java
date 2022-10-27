@@ -45,7 +45,7 @@ public class AuctionServiceImpl implements AuctionService {
             throw new IncorrectPriceException("Giá tối thiểu không được âm!");
         }
 
-        return auctionRepository.save(auction);
+        return auction;
     }
     @Override
     public List<AuctionDTO> getAllAuctions() {

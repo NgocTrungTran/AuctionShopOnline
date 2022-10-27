@@ -185,8 +185,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.role, " +
             "a.locationRegion" +
             ") " +
-            "FROM Account AS a WHERE a.createdBy = ?1")
-    AccountDTO findAccountByCreatedBy(String createBy);
+            "FROM Account AS a WHERE a.username = ?1")
+    AccountDTO findAccountByUsername(String createBy);
 
     void deleteById(Product id);
 

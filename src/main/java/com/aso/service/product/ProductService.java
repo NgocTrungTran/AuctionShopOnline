@@ -31,6 +31,9 @@ public interface ProductService extends IGeneralService<Product> {
 
     Optional<ProductDTO> findProductDTOBySlug (String slug);
 
+    Optional<Product> findBySlug(String slug);
+
+
     Optional<Product> findProductBySlug(String slug);
     List<ProductDTO> findAllProductDTOByAvailable(String available);
 
