@@ -177,7 +177,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Account> accountOptional = accountRepository.findByUsername ( username );
-        if ( !accountOptional.isPresent () ) {
+        if ( accountOptional.isEmpty () ) {
             throw new UsernameNotFoundException ( username );
         }
         return AccountPrinciple.build ( accountOptional.get () );
