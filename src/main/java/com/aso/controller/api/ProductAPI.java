@@ -160,6 +160,18 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
     }
+    @GetMapping("/find-by-slug/{slug}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getProductBySlug(@PathVariable String slug) {
+
+        Optional<Product> productOptional = productService.findBySlug (slug);
+
+        if ( productOptional.isEmpty () ) {
+            throw new ResourceNotFoundException("Sản phẩm không tồn tại");
+        }
+
+        return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
+    }
 
 //    @PostMapping("/create")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -276,7 +288,7 @@ public class ProductAPI {
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
-            AccountDTO accountDTO = accountService.findAccountByCreatedBy(p.get().getCreatedBy());
+            AccountDTO accountDTO = accountService.findAccountByCreatedBy(newProduct.getCreatedBy());
             if (p.get().getAction()) {
                 AuctionDTO auction = new AuctionDTO();
                 auction.setId(0L);

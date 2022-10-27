@@ -113,6 +113,12 @@ public class ProductServiceImpl implements ProductService{
     public Optional<ProductDTO> findProductDTOBySlug(String slug) {
         return productRepository.findProductDTOBySlug(slug);
     }
+
+    @Override
+    public Optional<Product> findBySlug(String slug) {
+        return productRepository.findBySlug ( slug );
+    }
+
     @Override
     public Optional<Product> findProductBySlug(String slug) {
         return productRepository.findProductBySlug(slug);
