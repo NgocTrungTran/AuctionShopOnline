@@ -18,6 +18,7 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> getByUsername(String username);
+    Optional<Account> getByEmail(String email);
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
@@ -115,6 +116,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<AccountDTO> findAllUsersDTODeletedFalseAndActiveFalse();
 
     Optional<Account> findByUsername(String username);
+    Optional<Account> findByEmail(String email);
 
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
