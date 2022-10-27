@@ -165,6 +165,18 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
     }
+    @GetMapping("/find-by-slug/{slug}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getProductBySlug(@PathVariable String slug) {
+
+        Optional<Product> productOptional = productService.findBySlug (slug);
+
+        if ( productOptional.isEmpty () ) {
+            throw new ResourceNotFoundException("Sản phẩm không tồn tại");
+        }
+
+        return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
+    }
 
 //    @PostMapping("/create")
 ////    @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -281,6 +293,7 @@ public class ProductAPI {
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
+
             AccountDTO accountDTO = accountService.findAccountByUsername(newProduct.getCreatedBy());
             if (p.get().getAction()) {
                 AuctionDTO auction = new AuctionDTO();
@@ -298,7 +311,8 @@ public class ProductAPI {
                 Date dt = new Date();
                 Calendar c = Calendar.getInstance();
                 c.setTime(dt);
-                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
+//                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
+                c.add(Calendar.MINUTE, 5);
                 dt = c.getTime();
                 auction.setAuctionEndTime(dt);
                 auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));
@@ -379,16 +393,6 @@ public class ProductAPI {
         } catch (Exception e) {
             return new ResponseEntity<>("Server không xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @GetMapping("/product/slug/{slug}")
-    public ResponseEntity<?> findProductBySlug(@PathVariable String slug) {
-        Optional<ProductDTO> productDTOOptional = productService.findProductDTOBySlug(slug);
-        if (!productDTOOptional.isPresent()) {
-            throw new DataInputException("Product is not found");
-        }
-
-        return new ResponseEntity<>(productDTOOptional.get(), HttpStatus.OK);
     }
 
     @GetMapping("/product-status-available")

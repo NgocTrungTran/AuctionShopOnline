@@ -81,18 +81,18 @@ public class AuthAPI {
     public ResponseEntity<?> login(@RequestBody Account account) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken (account.getUsername(), account.getPassword()));
+                    new UsernamePasswordAuthenticationToken (account.getEmail(), account.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = jwtService.generateTokenLogin(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Account currentUser = accountService.getByUsername(account.getUsername()).get ();
+            Account currentUser = accountService.getByEmail(account.getEmail()).get ();
 
             JwtResponse jwtResponse = new JwtResponse(
                     jwt,
                     currentUser.getId(),
                     userDetails.getUsername(),
-                    currentUser.getUsername(),
+                    currentUser.getEmail(),
                     userDetails.getAuthorities()
             );
 
@@ -115,4 +115,5 @@ public class AuthAPI {
             throw new ResourceNotFoundException ( "Login information is incorrect" );
         }
     }
+
 }

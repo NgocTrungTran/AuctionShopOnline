@@ -42,6 +42,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
 
 
     Optional<Account> getByUsername(String username);
+    Optional<Account> getByEmail(String email);
 
     Account create(AccountDTO newAccount);
 

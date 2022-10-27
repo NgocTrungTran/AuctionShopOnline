@@ -109,10 +109,10 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
             OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
 
-
-
+            orderOptional.get ().setStatus ( status.toStatus () );
 
            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+           orderRepository.save ( orderOptional.get () );
            newOrderDetailDTOList.add ( newOrderDetail.toOrderDetailDTO () );
         }
 

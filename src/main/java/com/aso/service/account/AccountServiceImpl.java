@@ -149,6 +149,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Optional<Account> getByEmail(String email) {
+        return accountRepository.getByEmail(email);
+    }
+
+    @Override
     public Account create(AccountDTO newAccount) {
         return null;
     }
@@ -175,10 +180,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> accountOptional = accountRepository.findByUsername ( username );
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Account> accountOptional = accountRepository.findByEmail ( email );
         if ( !accountOptional.isPresent () ) {
-            throw new UsernameNotFoundException ( username );
+            throw new UsernameNotFoundException ( email );
         }
         return AccountPrinciple.build ( accountOptional.get () );
     }

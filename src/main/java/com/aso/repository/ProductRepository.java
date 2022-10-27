@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +60,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.description," +
             "p.countday " +
             ") " +
-            "FROM Product AS p WHERE p.deleted = false ORDER BY p.id DESC")
+            "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTO();
 
 //    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
@@ -115,6 +116,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product AS p WHERE  " +
             " p.slug like %?1% ")
     Optional<ProductDTO> findProductDTOBySlug(String slug);
+
+    Optional<Product> findBySlug(String slug);
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO ( " +
             "p.id, " +
