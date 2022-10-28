@@ -1,8 +1,6 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
-import com.aso.exception.GlobalExceptionHandler;
-import com.aso.model.Order;
 import com.aso.model.Product;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
@@ -30,7 +28,6 @@ public class OrderDetailAPI {
 
     @PostMapping("/create/{orderId}")
     public ResponseEntity<?> createOrderDetail(@PathVariable("orderId") Long orderId, @RequestBody List<OrderDetailDTO> orderDetailDTOList) {
-        List<String> errors = new ArrayList<> ();
         try {
            OrderDTO orderDTO = orderService.findOrderDTOById ( orderId );
             if (orderDTO == null) {
@@ -40,14 +37,13 @@ public class OrderDetailAPI {
             for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
                 Optional<Product> productOptional = productService.findById ( orderDetailDTO.getProduct ().getId () );
                 if (productOptional.isEmpty ()) {
-                    errors.add ( "Không tồn tại " + orderDetailDTO.getProduct ().getTitle () + " trong dữ liệu" );
+                    throw new RuntimeException ("Không tồn tại " + orderDetailDTO.getProduct ().getTitle () + " trong dữ liệu");
                 }
-            }
+                Long currentAvailable = productOptional.get ().getAvailable ();
+                long newAvailable = currentAvailable - orderDetailDTO.getQuantity ();
 
-
-            if ( !errors.isEmpty () ) {
-                for (String error: errors) {
-                    throw new RuntimeException (error);
+                if ( newAvailable < 0 ) {
+                    throw new DataInputException ( "Số lượng không hợp lệ" );
                 }
             }
 

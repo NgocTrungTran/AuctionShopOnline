@@ -51,6 +51,16 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductDTO> findAllProductsDTOAuctions() {
+        return productRepository.findAllProductsDTOAuctions ();
+    }
+
+    @Override
+    public List<ProductDTO> findAllProductsDTOTheShop() {
+        return productRepository.findAllProductsDTOTheShop ();
+    }
+
+    @Override
     public List<ProductDTO> findAllProductsDTOTrash() {
         return null;
     }
