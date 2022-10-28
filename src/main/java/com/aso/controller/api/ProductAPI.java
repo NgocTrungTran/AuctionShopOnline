@@ -74,6 +74,28 @@ public class ProductAPI {
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
+    @GetMapping("/auctions")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsAuctions() {
+        List<ProductDTO> productDTOList = productService.findAllProductsDTOAuctions ();
+
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    @GetMapping("/the-shops")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsTheShop() {
+        List<ProductDTO> productDTOList = productService.findAllProductsDTOTheShop ();
+
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
     @GetMapping("/moderation")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsModeration() {
@@ -159,7 +181,7 @@ public class ProductAPI {
 
         Optional<Product> productOptional = productService.findById(product_id);
 
-        if (!productOptional.isPresent()) {
+        if ( productOptional.isEmpty () ) {
             throw new ResourceNotFoundException("Product invalid");
         }
 
@@ -377,7 +399,7 @@ public class ProductAPI {
 
         Optional<Product> product = productService.findProductBySlug(slug);
 
-        if (!product.isPresent()) {
+        if ( product.isEmpty () ) {
             throw new DataInputException("Invalid product id");
         }
 
