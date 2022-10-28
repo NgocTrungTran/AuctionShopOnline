@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 
 public class Chart {
     private Long id;
-    private BigDecimal total;
+    private BigDecimal auction;
+    private BigDecimal buy;
 }
