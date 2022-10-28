@@ -59,4 +59,9 @@ public class OrderDetailAPI {
             throw new RuntimeException (e);
         }
     }
+
+    @GetMapping("/chart")
+    public ResponseEntity<?> doChart() {
+        return new ResponseEntity<>(orderDetailService.getListChart("2022", 1L), HttpStatus.OK);
+    }
 }
