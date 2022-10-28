@@ -101,6 +101,10 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
         for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
             Optional<Order> orderOptional = orderRepository.findById ( orderId );
             Optional<Product> productOptional = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
+            Long currentAvailable = productOptional.get ().getAvailable ();
+            long newAvailable = currentAvailable - orderDetailDTO.getQuantity ();
+
+            productOptional.get ().setAvailable ( newAvailable );
             StatusDTO status = statusRepository.findStatusDTOById ( 8L );
 
             orderDetailDTO.setOrder (orderOptional.get ().toOrderDTO ());
@@ -113,6 +117,7 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
            OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
            orderRepository.save ( orderOptional.get () );
+           productRepository.save ( productOptional.get () );
            newOrderDetailDTOList.add ( newOrderDetail.toOrderDetailDTO () );
         }
 
