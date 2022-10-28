@@ -128,6 +128,11 @@ public class AccountServiceImpl implements AccountService {
     public Optional<AccountDTO> findUserDTOByUsername(String username) {
         return accountRepository.findUserDTOByUsername ( username );
     }
+
+    @Override
+    public Optional<AccountDTO> findUserDTOByEmail(String email) {
+        return accountRepository.findUserDTOByEmail ( email );
+    }
     @Override
     public Optional<AccountDTO> findUserDTOById(Long id) {
         return accountRepository.findUserDTOById ( id );

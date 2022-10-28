@@ -123,6 +123,22 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Boolean existsByPhone(String phone);
 
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
+            "a.id, " +
+            "a.username, " +
+            "a.fullName, " +
+            "a.email, " +
+            "a.phone, " +
+            "a.blocked, " +
+            "a.avatar, " +
+            "a.role, " +
+            "a.locationRegion" +
+            ") " +
+            "FROM Account AS a " +
+            "WHERE a.email = ?1"
+    )
+    Optional<AccountDTO> findUserDTOByEmail(String email);
+
     Account findByBlockedIsFalseAndId(Long id);
 
     @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +

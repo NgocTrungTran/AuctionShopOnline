@@ -38,6 +38,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     Optional<Account> findByUsername(String username);
 
     Optional<AccountDTO> findUserDTOByUsername(String username);
+    Optional<AccountDTO> findUserDTOByEmail(String email);
     Optional<AccountDTO> findUserDTOById(Long id);
 
 

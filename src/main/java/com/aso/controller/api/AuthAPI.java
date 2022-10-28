@@ -112,7 +112,7 @@ public class AuthAPI {
                     .body(jwtResponse);
         } catch (Exception e) {
             e.printStackTrace ();
-            throw new ResourceNotFoundException ( "Login information is incorrect" );
+            throw new ResourceNotFoundException ( "Đăng nhập thất bại!" );
         }
     }
 

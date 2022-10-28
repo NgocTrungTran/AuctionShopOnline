@@ -243,4 +243,15 @@ public class AccountAPI {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/getAccountEmail/{email}")
+    public ResponseEntity<?> getAccountByEmail(@PathVariable String email) {
+
+        Optional<AccountDTO> accountOptional = accountService.findUserDTOByEmail(email);
+
+        if (accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account invalid");
+        }
+        return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
+    }
 }
