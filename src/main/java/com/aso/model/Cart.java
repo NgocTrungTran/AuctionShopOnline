@@ -32,7 +32,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<CartItem> cartItem;
 
     public CartDTO toCartDTO(){
@@ -41,5 +41,15 @@ public class Cart extends BaseEntity {
                 .setStatus ( status.toStatusDTO () )
                 .setAccount(account.toAccountDTO())
                 ;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", account=" + account +
+                ", status=" + status +
+                ", cartItem=" + cartItem +
+                '}';
     }
 }

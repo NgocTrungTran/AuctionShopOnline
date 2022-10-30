@@ -1,6 +1,7 @@
 package com.aso.controller.api;
 
 
+import com.aso.exception.DataInputException;
 import com.aso.model.Account;
 import com.aso.model.Cart;
 import com.aso.model.dto.CartDTO;
@@ -29,9 +30,14 @@ public class CartAPI {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCartByUserName(@PathVariable Long id){
-        return new ResponseEntity<>(cartService.findCartDTOByIdAccountInfo(id).get().toCart(),HttpStatus.OK);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<?> getCartByUserName(@PathVariable Long accountId){
+        Optional<CartDTO> cartDTO = cartService.findCartDTOByIdAccountInfo ( accountId );
+        if ( cartDTO.isEmpty () ) {
+            throw new DataInputException ( "Không tồn tại giỏ hàng!" );
+        }
+
+        return new ResponseEntity<>(cartDTO.get().toCart (),HttpStatus.OK);
     }
 
     @PostMapping("/create")

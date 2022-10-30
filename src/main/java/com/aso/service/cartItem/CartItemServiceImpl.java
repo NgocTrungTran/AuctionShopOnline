@@ -44,27 +44,27 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Optional<CartItem> findById(Long id) {
-        return cartItemRepository.findById(id);
+        return cartItemRepository.findById ( id );
     }
 
     @Override
     public Optional<CartItem> findByProductId(Long productId) {
-        return cartItemRepository.findByProductId(productId);
+        return cartItemRepository.findByProductId ( productId );
     }
 
     @Override
     public List<CartItem> findAllByCart(Cart cart) {
-        return cartItemRepository.findAllByCart(cart);
+        return cartItemRepository.findAllByCart ( cart );
     }
 
     @Override
     public BigDecimal getSumAmountByCartId(Long cartId) {
-        return cartItemRepository.getSumAmountByCartId(cartId);
+        return cartItemRepository.getSumAmountByCartId ( cartId );
     }
 
     @Override
     public List<CartItemDTO> findAllCartItemsDTO(Long cartId) {
-        return cartItemRepository.findAllCartItemsDTO(cartId);
+        return cartItemRepository.findAllCartItemsDTO ( cartId );
     }
 
     @Override
@@ -76,14 +76,15 @@ public class CartItemServiceImpl implements CartItemService {
     public void softDelete(CartItem cartItem) {
 
     }
+
     @Override
-    public List<CartItemDTO> findCartItemDTOByAccountId(Long accountId) {
-        return cartItemRepository.findCartItemDTOByAccountId(accountId);
+    public List<CartItemDTO> findCartItemDTOByEmail(String email) {
+        return cartItemRepository.findCartItemDTOByEmail ( email );
     }
 
     @Override
     public CartItem save(CartItem cartItem) {
-        return cartItemRepository.save(cartItem);
+        return cartItemRepository.save ( cartItem );
     }
 
     @Override
@@ -103,7 +104,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Optional<CartItemDTO> getCartItemDTOById(Long id) {
-        return cartItemRepository.getCartItemDTOById(id);
+        return cartItemRepository.getCartItemDTOById ( id );
     }
 
 
@@ -111,17 +112,8 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountId );
 
-        if ( accountOptional.isEmpty () ) {
-            throw new AccountInputException ("Tài khoản không tồn tại");
-        }
+        Optional<Product> product = productRepository.findBySlug ( cartItemDTO.getProduct ().getSlug () );
 
-        Optional<Product> product = productRepository.findById(cartItemDTO.getProduct().getId());
-
-        if ( product.isEmpty () ) {
-            throw new DataInputException("Sản phẩm không tồn tại!");
-        } else {
-            cartItemDTO.setProduct ( product.get ().toProductDTO () );
-        }
 
         Optional<CartDTO> cartDTOOptional = cartService.findCartDTOByIdAccountInfo ( accountId );
 
@@ -144,11 +136,15 @@ public class CartItemServiceImpl implements CartItemService {
         } else {
             cartItemDTO.setPrice ( product.get ().getPrice () );
         }
+
+        cartItemDTO.setProduct ( product.get ().toProductDTO () );
         cartItemDTO.setPrice ( product.get ().getPrice () );
         cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
 
-        return cartItemRepository.save(cartItemDTO.toCartItem ());
+        return cartItemRepository.save ( cartItemDTO.toCartItem () );
     }
+
+
 
     @Override
     public void removeById(CartItem cartItem) {
@@ -156,9 +152,9 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItemDTO> doRemoveCartItems(Long accountId, List<CartItemDTO> cartItemsDTO) {
+    public List<CartItemDTO> doRemoveCartItems(String email, List<CartItemDTO> cartItemsDTO) {
 
-        for (CartItemDTO cartItem: cartItemsDTO) {
+        for (CartItemDTO cartItem : cartItemsDTO) {
             Optional<CartItem> cartItemOptional = cartItemRepository.findById ( cartItem.getId () );
             if ( cartItemOptional.isEmpty () ) {
                 throw new Error ( "Sản phẩm " + cartItem.getTitle () + " không tồn tại trong giỏ hàng." );
@@ -168,13 +164,14 @@ public class CartItemServiceImpl implements CartItemService {
             cartItemRepository.save ( newCartItem );
         }
 
-        return cartItemRepository.findCartItemDTOByAccountId ( accountId );
+        return cartItemRepository.findCartItemDTOByEmail ( email );
     }
 
     @Override
-    public Optional<CartItemDTO> getCartItemDTOByCode(String title , String code) {
+    public Optional<CartItemDTO> getCartItemDTOByCode(String title, String code) {
         return null;
     }
+
     @Override
     public CartItem saveInDetail(CartItem cartItem) {
 //        Optional<CartItemDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());

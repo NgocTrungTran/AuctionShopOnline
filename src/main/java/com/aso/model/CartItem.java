@@ -51,6 +51,7 @@ public class CartItem {
     public CartItemDTO toCartItemListDTO() {
         return new CartItemDTO ()
                 .setId(id)
+                .setCart ( cart.toCartDTO () )
                 .setProduct (product.toProductDTO ())
                 .setTitle(title)
                 .setPrice(price)

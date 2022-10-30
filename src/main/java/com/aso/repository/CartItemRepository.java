@@ -21,6 +21,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItem> findAllByCart(Cart cart);
 
 
+
+
     @Query("SELECT SUM(ci.amountTransaction) FROM CartItem AS ci WHERE ci.cart.id = :cartId")
     BigDecimal getSumAmountByCartId(@Param("cartId") Long cartId);
 
@@ -44,11 +46,11 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.title, " +
             "c.price ," +
             "c.quantity, " +
-            "c.amountTransaction, " +
-            "c.cart" +
+            "c.amountTransaction " +
+//            "c.cart" +
             " )  " +
-            "FROM CartItem AS c WHERE c.cart.account.id = ?1 AND c.deleted = false")
-    List<CartItemDTO> findCartItemDTOByAccountId(Long accountId);
+            "FROM CartItem AS c WHERE c.cart.account.email = ?1 AND c.deleted = false")
+    List<CartItemDTO> findCartItemDTOByEmail(String email);
 
     @Query("SELECT NEW com.aso.model.dto.CartItemDTO(" +
             "c.id, " +

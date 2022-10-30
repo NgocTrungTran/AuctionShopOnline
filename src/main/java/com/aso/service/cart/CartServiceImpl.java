@@ -27,12 +27,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Optional<Cart> findById(Long id) {
-        return Optional.empty();
+        return cartRepository.findById ( id );
     }
 
     @Override
     public Cart getById(Long id) {
-        return null;
+        return cartRepository.getById ( id );
     }
 
     @Override
