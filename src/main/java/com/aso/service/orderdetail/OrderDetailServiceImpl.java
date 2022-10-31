@@ -126,8 +126,8 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     }
 
     @Override
-    public List<Chart> getListChart(String year, Long action) {
-        return orderDetailRepository.getListChart(year, action);
+    public List<Chart> getListChart(String year) {
+        return orderDetailRepository.getListChart(year);
     }
 
     @Override

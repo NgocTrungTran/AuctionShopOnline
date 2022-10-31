@@ -123,10 +123,8 @@ public class AccountAPI {
         }
 
         try {
-
             Account newAccount = accountService.doCreate ( accountDTO );
             return new ResponseEntity<> ( newAccount.toAccountDTO (), HttpStatus.CREATED );
-
         } catch (DataIntegrityViolationException e) {
             throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
         } catch (Exception e) {

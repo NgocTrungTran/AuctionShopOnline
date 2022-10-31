@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @NamedNativeQuery(
         name = "sp_chart",
         query =
-                "call sp_chartByMonth(:sYear,:sAction);",
+                "call sp_chartByMonth(:sYear);",
         resultSetMapping = "result_chartdto"
 )
 @SqlResultSetMapping(
@@ -32,7 +32,8 @@ import java.math.BigDecimal;
                 targetClass = Chart.class,
                 columns = {
                         @ColumnResult(name = "id", type = Long.class),
-                        @ColumnResult(name = "total", type = BigDecimal.class)
+                        @ColumnResult(name = "auction", type = BigDecimal.class),
+                        @ColumnResult(name = "buy", type = BigDecimal.class)
                 }
         )
 )

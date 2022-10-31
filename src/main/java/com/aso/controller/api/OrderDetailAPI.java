@@ -56,8 +56,8 @@ public class OrderDetailAPI {
         }
     }
 
-    @GetMapping("/chart")
-    public ResponseEntity<?> doChart() {
-        return new ResponseEntity<>(orderDetailService.getListChart("2022", 1L), HttpStatus.OK);
+    @GetMapping("/chart/{sYear}")
+    public ResponseEntity<?> doChart(@PathVariable String sYear) {
+        return new ResponseEntity<>(orderDetailService.getListChart(sYear), HttpStatus.OK);
     }
 }

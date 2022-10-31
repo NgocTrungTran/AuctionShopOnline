@@ -62,7 +62,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(@Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
 
     @Query(name="sp_chart", nativeQuery = true)
-    List<Chart> getListChart( @Param("sYear") String year, @Param("sAction") Long action);
+    List<Chart> getListChart( @Param("sYear") String year);
 
     //List<StockAkhirDto> findStockAkhirPerProductIn(
     //      @Param("warehouseCode") String warehouseCode,

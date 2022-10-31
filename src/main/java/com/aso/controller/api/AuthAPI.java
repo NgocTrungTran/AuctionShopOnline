@@ -82,16 +82,20 @@ public class AuthAPI {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken (account.getEmail(), account.getPassword()));
+            System.out.println("authentication => " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = jwtService.generateTokenLogin(authentication);
+            System.out.println("jwt => " + jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println("userDetails => " + userDetails);
             Account currentUser = accountService.getByEmail(account.getEmail()).get ();
+            System.out.println("currentUser => " + currentUser);
 
             JwtResponse jwtResponse = new JwtResponse(
                     jwt,
                     currentUser.getId(),
-                    userDetails.getUsername(),
+                    currentUser.getUsername(),
                     currentUser.getEmail(),
                     userDetails.getAuthorities()
             );
@@ -100,8 +104,8 @@ public class AuthAPI {
                     .httpOnly(false)
                     .secure(false)
                     .path("/")
-                    .maxAge(60 * 60 * 1000)
-                    .domain("localhost")
+                    .maxAge(60 * 60 * 1000 * 2)
+//                    .domain("localhost")
                     .build();
 
             System.out.println(jwtResponse);
