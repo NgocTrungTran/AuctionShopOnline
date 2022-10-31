@@ -3,6 +3,7 @@ package com.aso.service.cartItem;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.*;
 import com.aso.model.dto.CartDTO;
 import com.aso.model.dto.CartItemDTO;
@@ -13,6 +14,8 @@ import com.aso.repository.StatusRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,8 +125,11 @@ public class CartItemServiceImpl implements CartItemService {
             StatusDTO status = statusRepository.findStatusDTOById ( 2L );
             cart.setAccount ( accountOptional.get () );
             cart.setStatus ( status.toStatus () );
-
-            cartItemDTO.setCart ( cartService.save ( cart ).toCartDTO () );
+            try {
+                cartItemDTO.setCart ( cartService.save ( cart ).toCartDTO () );
+            }catch (Exception e) {
+                throw new DataOutputException ( e.getMessage () );
+            }
 
         } else {
             cartItemDTO.setCart ( cartDTOOptional.get () );
@@ -141,7 +147,12 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemDTO.setPrice ( product.get ().getPrice () );
         cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
 
-        return cartItemRepository.save ( cartItemDTO.toCartItem () );
+
+        try {
+            return cartItemRepository.save ( cartItemDTO.toCartItem () );
+        } catch (Exception e) {
+            throw new RuntimeException (e.getMessage ());
+        }
     }
 
 
@@ -184,5 +195,31 @@ public class CartItemServiceImpl implements CartItemService {
         return null;
     }
 
+    @Override
+    public CartItem doReduce(CartItem cartItem) {
 
+        int currentQuantity = cartItem.getQuantity ();
+
+        cartItem.setQuantity ( currentQuantity - 1 );
+        cartItem.setAmountTransaction ( cartItem.getPrice ().multiply ( BigDecimal.valueOf ( cartItem.getQuantity () ) ) );
+        try {
+            return cartItemRepository.save ( cartItem );
+        } catch (Exception e) {
+            throw new DataInputException ( e.getMessage () );
+        }
+    }
+
+    @Override
+    public CartItem doIncreasing(CartItem cartItem) {
+
+        int currentQuantity = cartItem.getQuantity ();
+
+        cartItem.setQuantity ( currentQuantity + 1 );
+        cartItem.setAmountTransaction ( cartItem.getPrice ().multiply ( BigDecimal.valueOf ( cartItem.getQuantity () ) ) );
+        try {
+            return cartItemRepository.save ( cartItem );
+        } catch (Exception e) {
+            throw new DataInputException ( e.getMessage () );
+        }
+    }
 }

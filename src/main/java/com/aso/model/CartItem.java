@@ -36,8 +36,6 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    private boolean active;
-
     @Column(name = "amount_transaction", precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 

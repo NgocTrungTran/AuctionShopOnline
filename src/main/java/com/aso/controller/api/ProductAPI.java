@@ -238,7 +238,7 @@ public class ProductAPI {
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
-            productDTO.setCreatedBy("Phuoc");
+//            productDTO.setCreatedBy("Phuoc");
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
             if (!productDTO.getAction()) {

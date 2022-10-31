@@ -35,4 +35,7 @@ public interface CartItemService extends IGeneralService<CartItem> {
     CartItem saveInDetail(CartItem cartItem);
 
     CartItem saveOp(CartItem cartItem);
+
+    CartItem doReduce(CartItem cartItem);
+    CartItem doIncreasing(CartItem cartItem);
 }

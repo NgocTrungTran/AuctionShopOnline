@@ -95,19 +95,16 @@ public class CartItemsAPI {
             int currentQuantity = cartItemOptional.get ().getQuantity ();
             boolean checkQuantity = (currentQuantity - 1) < 1;
 
-            CartItem newCartItem = cartItemOptional.get ();
-
             if ( checkQuantity ) {
                 errors.add ( "Số lượng đặt hàng không hợp lệ" );
                 return new ResponseEntity<>( errors, HttpStatus.BAD_REQUEST);
             }
 
-            newCartItem.setQuantity ( currentQuantity - 1 );
-            newCartItem.setAmountTransaction ( newCartItem.getPrice ().multiply ( BigDecimal.valueOf ( newCartItem.getQuantity () ) ) );
-            return new ResponseEntity<>(cartItemService.save ( newCartItem ).toCartItemListDTO () , HttpStatus.ACCEPTED);
+            CartItem newCartItem = cartItemService.doReduce ( cartItemOptional.get () );
+            return new ResponseEntity<>( newCartItem.toCartItemListDTO () , HttpStatus.ACCEPTED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Không thể giảm số lượng sản phẩm", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<> ( e.getMessage (), HttpStatus.BAD_REQUEST );
         }
     }
     @GetMapping("/increasing/{cartItemId}")
@@ -117,7 +114,6 @@ public class CartItemsAPI {
             if ( cartItemOptional.isEmpty () ) {
                 throw new DataOutputException ( "Không tồn tại sản phẩm này trong giỏ hàng" );
             }
-            CartItem newCartItem = cartItemOptional.get ();
 
             Product product = cartItemOptional.get ().getProduct ();
 
@@ -128,9 +124,8 @@ public class CartItemsAPI {
                 return new ResponseEntity<>("Số lượng cần mua không thể lớn hơn số lượng sản phẩm còn lại", HttpStatus.NO_CONTENT);
             }
 
-            newCartItem.setQuantity ( currentQuantity + 1 );
-            newCartItem.setAmountTransaction ( newCartItem.getPrice ().multiply ( BigDecimal.valueOf ( newCartItem.getQuantity () ) ) );
-            return new ResponseEntity<>(cartItemService.save ( newCartItem ).toCartItemListDTO () , HttpStatus.ACCEPTED);
+            CartItem newCartItem = cartItemService.doIncreasing ( cartItemOptional.get () );
+            return new ResponseEntity<>(newCartItem.toCartItemListDTO () , HttpStatus.ACCEPTED);
 
         } catch (Exception e) {
             return new ResponseEntity<>("Không thể giảm số lượng sản phẩm", HttpStatus.NO_CONTENT);
@@ -195,7 +190,7 @@ public class CartItemsAPI {
             CartItem cartItem = cartItemService.doSaveCartItem ( accountId, cartItemsDTO );
             return new ResponseEntity<>(cartItem.toCartItemListDTO (), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new DataInputException("không đủ số lượng sản phẩm để thêm vào giỏ hàng!!");
+            throw new DataInputException("Lỗi không xác định, hãy liên hệ với quản trị viên!!");
         }
     }
 }
