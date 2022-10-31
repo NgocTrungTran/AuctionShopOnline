@@ -22,17 +22,20 @@ public interface CartItemService extends IGeneralService<CartItem> {
 //
 //    void delete(Long cartItem);
 
-    List<CartItemDTO> findCartItemDTOByAccountId(Long accountId);
+    List<CartItemDTO> findCartItemDTOByEmail(String email);
 
     Optional<CartItemDTO> getCartItemDTOById(Long id);
 
     CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO);
 
-    List<CartItemDTO> doRemoveCartItems (Long accountId, List<CartItemDTO> cartItemsDTO);
+    List<CartItemDTO> doRemoveCartItems (String email, List<CartItemDTO> cartItemsDTO);
 
     Optional<CartItemDTO> getCartItemDTOByCode(String userName, String code);
 
     CartItem saveInDetail(CartItem cartItem);
 
     CartItem saveOp(CartItem cartItem);
+
+    CartItem doReduce(CartItem cartItem);
+    CartItem doIncreasing(CartItem cartItem);
 }

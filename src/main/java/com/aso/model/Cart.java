@@ -32,7 +32,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", orphanRemoval = true, targetEntity = CartItem.class, cascade = CascadeType.ALL )
     private List<CartItem> cartItem;
 
     public CartDTO toCartDTO(){

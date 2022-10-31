@@ -3,6 +3,7 @@ package com.aso.service.cartItem;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.*;
 import com.aso.model.dto.CartDTO;
 import com.aso.model.dto.CartItemDTO;
@@ -13,6 +14,8 @@ import com.aso.repository.StatusRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,27 +47,27 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Optional<CartItem> findById(Long id) {
-        return cartItemRepository.findById(id);
+        return cartItemRepository.findById ( id );
     }
 
     @Override
     public Optional<CartItem> findByProductId(Long productId) {
-        return cartItemRepository.findByProductId(productId);
+        return cartItemRepository.findByProductId ( productId );
     }
 
     @Override
     public List<CartItem> findAllByCart(Cart cart) {
-        return cartItemRepository.findAllByCart(cart);
+        return cartItemRepository.findAllByCart ( cart );
     }
 
     @Override
     public BigDecimal getSumAmountByCartId(Long cartId) {
-        return cartItemRepository.getSumAmountByCartId(cartId);
+        return cartItemRepository.getSumAmountByCartId ( cartId );
     }
 
     @Override
     public List<CartItemDTO> findAllCartItemsDTO(Long cartId) {
-        return cartItemRepository.findAllCartItemsDTO(cartId);
+        return cartItemRepository.findAllCartItemsDTO ( cartId );
     }
 
     @Override
@@ -76,14 +79,15 @@ public class CartItemServiceImpl implements CartItemService {
     public void softDelete(CartItem cartItem) {
 
     }
+
     @Override
-    public List<CartItemDTO> findCartItemDTOByAccountId(Long accountId) {
-        return cartItemRepository.findCartItemDTOByAccountId(accountId);
+    public List<CartItemDTO> findCartItemDTOByEmail(String email) {
+        return cartItemRepository.findCartItemDTOByEmail ( email );
     }
 
     @Override
     public CartItem save(CartItem cartItem) {
-        return cartItemRepository.save(cartItem);
+        return cartItemRepository.save ( cartItem );
     }
 
     @Override
@@ -103,7 +107,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Optional<CartItemDTO> getCartItemDTOById(Long id) {
-        return cartItemRepository.getCartItemDTOById(id);
+        return cartItemRepository.getCartItemDTOById ( id );
     }
 
 
@@ -111,17 +115,8 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem doSaveCartItem(Long accountId, CartItemDTO cartItemDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountId );
 
-        if ( accountOptional.isEmpty () ) {
-            throw new AccountInputException ("Tài khoản không tồn tại");
-        }
+        Optional<Product> product = productRepository.findBySlug ( cartItemDTO.getProduct ().getSlug () );
 
-        Optional<Product> product = productRepository.findById(cartItemDTO.getProduct().getId());
-
-        if ( product.isEmpty () ) {
-            throw new DataInputException("Sản phẩm không tồn tại!");
-        } else {
-            cartItemDTO.setProduct ( product.get ().toProductDTO () );
-        }
 
         Optional<CartDTO> cartDTOOptional = cartService.findCartDTOByIdAccountInfo ( accountId );
 
@@ -130,8 +125,11 @@ public class CartItemServiceImpl implements CartItemService {
             StatusDTO status = statusRepository.findStatusDTOById ( 2L );
             cart.setAccount ( accountOptional.get () );
             cart.setStatus ( status.toStatus () );
-
-            cartItemDTO.setCart ( cartService.save ( cart ).toCartDTO () );
+            try {
+                cartItemDTO.setCart ( cartService.save ( cart ).toCartDTO () );
+            }catch (Exception e) {
+                throw new DataOutputException ( e.getMessage () );
+            }
 
         } else {
             cartItemDTO.setCart ( cartDTOOptional.get () );
@@ -144,11 +142,20 @@ public class CartItemServiceImpl implements CartItemService {
         } else {
             cartItemDTO.setPrice ( product.get ().getPrice () );
         }
+
+        cartItemDTO.setProduct ( product.get ().toProductDTO () );
         cartItemDTO.setPrice ( product.get ().getPrice () );
         cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
 
-        return cartItemRepository.save(cartItemDTO.toCartItem ());
+
+        try {
+            return cartItemRepository.save ( cartItemDTO.toCartItem () );
+        } catch (Exception e) {
+            throw new RuntimeException (e.getMessage ());
+        }
     }
+
+
 
     @Override
     public void removeById(CartItem cartItem) {
@@ -156,9 +163,9 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItemDTO> doRemoveCartItems(Long accountId, List<CartItemDTO> cartItemsDTO) {
+    public List<CartItemDTO> doRemoveCartItems(String email, List<CartItemDTO> cartItemsDTO) {
 
-        for (CartItemDTO cartItem: cartItemsDTO) {
+        for (CartItemDTO cartItem : cartItemsDTO) {
             Optional<CartItem> cartItemOptional = cartItemRepository.findById ( cartItem.getId () );
             if ( cartItemOptional.isEmpty () ) {
                 throw new Error ( "Sản phẩm " + cartItem.getTitle () + " không tồn tại trong giỏ hàng." );
@@ -168,13 +175,14 @@ public class CartItemServiceImpl implements CartItemService {
             cartItemRepository.save ( newCartItem );
         }
 
-        return cartItemRepository.findCartItemDTOByAccountId ( accountId );
+        return cartItemRepository.findCartItemDTOByEmail ( email );
     }
 
     @Override
-    public Optional<CartItemDTO> getCartItemDTOByCode(String title , String code) {
+    public Optional<CartItemDTO> getCartItemDTOByCode(String title, String code) {
         return null;
     }
+
     @Override
     public CartItem saveInDetail(CartItem cartItem) {
 //        Optional<CartItemDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());
@@ -187,5 +195,31 @@ public class CartItemServiceImpl implements CartItemService {
         return null;
     }
 
+    @Override
+    public CartItem doReduce(CartItem cartItem) {
 
+        int currentQuantity = cartItem.getQuantity ();
+
+        cartItem.setQuantity ( currentQuantity - 1 );
+        cartItem.setAmountTransaction ( cartItem.getPrice ().multiply ( BigDecimal.valueOf ( cartItem.getQuantity () ) ) );
+        try {
+            return cartItemRepository.save ( cartItem );
+        } catch (Exception e) {
+            throw new DataInputException ( e.getMessage () );
+        }
+    }
+
+    @Override
+    public CartItem doIncreasing(CartItem cartItem) {
+
+        int currentQuantity = cartItem.getQuantity ();
+
+        cartItem.setQuantity ( currentQuantity + 1 );
+        cartItem.setAmountTransaction ( cartItem.getPrice ().multiply ( BigDecimal.valueOf ( cartItem.getQuantity () ) ) );
+        try {
+            return cartItemRepository.save ( cartItem );
+        } catch (Exception e) {
+            throw new DataInputException ( e.getMessage () );
+        }
+    }
 }
