@@ -1,5 +1,6 @@
 package com.aso.service.orderdetail;
 
+import com.aso.model.Chart;
 import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
@@ -122,6 +123,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
         }
 
         return newOrderDetailDTOList;
+    }
+
+    @Override
+    public List<Chart> getListChart(String year) {
+        return orderDetailRepository.getListChart(year);
     }
 
     @Override

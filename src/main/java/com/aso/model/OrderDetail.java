@@ -19,6 +19,24 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "orders_detail")
 @Accessors(chain = true)
+
+@NamedNativeQuery(
+        name = "sp_chart",
+        query =
+                "call sp_chartByMonth(:sYear);",
+        resultSetMapping = "result_chartdto"
+)
+@SqlResultSetMapping(
+        name = "result_chartdto",
+        classes = @ConstructorResult(
+                targetClass = Chart.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "auction", type = BigDecimal.class),
+                        @ColumnResult(name = "buy", type = BigDecimal.class)
+                }
+        )
+)
 public class OrderDetail extends BaseEntity {
 
     @Id

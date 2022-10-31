@@ -1,5 +1,6 @@
 package com.aso.service.orderdetail;
 
+import com.aso.model.Chart;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDetailDTO;
 import com.aso.service.IGeneralService;
@@ -18,4 +19,5 @@ public interface OrderDetailService extends IGeneralService<OrderDetail> {
     List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail( @Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail );
 
     List<OrderDetailDTO> doCreateOrderDetail (Long orderId, List<OrderDetailDTO> orderDetailDTOList);
+    List<Chart> getListChart(String year);
 }
