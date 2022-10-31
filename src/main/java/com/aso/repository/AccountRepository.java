@@ -3,7 +3,6 @@ package com.aso.repository;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
-import com.aso.model.dto.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -242,6 +241,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.locationRegion " +
             ") FROM Account AS a WHERE a.deleted = false ORDER BY a.id DESC")
     Page<AccountDTO> findAllAccounts(Pageable pageable);
-
 
 }

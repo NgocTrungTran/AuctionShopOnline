@@ -1,11 +1,9 @@
 package com.aso.controller.api;
 
-import com.aso.exception.AttributesExistsException;
 import com.aso.exception.DataInputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.JwtResponse;
-import com.aso.model.Role;
 import com.aso.model.dto.AccountDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.gmail.MyConstants;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -73,7 +70,7 @@ public class AuthAPI {
             return new ResponseEntity<>(HttpStatus.CREATED);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DataInputException("Account information is not valid, please check the information again");
+            throw new DataInputException("Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại thông tin!");
         }
     }
 
@@ -112,8 +109,7 @@ public class AuthAPI {
                     .body(jwtResponse);
         } catch (Exception e) {
             e.printStackTrace ();
-            throw new ResourceNotFoundException ( "Đăng nhập thất bại!" );
+            throw new ResourceNotFoundException ( "Tài khoản hoặc mật khẩu không chính xác!" );
         }
     }
-
 }
