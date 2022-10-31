@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/products")
+@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class ProductAPI {
 
     @Autowired
@@ -64,7 +66,6 @@ public class ProductAPI {
     private CategoryService categoryService;
 
     @GetMapping
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProducts() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTO();
 
@@ -333,8 +334,8 @@ public class ProductAPI {
                 Date dt = new Date();
                 Calendar c = Calendar.getInstance();
                 c.setTime(dt);
-//                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
-                c.add(Calendar.MINUTE, 5);
+                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
+//                c.add(Calendar.MINUTE, 5);
                 dt = c.getTime();
                 auction.setAuctionEndTime(dt);
                 auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));

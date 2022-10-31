@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService( accountService ).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -62,10 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 //                .antMatchers("/", "/api/auth/login", "/api/auth/register","/api/accounts/**", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}", "/sendSimpleEmail").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/**").hasAnyAuthority("ADMIN")
-                .antMatchers("/assets/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/", "/api/auth/**", "/assets/**").permitAll()
+                .antMatchers("/api/accounts/**", "/api/auctions/**", "/api/bids/**", "/api/categories/**", "/api/products/**", "/api/productmedia/**", "/api/roles/**", "/api/statistical", "/api/carts/**")
+                .hasAnyAuthority("ADMIN")
+                .antMatchers("/api/carts/**", "/api/cart-items/**", "/api/categories/**", "/api/orders/**", "/api/products/**", "/api/productmedia/**")
+                .hasAnyAuthority("USER")
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")

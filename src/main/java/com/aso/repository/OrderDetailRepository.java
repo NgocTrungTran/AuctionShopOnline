@@ -1,5 +1,6 @@
 package com.aso.repository;
 
+import com.aso.model.Chart;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDetailDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,4 +60,12 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "AND o.status = :statusOrderDetail " +
             "")
     List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(@Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
+
+    @Query(name="sp_chart", nativeQuery = true)
+    List<Chart> getListChart( @Param("sYear") String year);
+
+    //List<StockAkhirDto> findStockAkhirPerProductIn(
+    //      @Param("warehouseCode") String warehouseCode,
+    //      @Param("productCodes") Set<String> productCode
+    //   );
 }
