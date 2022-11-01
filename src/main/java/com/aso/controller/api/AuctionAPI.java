@@ -82,6 +82,7 @@ public class AuctionAPI {
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
     }
 
+
     @GetMapping("/auction/{productId}")
     public ResponseEntity<?> getAuctionByProductId(@PathVariable Long productId) {
         Optional<AuctionDTO> auctionDTO = auctionService.findByAuctionByProductId(productId);
