@@ -1,15 +1,22 @@
 package com.aso.controller.api;
 
+import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.model.Account;
 import com.aso.model.Product;
+import com.aso.model.dto.CartItemDTO;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
+import com.aso.service.account.AccountService;
 import com.aso.service.order.OrderService;
 import com.aso.service.orderdetail.OrderDetailService;
 import com.aso.service.product.ProductService;
+import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,13 +29,33 @@ public class OrderDetailAPI {
     @Autowired
     private OrderDetailService orderDetailService;
     @Autowired
+    private AccountService accountService;
+    @Autowired
     private OrderService orderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private AppUtil appUtil;
+
+    @GetMapping("/{email}")
+    // đã test ok
+    public ResponseEntity<?> getOrderByAccountEmail(@PathVariable String email) {
+        try {
+            Optional<Account> accountOptional = accountService.getByEmail ( email );
+            if ( accountOptional.isEmpty () ) {
+                throw new AccountInputException ( "Tài khoản không tồn tại!" );
+            }
+            List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findAllOrderDetailByAccountEmail (email);
+            return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("Không lấy được danh sách sản phảm trong giỏ hàng");
+        }
+    }
 
     @PostMapping("/create/{orderId}")
-    public ResponseEntity<?> createOrderDetail(@PathVariable("orderId") Long orderId, @RequestBody List<OrderDetailDTO> orderDetailDTOList) {
+    public ResponseEntity<?> createOrderDetail(@PathVariable("orderId") Long orderId, @Validated @RequestBody List<OrderDetailDTO> orderDetailDTOList) {
         try {
+
            OrderDTO orderDTO = orderService.findOrderDTOById ( orderId );
             if (orderDTO == null) {
                 throw new RuntimeException ("Đơn hàng không tồn tại");

@@ -60,7 +60,7 @@ public class OrderDetail extends BaseEntity {
     @Column(precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Status status;
 

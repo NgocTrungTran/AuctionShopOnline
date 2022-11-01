@@ -40,7 +40,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/products")
-@PreAuthorize("hasAnyAuthority('ADMIN')")
+//@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class ProductAPI {
 
     @Autowired

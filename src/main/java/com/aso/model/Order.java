@@ -42,7 +42,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
     private Status status;
 

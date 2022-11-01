@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,14 +26,14 @@ public class Status {
 
     private String name;
 
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart;
+    @OneToMany(mappedBy = "status")
+    private List<Cart> carts;
 
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Order order;
+    @OneToMany(mappedBy = "status")
+    private List<Order> orders;
 
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
-    private OrderDetail orderDetail;
+    @OneToMany(mappedBy = "status")
+    private List<OrderDetail> orderDetails;
 
     public StatusDTO toStatusDTO() {
         return new StatusDTO ()
