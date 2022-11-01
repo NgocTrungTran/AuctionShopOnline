@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -23,15 +25,16 @@ public class OrderDTO {
 
     private Long id;
 
-    @NotNull
+    @NotEmpty(message = "Hãy nhập họ và tên")
     private String fullName;
-    @NotNull
+    @NotEmpty(message = "Hãy nhập số điện thoại")
+    @Pattern ( regexp = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", message = "Số điện thoại không đúng")
     private String phone;
-    @NotNull
+    @NotEmpty(message = "Hãy nhập email")
+    @Pattern ( regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email không hợp lệ")
     private String email;
     private LocationRegionDTO locationRegion;
     private String description;
-
     private AccountDTO account;
     private StatusDTO status;
 

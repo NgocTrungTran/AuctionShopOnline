@@ -64,12 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 //                .antMatchers("/", "/api/auth/login", "/api/auth/register","/api/accounts/**", "/api/accounts/send-email", "/client/create", "/login", "/api/users/{username}", "/sendSimpleEmail").permitAll()
-                .antMatchers("/api/**", "/api/auth/**", "/assets/**").permitAll()
-//                .antMatchers("/api/accounts/**", "/api/auctions/**", "/api/bids/**", "/api/categories/**", "/api/products/**", "/api/productmedia/**", "/api/roles/**", "/api/statistical", "/api/carts/**")
-//                .hasAnyAuthority("ADMIN")
-//                .antMatchers("/api/carts/**", "/api/cart-items/**", "/api/categories/**", "/api/orders/**", "/api/products/**", "/api/productmedia/**")
-//                .hasAnyAuthority("USER")
-                .and()
+                .antMatchers("/api/**", "/api/auth/**", "/assets/**").permitAll();
+//                .antMatchers("/api/accounts/**", "/api/auctions/**", "/api/bids/**", "/api/categories/**", "/api/products/**", "/api/productmedia/**", "/api/roles/**", "/api/statistical", "/api/carts/**").hasAnyAuthority("ADMIN")
+//                .antMatchers("/api/carts/**", "/api/cart-items/**", "/api/categories/**", "/api/orders/**", "/api/products/**", "/api/productmedia/**").hasAnyAuthority("USER")
+//                .and()
 //                .formLogin()
 //                .loginProcessingUrl("/login")
 //                .loginPage("/login")
@@ -83,8 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .deleteCookies("JWT")
 //                .invalidateHttpSession(true)
 //                .and()
-                .csrf().disable();
-
+//                .csrf().disable();
+//
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
 
