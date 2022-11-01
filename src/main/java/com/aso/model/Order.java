@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -25,25 +26,40 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String fullName;
+
+    private String phone;
+
+    private String email;
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
     private String description;
 
-    private String statusOrder;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "orderDetail_id")
-    private OrderDetail orderDetail;
+    @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
+    private Status status;
+
+    @OneToMany(mappedBy = "order", targetEntity = OrderDetail.class, fetch = FetchType.EAGER)
+    private Set<OrderDetail> orderDetail;
 
     public OrderDTO toOrderDTO() {
         return new OrderDTO()
                 .setId(id)
-                .setDescription(description)
-                .setStatusOrder(statusOrder)
+                .setFullName ( fullName )
+                .setPhone ( phone )
+                .setEmail ( email )
                 .setLocationRegion(locationRegion.toLocationRegionDTO())
-                .setOrderDetail(orderDetail.toOrderDetailDTO())
+                .setDescription(description)
+                .setAccount ( account.toAccountDTO () )
+                .setStatus (status.toStatusDTO ())
+                .setCreatedBy ( getCreatedBy () )
                 ;
     }
 }

@@ -3,11 +3,18 @@ package com.aso.controller.api;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
+import com.aso.model.Auction;
+import com.aso.model.Bid;
 import com.aso.model.Product;
 import com.aso.model.ProductMedia;
-import com.aso.model.dto.ProductDTO;
-import com.aso.model.dto.ProductMediaDTO;
+import com.aso.model.dto.*;
+import com.aso.model.enums.AuctionType;
+import com.aso.model.enums.ItemStatus;
+import com.aso.repository.AuctionRepository;
 import com.aso.repository.ProductRepository;
+import com.aso.service.account.AccountService;
+import com.aso.service.auction.AuctionService;
+import com.aso.service.bid.BidService;
 import com.aso.service.category.CategoryService;
 import com.aso.service.product.ProductService;
 
@@ -21,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +40,11 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/products")
+//@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class ProductAPI {
+
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private ProductService productService;
 
@@ -40,8 +52,7 @@ public class ProductAPI {
     private ProductMediaService productMediaService;
 
     @Autowired
-    private ProductRepository productRepository;
-
+    private AuctionService auctionService;
     @Autowired
     private Validation validation;
 
@@ -49,15 +60,50 @@ public class ProductAPI {
     private AppUtil appUtil;
 
     @Autowired
+    private BidService bidService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @GetMapping
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProducts() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTO();
 
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    @GetMapping("/auctions")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsAuctions() {
+        List<ProductDTO> productDTOList = productService.findAllProductsDTOAuctions ();
+
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    @GetMapping("/the-shops")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsTheShop() {
+        List<ProductDTO> productDTOList = productService.findAllProductsDTOTheShop ();
+
+        if (productDTOList.isEmpty()) {
+            throw new DataOutputException("No data");
+        }
+
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+    @GetMapping("/moderation")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllProductsModeration() {
+        List<ProductListDTO> productDTOList = productService.findAllProductListDTOModeration();
+
+        if (productDTOList.isEmpty()) {
+            return new ResponseEntity<>(productDTOList, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
@@ -136,8 +182,20 @@ public class ProductAPI {
 
         Optional<Product> productOptional = productService.findById(product_id);
 
-        if (!productOptional.isPresent()) {
+        if ( productOptional.isEmpty () ) {
             throw new ResourceNotFoundException("Product invalid");
+        }
+
+        return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
+    }
+    @GetMapping("/find-by-slug/{slug}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getProductBySlug(@PathVariable String slug) {
+
+        Optional<Product> productOptional = productService.findBySlug (slug);
+
+        if ( productOptional.isEmpty () ) {
+            throw new ResourceNotFoundException("Sản phẩm không tồn tại");
         }
 
         return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
@@ -181,8 +239,12 @@ public class ProductAPI {
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
+//            productDTO.setCreatedBy("Phuoc");
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
+            if (!productDTO.getAction()) {
+                productDTO.setCountday(null);
+            }
             // Note: thêm category vô đây
             Product newProduct = productService.save(productDTO.toProduct());
             for (String p: productDTO.getImages()) {
@@ -221,6 +283,10 @@ public class ProductAPI {
             p.get().setTitle(productDTO.getTitle());
             p.get().setCategory(productDTO.toProduct().getCategory());
             p.get().setDescription(productDTO.getDescription());
+            p.get().setCountday(productDTO.getCountday());
+            if (productDTO.getAction()) {
+                p.get().setCountday(null);
+            }
 
             for (String pr: productDTO.getImages()) {
                 ProductMedia productMedia = new ProductMedia();
@@ -229,37 +295,61 @@ public class ProductAPI {
                 productMediaService.save(productMedia);
             }
 
-//            productDTO.setCreatedAt(p.get().getCreatedAt());
-//            productDTO.setCreatedBy(p.get().getCreatedBy());
-//            productDTO.setUpdateAt(new Date());
-//            productDTO.setUpdateBy(p.get().getUpdatedBy());
-//            productDTO.setSold(p.get().getSold());
-//            productDTO.setSlug(slug);
-//            productDTO.setViewed(p.get().getViewed());
-
-//            Product product = new Product();
-//            product.setId(id);
-//            product.setCreatedAt(p.get().getCreatedAt());
-//            product.setCreatedBy(p.get().getCreatedBy());
-//            product.setUpdatedAt(new Date());
-//            product.setTs(p.get().getTs());
-//            product.setDeleted(p.get().isDeleted());
-//            product.setAction(productDTO.getAction());
-//            product.setAvailable(productDTO.getAvailable());
-//            product.setImage(productDTO.getImage());
-//            product.setModeration(p.get().getModeration());
-//            product.setPrice(productDTO.getPrice());
-//            product.setSlug(slug);
-//            product.setSold(0L);
-//            product.setTitle(productDTO.getTitle());
-//            product.setViewed(0L);
-//            product.setCategory(productDTO.getCategory().toCategory());
-//            product.setDescription(productDTO.getDescription());
-
             Product newProduct = productService.save(p.get());
 
             return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
 
+        } catch (Exception e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/moderation/{id}")
+    public ResponseEntity<?> doModeration(@PathVariable Long id) {
+        Optional<Product> p = productService.findById(id);
+        if (!p.isPresent()) {
+            return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
+        }
+        try {
+            p.get().setModeration(true);
+            p.get().setCreatedBy("Phuoc");
+            Product newProduct = productService.save(p.get());
+
+            // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
+
+            AccountDTO accountDTO = accountService.findAccountByUsername(newProduct.getCreatedBy());
+            if (p.get().getAction()) {
+                AuctionDTO auction = new AuctionDTO();
+                auction.setId(0L);
+                auction.setEmail(accountDTO.getEmail());
+                auction.setCreatedAt(new Date());
+                auction.setCreatedBy(accountDTO.getUsername());
+                auction.setAccount(accountDTO);
+                auction.setProduct(p.get().toProductDTO());
+                auction.setAuctionType(AuctionType.BIDDING);
+                auction.setItemStatus(ItemStatus.NEW);
+                auction.setStartingPrice(p.get().getPrice());
+                auction.setCurrentPrice(p.get().getPrice());
+                auction.setAuctionStartTime(new Date());
+                Date dt = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(dt);
+                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
+//                c.add(Calendar.MINUTE, 5);
+                dt = c.getTime();
+                auction.setAuctionEndTime(dt);
+                auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));
+                Auction auc = auctionService.createAuction(auction);
+                Bid bid = new Bid();
+                bid.setCreatedBy(accountDTO.getUsername());
+                bid.setAccount(accountDTO.toAccount());
+                bid.setAuction(auc);
+                bid.setBidPrice(p.get().getPrice());
+                bid.setEmail(accountDTO.getEmail());
+                bid.setEstimatePrice(p.get().getEstimatePrice());
+                bidService.save(bid);
+            }
+            return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -310,7 +400,7 @@ public class ProductAPI {
 
         Optional<Product> product = productService.findProductBySlug(slug);
 
-        if (!product.isPresent()) {
+        if ( product.isEmpty () ) {
             throw new DataInputException("Invalid product id");
         }
 
@@ -326,16 +416,6 @@ public class ProductAPI {
         } catch (Exception e) {
             return new ResponseEntity<>("Server không xử lý được", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @GetMapping("/product/slug/{slug}")
-    public ResponseEntity<?> findProductBySlug(@PathVariable String slug) {
-        Optional<ProductDTO> productDTOOptional = productService.findProductDTOBySlug(slug);
-        if (!productDTOOptional.isPresent()) {
-            throw new DataInputException("Product is not found");
-        }
-
-        return new ResponseEntity<>(productDTOOptional.get(), HttpStatus.OK);
     }
 
     @GetMapping("/product-status-available")

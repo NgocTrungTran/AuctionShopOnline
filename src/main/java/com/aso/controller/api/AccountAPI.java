@@ -72,7 +72,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
 
-        if (!accountOptional.isPresent()) {
+        if (accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account invalid");
         }
 
@@ -89,7 +89,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> productOptional = accountService.findAccountByIdDTO(account_id);
 
-        if (!productOptional.isPresent()) {
+        if (productOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account invalid");
         }
 
@@ -118,15 +118,13 @@ public class AccountAPI {
 
         Optional<Role> optionalRole = roleService.findById ( accountDTO.getRole ().getId () );
 
-        if ( !optionalRole.isPresent () ) {
+        if (optionalRole.isEmpty()) {
             bindingResult.addError ( new FieldError ( "role", "role", " Chức năng Role không hợp lệ ! " ) );
         }
 
         try {
-
             Account newAccount = accountService.doCreate ( accountDTO );
             return new ResponseEntity<> ( newAccount.toAccountDTO (), HttpStatus.CREATED );
-
         } catch (DataIntegrityViolationException e) {
             throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
         } catch (Exception e) {
@@ -165,7 +163,7 @@ public class AccountAPI {
             accountOption.setRole(accountDTO.getRole().toRole());
 
             Account updatedAccount = accountService.save( accountOption );
-            LocationRegion locationRegion = accountDTO.getLocationregion().toLocationRegion();
+            LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion();
             locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
 
@@ -242,5 +240,16 @@ public class AccountAPI {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/getAccountEmail/{email}")
+    public ResponseEntity<?> getAccountByEmail(@PathVariable String email) {
+
+        Optional<AccountDTO> accountOptional = accountService.findUserDTOByEmail(email);
+
+        if (accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account invalid");
+        }
+        return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
     }
 }

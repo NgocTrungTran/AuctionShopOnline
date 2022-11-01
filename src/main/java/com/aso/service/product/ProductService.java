@@ -16,9 +16,13 @@ import java.util.Optional;
 public interface ProductService extends IGeneralService<Product> {
 
     List<ProductListDTO> findAllProductListDTO();
+    List<ProductListDTO> findAllProductListDTOModeration();
 
     List<ProductDTO> findAllProductsDTO();
 
+    List<ProductDTO> findAllProductsDTOAuctions();
+
+    List<ProductDTO> findAllProductsDTOTheShop();
     List<ProductDTO> findAllProductsDTOTrash();
 
     Boolean existsByTitle(String title);
@@ -30,10 +34,14 @@ public interface ProductService extends IGeneralService<Product> {
 
     Optional<ProductDTO> findProductDTOBySlug (String slug);
 
+    Optional<Product> findBySlug(String slug);
+
+
     Optional<Product> findProductBySlug(String slug);
     List<ProductDTO> findAllProductDTOByAvailable(String available);
 
     Page<ProductDTO> findAllProducts(Pageable pageable);
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
     ResponseEntity<Page<ProductDTO>> findAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    List<ProductDTO> isSlug();
 }

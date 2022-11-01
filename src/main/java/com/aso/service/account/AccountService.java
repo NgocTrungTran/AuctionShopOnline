@@ -38,10 +38,12 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     Optional<Account> findByUsername(String username);
 
     Optional<AccountDTO> findUserDTOByUsername(String username);
+    Optional<AccountDTO> findUserDTOByEmail(String email);
     Optional<AccountDTO> findUserDTOById(Long id);
 
 
     Optional<Account> getByUsername(String username);
+    Optional<Account> getByEmail(String email);
 
     Account create(AccountDTO newAccount);
 
@@ -55,10 +57,12 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     void deleteData(Long userId);
 
     Account doCreate(AccountDTO accountDTO);
+    Account doRegister(AccountDTO accountDTO);
 
     List<AccountDTO> findAccountDTOAll();
     Optional<AccountDTO> findAccountByIdDTO(Long id);
     Page<AccountDTO> findAllAccounts(Pageable pageable);
     Page<AccountDTO> findAllAccountss(Pageable pageable, @Param("keyword") String keyword);
 
+    AccountDTO findAccountByUsername(String createBy);
 }

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
-
+@Builder
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor
@@ -46,36 +46,31 @@ public class Account extends BaseEntity{
     @JoinColumn(name = "location_region_id", referencedColumnName = "id")
     private LocationRegion locationRegion;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account")
     private List<Cart> cart;
+
+    @OneToMany(mappedBy = "account")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "account")
+    private List<Auction> auctions;
+
+    @OneToMany(mappedBy = "account")
+    private List<Bid> bids;
+
+    @OneToMany(mappedBy = "account")
+    private List<WatchList> watchLists;
 
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
                 .setId(id)
                 .setUsername ( username )
                 .setFullName ( fullName )
-                .setLocationregion( locationRegion.toLocationRegionDTO ())
+                .setLocationRegion( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )
                 .setBlocked ( blocked )
                 .setRole(role.toRoleDTO());
     }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", blocked=" + blocked +
-                ", avatar='" + avatar + '\'' +
-                ", role=" + role +
-                ", locationRegion=" + locationRegion +
-                '}';
-    }
-
 }

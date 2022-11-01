@@ -15,17 +15,17 @@ public class AccountPrinciple implements UserDetails {
 
     private final Long id;
 
-    private final String username;
+    private final String email;
 
     private final String password;
 
     private final Collection<? extends GrantedAuthority> roles;
 
     public AccountPrinciple(Long id,
-                         String username, String password,
-                         Collection<? extends GrantedAuthority> roles) {
+                            String email, String password,
+                            Collection<? extends GrantedAuthority> roles) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
@@ -37,7 +37,7 @@ public class AccountPrinciple implements UserDetails {
 
         return new AccountPrinciple(
                 account.getId(),
-                account.getUsername(),
+                account.getEmail(),
                 account.getPassword(),
                 authorities
         );
@@ -49,7 +49,7 @@ public class AccountPrinciple implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

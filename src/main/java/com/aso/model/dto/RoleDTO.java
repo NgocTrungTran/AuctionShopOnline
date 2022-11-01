@@ -39,6 +39,5 @@ public class RoleDTO {
                 .setCode ( code )
                 .setName ( name );
     }
-
 }
 

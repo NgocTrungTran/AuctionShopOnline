@@ -17,8 +17,9 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     Boolean existsByCreatedBy(String createdBy);
     @Query("SELECT NEW com.aso.model.dto.CartDTO (" +
             "c.id, " +
+            "c.status, " +
             "c.account " +
             " )  " +
-            "FROM Cart c  WHERE c.account.id = ?1 AND c.status = 'Chưa thanh toán' ")
+            "FROM Cart c  WHERE c.account.id = ?1 AND c.status.id = 2 ")
     Optional<CartDTO> findCartDTOByIdAccountInfo(Long accountId);
 }

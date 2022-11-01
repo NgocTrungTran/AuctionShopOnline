@@ -3,6 +3,7 @@ package com.aso.model.dto;
 import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
+import com.aso.model.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -21,13 +23,13 @@ import java.util.Date;
 @Accessors(chain = true)
 public class OrderDetailDTO {
     private Long id;
-    private Order order;
-    private Product product;
+    private OrderDTO order;
+    private ProductDTO product;
     private BigDecimal price;
     private int quantity;
     private BigDecimal amountTransaction;
 
-    private String statusOrderDetail;
+    private StatusDTO status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Date createdAt;
@@ -35,15 +37,27 @@ public class OrderDetailDTO {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Date updatedAt;
 
+    public OrderDetailDTO(Long id, Order order, Product product, BigDecimal price, int quantity, BigDecimal amountTransaction, Status status, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.order = order.toOrderDTO ();
+        this.product = product.toProductDTO ();
+        this.price = price;
+        this.quantity = quantity;
+        this.amountTransaction = amountTransaction;
+        this.status = status.toStatusDTO ();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public OrderDetail toOrderDetail(){
         return new OrderDetail()
                 .setId(id)
-                .setOrder(order)
-                .setProduct(product)
+                .setOrder(order.toOrder ())
+                .setProduct(product.toProduct ())
                 .setPrice(price)
                 .setQuantity(quantity)
                 .setAmountTransaction(amountTransaction)
-                .setStatusOrderDetail(statusOrderDetail)
+                .setStatus (status.toStatus ())
                 ;
     }
 }

@@ -1,5 +1,6 @@
 package com.aso.repository;
 
+import com.aso.model.Chart;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDetailDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,19 @@ import java.util.List;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
+    @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
+            "od.id," +
+            "od.order," +
+            "od.product," +
+            "od.price," +
+            "od.quantity," +
+            "od.amountTransaction," +
+            "od.status,  " +
+            "od.createdAt ," +
+            "od.updatedAt " +
+            ") " +
+            "FROM OrderDetail od WHERE od.order.account.email = ?1 AND od.deleted = false ")
+    List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email);
 
     @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
             "od.id," +
@@ -19,7 +33,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "od.price," +
             "od.quantity," +
             "od.amountTransaction," +
-            "od.statusOrderDetail,  " +
+            "od.status,  " +
             "od.createdAt ," +
             "od.updatedAt " +
             ") " +
@@ -33,14 +47,14 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "o.price," +
             "o.quantity," +
             "o.amountTransaction," +
-            "o.statusOrderDetail,  " +
+            "o.status,  " +
             "o.createdAt ," +
             "o.updatedAt " +
             ")  " +
             "FROM OrderDetail o " +
             "WHERE FUNCTION('MONTH', o.createdAt) = :createMonth " +
             "AND FUNCTION('YEAR', o.createdAt) = :createYear " +
-            "AND o.statusOrderDetail = :statusOrderDetail " +
+            "AND o.status = :statusOrderDetail " +
              "")
     List<OrderDetailDTO> findOderByCreateMonthYearAndStatusOrderDetail(@Param("createMonth") int createMonth, @Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
     @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
@@ -50,13 +64,21 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "o.price," +
             "o.quantity," +
             "o.amountTransaction," +
-            "o.statusOrderDetail,  " +
+            "o.status,  " +
             "o.createdAt ," +
             "o.updatedAt " +
             ")  " +
             "FROM OrderDetail o " +
             "WHERE FUNCTION('YEAR', o.createdAt) = :createYear " +
-            "AND o.statusOrderDetail = :statusOrderDetail " +
+            "AND o.status = :statusOrderDetail " +
             "")
     List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(@Param("createYear") int createYear, @Param("statusOrderDetail") String statusOrderDetail);
+
+    @Query(name="sp_chart", nativeQuery = true)
+    List<Chart> getListChart( @Param("sYear") String year);
+
+    //List<StockAkhirDto> findStockAkhirPerProductIn(
+    //      @Param("warehouseCode") String warehouseCode,
+    //      @Param("productCodes") Set<String> productCode
+    //   );
 }

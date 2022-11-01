@@ -1,17 +1,21 @@
 package com.aso.controller.api;
 
 
+import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
+import com.aso.model.dto.StatusDTO;
 import com.aso.repository.CartRepository;
 import com.aso.service.order.OrderService;
 import com.aso.service.orderdetail.OrderDetailService;
+import com.aso.service.status.StatusService;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -22,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderAPI {
     @Autowired
     private AppUtil appUtils;
@@ -31,10 +35,9 @@ public class OrderAPI {
     private OrderService orderService;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
     private OrderDetailService orderDetailService;
+    @Autowired
+    private StatusService statusService;
 
     @GetMapping()
     // ok
@@ -47,11 +50,9 @@ public class OrderAPI {
     }
     @GetMapping("/{id}")
     // ok
-    public ResponseEntity<?> findOrderByUserName(@PathVariable String id) {
-        List<OrderDTO> orderList = orderService.findOrderDTOById(id);
-        if (orderList.isEmpty()){
-            throw new RuntimeException("Không tìm thấy order");
-        }
+    public ResponseEntity<?> findOrderByUserName(@PathVariable Long id) {
+        OrderDTO orderList = orderService.findOrderDTOById(id);
+
         return new ResponseEntity<>(orderList,HttpStatus.OK);
     }
 
@@ -59,7 +60,7 @@ public class OrderAPI {
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> findAllOrderDetailById(@PathVariable Long id){
         Optional<OrderDetail> orderDetailDTOS = orderDetailService.findById(id);
-        if (!orderDetailDTOS.isPresent()){
+        if ( orderDetailDTOS.isEmpty () ){
             throw new RuntimeException("Không tìm thấy order");
         }
         return new ResponseEntity<>(orderDetailDTOS.get().toOrderDetailDTO(),HttpStatus.OK);
@@ -145,17 +146,37 @@ public class OrderAPI {
 
     }
 
-    @PostMapping("/create-order-dashboard")
-    public ResponseEntity<?> doCreateOrderInDashBoard(@RequestBody OrderDTO orderDTO, BindingResult bindingResult) throws MessagingException, UnsupportedEncodingException {
+    @PostMapping("/checkout/{accountId}")
+    public ResponseEntity<?> doCreateOrderClient(@PathVariable Long accountId,
+                                                      @Validated @RequestBody OrderDTO orderDTO,
+                                                      BindingResult bindingResult
+    ) throws MessagingException, UnsupportedEncodingException {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         try {
-            orderService.save(orderDTO.toOrder());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            OrderDTO newOrderDTO = orderService.doCheckoutOrder ( accountId, orderDTO );
+            return new ResponseEntity<>(newOrderDTO, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Lỗi không xác định",HttpStatus.NO_CONTENT);
         }
     }
+    @PutMapping("/remove-order/{orderId}")
+    public ResponseEntity<?> doRemoveOrder(@PathVariable Long orderId) {
+        try {
+            Optional<Order> orderOptional = orderService.findById ( orderId );
+            if ( orderOptional.isEmpty () ) {
+                throw new RuntimeException ("Đơn hàng không tồn tại");
+            }
+            orderService.doRemoveOrder ( orderId );
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Lỗi không xác định",HttpStatus.NO_CONTENT);
+        }
+    }
+
+
+
+
 }

@@ -22,4 +22,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             "r.name " +
             ") FROM Role AS r")
     List<RoleDTO> findAllRoles();
+
 }

@@ -1,14 +1,18 @@
 package com.aso.service.orderdetail;
 
+import com.aso.model.Chart;
+import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
+import com.aso.model.dto.StatusDTO;
 import com.aso.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +35,8 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private StatusRepository statusRepository;
 
 
     @Override
@@ -48,6 +53,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     @Override
     public Optional<OrderDetail> findById(Long id) {
         return orderDetailRepository.findById(id);
+    }
+
+    @Override
+    public void removeById(OrderDetail orderDetail) {
+        orderDetailRepository.save ( orderDetail );
     }
 
     @Override
@@ -72,6 +82,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
 
     @Override
+    public List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email) {
+        return orderDetailRepository.findAllOrderDetailByAccountEmail ( email );
+    }
+
+    @Override
     public List<OrderDetailDTO> findAllOrderDetailById(String id) {
         return orderDetailRepository.findAllOrderDetailId(id);
     }
@@ -85,24 +100,61 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     public List<OrderDetailDTO> findOderByCreateYearAndStatusOrderDetail(int createYear, String statusOrderDetail) {
         return orderDetailRepository.findOderByCreateYearAndStatusOrderDetail(createYear,statusOrderDetail);
     }
+
+    @Override
+    public List<OrderDetailDTO> doCreateOrderDetail(Long orderId, List<OrderDetailDTO> orderDetailDTOList) {
+        List<OrderDetailDTO> newOrderDetailDTOList = new ArrayList<> ();
+        for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
+            Optional<Order> orderOptional = orderRepository.findById ( orderId );
+            Optional<Product> productOptional = productRepository.findById ( orderDetailDTO.getProduct ().getId () );
+            Long currentAvailable = productOptional.get ().getAvailable ();
+            long newAvailable = currentAvailable - orderDetailDTO.getQuantity ();
+
+            productOptional.get ().setAvailable ( newAvailable );
+            StatusDTO status = statusRepository.findStatusDTOById ( 8L );
+
+            orderDetailDTO.setOrder (orderOptional.get ().toOrderDTO ());
+            orderDetailDTO.setProduct (productOptional.get ().toProductDTO () );
+            orderDetailDTO.setStatus ( status );
+
+            OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
+
+            orderOptional.get ().setStatus ( status.toStatus () );
+
+           OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+           orderRepository.save ( orderOptional.get () );
+           productRepository.save ( productOptional.get () );
+           newOrderDetailDTOList.add ( newOrderDetail.toOrderDetailDTO () );
+        }
+
+        return newOrderDetailDTOList;
+    }
+
+    @Override
+    public List<Chart> getListChart(String year) {
+        return orderDetailRepository.getListChart(year);
+    }
+
     @Override
     public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
-        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
-        for (OrderDTO orderDTO : orderList){
-            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
-            orderRepository.save(orderDTO.toOrder());
-        }
-        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
-        return orderDetailRepository.save(orderDetail);
+//        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+//        for (OrderDTO orderDTO : orderList){
+//            orderDTO.setStatusOrder("Đơn hàng đã duyệt");
+//            orderRepository.save(orderDTO.toOrder());
+//        }
+//        orderDetail.setStatusOrderDetail("Đơn hàng đã duyệt");
+//        return orderDetailRepository.save(orderDetail);
+        return null;
     }
     public OrderDetail deliveryOrder(OrderDetail orderDetail, String Title) {
-        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
-        for (OrderDTO orderDTO : orderList){
-            orderDTO.setStatusOrder("Đang giao hàng");
-            orderRepository.save(orderDTO.toOrder());
-        }
-        orderDetail.setStatusOrderDetail("Đang giao hàng");
-        return orderDetailRepository.save(orderDetail);
+//        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
+//        for (OrderDTO orderDTO : orderList){
+//            orderDTO.setStatusOrder("Đang giao hàng");
+//            orderRepository.save(orderDTO.toOrder());
+//        }
+//        orderDetail.setStatusOrderDetail("Đang giao hàng");
+//        return orderDetailRepository.save(orderDetail);
+        return null;
     }
 
 }

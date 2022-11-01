@@ -1,6 +1,7 @@
 package com.aso.controller.api;
 
 
+import com.aso.exception.DataInputException;
 import com.aso.model.Account;
 import com.aso.model.Cart;
 import com.aso.model.dto.CartDTO;
@@ -29,9 +30,14 @@ public class CartAPI {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCartByUserName(@PathVariable Long id){
-        return new ResponseEntity<>(cartService.findCartDTOByIdAccountInfo(id).get().toCart(),HttpStatus.OK);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<?> getCartByUserName(@PathVariable Long accountId){
+        Optional<CartDTO> cartDTO = cartService.findCartDTOByIdAccountInfo ( accountId );
+        if ( cartDTO.isEmpty () ) {
+            throw new DataInputException ( "Không tồn tại giỏ hàng!" );
+        }
+
+        return new ResponseEntity<>(cartDTO.get().toCart (),HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -42,13 +48,26 @@ public class CartAPI {
 
         Optional<Account> accountOptional = accountService.findById ( cartDTO.getAccount ().getId () );
 
-        if ( !accountOptional.isPresent () ) {
+        if ( accountOptional.isEmpty () ) {
             return new ResponseEntity<>("Tài khoản không tồn tại",HttpStatus.NO_CONTENT);
         }
 
         try {
             cartDTO.setAccount ( accountOptional.get ().toAccountDTO () );
             cartService.save(cartDTO.toCart());
+            return new ResponseEntity<>("Tạo giỏ hàng thành công", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("không thể tạo được đơn hàng",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/remove")
+    public ResponseEntity<?> doRemove(Long accountId) {
+
+
+
+        try {
+
             return new ResponseEntity<>("Tạo giỏ hàng thành công", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("không thể tạo được đơn hàng",HttpStatus.BAD_REQUEST);

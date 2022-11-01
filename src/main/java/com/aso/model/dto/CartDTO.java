@@ -17,20 +17,21 @@ public class CartDTO {
 
     private Long id;
 
-    private String status;
+    private StatusDTO status;
 
     private AccountDTO account;
 
 
-    public CartDTO(Long id, Account account){
+    public CartDTO(Long id, Status status, Account account){
         this.id = id;
+        this.status = status.toStatusDTO ();
         this.account = account.toAccountDTO();
     }
 
     public Cart toCart() {
         return new Cart()
                 .setId(id)
-                .setStatus ( status )
+                .setStatus ( status.toStatus () )
                 .setAccount(account.toAccount())
                ;
     }

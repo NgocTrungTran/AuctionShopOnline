@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,16 +17,17 @@ public class StatisticalAPI {
     @Autowired
     private OrderDetailService orderDetailService;
 
-// Số liệu thống kê đơn hàng đã giao tháng .../ năm ...
+    // Số liệu thống kê đơn hàng đã giao tháng .../ năm ...
     @GetMapping("/statistical-by-month-year/{month}/{year}")
     public ResponseEntity<?> getStatisticalByMonthYear(@PathVariable int month, @PathVariable int year, @Param("statusOrderDetail") String statusOrderDetail) {
-        List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateMonthYearAndStatusOrderDetail(month, year,"Đơn hàng đã giao thành công!");
+        List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateMonthYearAndStatusOrderDetail(month, year, "Đơn hàng đã giao thành công!");
         return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
     }
-//  Số liệu thống kê của năm
-@GetMapping("/statistical-by-month-year/{year}")
-public ResponseEntity<?> getStatisticalByYear(@PathVariable int year, @Param("statusOrderDetail") String statusOrderDetail) {
-    List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateYearAndStatusOrderDetail(year,"Đơn hàng đã giao thành công!");
-    return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
-}
+
+    //  Số liệu thống kê của năm
+    @GetMapping("/statistical-by-month-year/{year}")
+    public ResponseEntity<?> getStatisticalByYear(@PathVariable int year, @Param("statusOrderDetail") String statusOrderDetail) {
+        List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findOderByCreateYearAndStatusOrderDetail(year, "Đơn hàng đã giao thành công!");
+        return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
+    }
 }

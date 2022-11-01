@@ -17,8 +17,26 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "order_items")
+@Table(name = "orders_detail")
 @Accessors(chain = true)
+
+@NamedNativeQuery(
+        name = "sp_chart",
+        query =
+                "call sp_chartByMonth(:sYear);",
+        resultSetMapping = "result_chartdto"
+)
+@SqlResultSetMapping(
+        name = "result_chartdto",
+        classes = @ConstructorResult(
+                targetClass = Chart.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "auction", type = BigDecimal.class),
+                        @ColumnResult(name = "buy", type = BigDecimal.class)
+                }
+        )
+)
 public class OrderDetail extends BaseEntity {
 
     @Id
@@ -42,17 +60,19 @@ public class OrderDetail extends BaseEntity {
     @Column(precision = 12, scale = 0, nullable = false)
     private BigDecimal amountTransaction;
 
-    private String statusOrderDetail;
+    @ManyToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Status status;
 
     public OrderDetailDTO toOrderDetailDTO() {
     return new OrderDetailDTO()
             .setId(id)
-            .setOrder(order)
-            .setProduct(product)
+            .setOrder(order.toOrderDTO ())
+            .setProduct(product.toProductDTO ())
             .setPrice(price)
             .setQuantity(quantity)
             .setAmountTransaction(amountTransaction)
-            .setStatusOrderDetail(statusOrderDetail)
+            .setStatus (status.toStatusDTO ())
             ;
     }
 }

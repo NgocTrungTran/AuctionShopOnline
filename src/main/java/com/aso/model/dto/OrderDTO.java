@@ -1,9 +1,7 @@
 package com.aso.model.dto;
 
 
-import com.aso.model.LocationRegion;
-import com.aso.model.Order;
-import com.aso.model.OrderDetail;
+import com.aso.model.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -23,37 +24,47 @@ import java.util.List;
 public class OrderDTO {
 
     private Long id;
+
+    @NotEmpty(message = "Hãy nhập họ và tên")
+    private String fullName;
+    @NotEmpty(message = "Hãy nhập số điện thoại")
+    @Pattern ( regexp = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", message = "Số điện thoại không đúng")
+    private String phone;
+    @NotEmpty(message = "Hãy nhập email")
+    @Pattern ( regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email không hợp lệ")
+    private String email;
     private LocationRegionDTO locationRegion;
     private String description;
-
-    private String statusOrder;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
-    private Date createdAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
-    private Date updatedAt;
-
+    private AccountDTO account;
+    private StatusDTO status;
 
     private OrderDetailDTO orderDetail;
 
-    public OrderDTO(Long id, LocationRegion locationRegion, String description, String statusOrder,OrderDetail orderDetail, Date createdAt, Date updatedAt) {
+    private String createdBy;
+
+    public OrderDTO(Long id, String fullName, String phone, String email, LocationRegion locationRegion, String description, Account account, Status status, String createdBy) {
         this.id = id;
-        this.locationRegion = locationRegion.toLocationRegionDTO();
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.locationRegion = locationRegion.toLocationRegionDTO ();
         this.description = description;
-        this.statusOrder = statusOrder;
-        this.orderDetail = orderDetail.toOrderDetailDTO();
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.account = account.toAccountDTO ();
+        this.status = status.toStatusDTO ();
+        this.createdBy = createdBy;
     }
 
     public Order toOrder() {
-        return new Order()
-                .setId(id)
-                .setDescription(description)
-                .setLocationRegion(locationRegion.toLocationRegion())
-                .setStatusOrder(statusOrder)
-                .setOrderDetail(orderDetail.toOrderDetail())
+        return (Order) new Order ()
+                .setId ( id )
+                .setFullName ( fullName )
+                .setPhone ( phone )
+                .setEmail ( email )
+                .setLocationRegion ( locationRegion.toLocationRegion () )
+                .setDescription ( description )
+                .setAccount ( account.toAccount () )
+                .setStatus ( status.toStatus () )
+                .setCreatedBy ( createdBy )
                 ;
 
     }

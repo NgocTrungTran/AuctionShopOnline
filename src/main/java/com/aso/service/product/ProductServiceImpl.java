@@ -41,8 +41,23 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductListDTO> findAllProductListDTOModeration() {
+        return productRepository.findAllProductListDTOModeration();
+    }
+
+    @Override
     public List<ProductDTO> findAllProductsDTO() {
         return productRepository.findAllProductsDTO();
+    }
+
+    @Override
+    public List<ProductDTO> findAllProductsDTOAuctions() {
+        return productRepository.findAllProductsDTOAuctions ();
+    }
+
+    @Override
+    public List<ProductDTO> findAllProductsDTOTheShop() {
+        return productRepository.findAllProductsDTOTheShop ();
     }
 
     @Override
@@ -58,6 +73,11 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
+    }
+
+    @Override
+    public void removeById(Product product) {
+
     }
 
     @Override
@@ -103,6 +123,12 @@ public class ProductServiceImpl implements ProductService{
     public Optional<ProductDTO> findProductDTOBySlug(String slug) {
         return productRepository.findProductDTOBySlug(slug);
     }
+
+    @Override
+    public Optional<Product> findBySlug(String slug) {
+        return productRepository.findBySlug ( slug );
+    }
+
     @Override
     public Optional<Product> findProductBySlug(String slug) {
         return productRepository.findProductBySlug(slug);
@@ -131,4 +157,9 @@ public class ProductServiceImpl implements ProductService{
                 )
         ), HttpStatus.OK);
     }
-  }
+
+    @Override
+    public List<ProductDTO> isSlug() {
+        return productRepository.isSlug();
+    }
+}

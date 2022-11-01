@@ -27,6 +27,11 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findById(id);
     }
 
+    @Override
+    public void removeById(Role role) {
+
+    }
+
 
     @Override
     public Role save(Role role) {
@@ -59,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDTO> findAllRole() {
+    public List<RoleDTO> findAllRoles() {
         return roleRepository.findAllRoles();
     }
 }

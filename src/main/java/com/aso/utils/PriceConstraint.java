@@ -1,4 +1,4 @@
-package com.aso.validators;
+package com.aso.utils;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

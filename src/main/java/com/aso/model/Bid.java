@@ -1,5 +1,6 @@
 package com.aso.model;
 
+import com.aso.model.dto.BidDTO;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -15,11 +16,13 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "bids")
 @Accessors(chain = true)
-public class Bid extends BaseEntity{
+public class Bid extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String createdBy;
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
@@ -29,11 +32,28 @@ public class Bid extends BaseEntity{
     @JoinColumn(name = "auction_id", referencedColumnName = "id")
     private Auction auction;
 
-    private long relatedOfferId;
-
     private String email;
 
+    @Column(precision = 12, scale = 0)
     private BigDecimal bidPrice;
 
-    private LocalDateTime bidTime;
+    @Column(precision = 12, scale = 0, name="estimate_price")
+    private BigDecimal estimatePrice = new BigDecimal ( 0L );
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted = false;
+
+    public BidDTO toBidDTO(){
+        return new BidDTO()
+                .setId(id)
+                .setCreatedAt(account.getCreatedAt())
+                .setCreatedBy(account.getUsername())
+                .setEmail(email)
+                .setBidPrice(bidPrice)
+                .setEstimatePrice(estimatePrice)
+                .setAccount(account.toAccountDTO())
+                .setAuction(auction.toAuctionDTO())
+                .setDeleted(deleted)
+                ;
+    }
 }

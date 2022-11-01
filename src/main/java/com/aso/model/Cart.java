@@ -28,14 +28,17 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    private String status = "Chưa thanh toán";
+    @ManyToOne
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Status status;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", orphanRemoval = true, targetEntity = CartItem.class, cascade = CascadeType.ALL )
     private List<CartItem> cartItem;
 
     public CartDTO toCartDTO(){
         return new CartDTO()
                 .setId(id)
+                .setStatus ( status.toStatusDTO () )
                 .setAccount(account.toAccountDTO())
                 ;
     }

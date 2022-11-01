@@ -3,7 +3,6 @@ package com.aso.repository;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.dto.AccountDTO;
-import com.aso.model.dto.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +17,7 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> getByUsername(String username);
+    Optional<Account> getByEmail(String email);
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
             "a.id, " +
@@ -49,7 +49,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.role," +
             "a.locationRegion " +
             ") " +
-            "FROM Account AS a WHERE a.deleted = false  ORDER BY a.id DESC "
+            "FROM Account AS a WHERE a.deleted = false ORDER BY a.id DESC "
     )
     List<AccountDTO> findAccountDTOAll();
 
@@ -83,8 +83,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.blocked, " +
             "a.locationRegion" +
             ") " +
-            "FROM Account AS a WHERE a.deleted = true and a.role.id = 2"
-    )
+            "FROM Account AS a WHERE a.deleted = true and a.role.id = 2")
     List<AccountDTO> findAllUsersDTODeleted();
 
     @Query("SELECT new com.aso.model.dto.AccountDTO (" +
@@ -116,11 +115,28 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<AccountDTO> findAllUsersDTODeletedFalseAndActiveFalse();
 
     Optional<Account> findByUsername(String username);
+    Optional<Account> findByEmail(String email);
 
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
 
     Boolean existsByPhone(String phone);
+
+    @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
+            "a.id, " +
+            "a.username, " +
+            "a.fullName, " +
+            "a.email, " +
+            "a.phone, " +
+            "a.blocked, " +
+            "a.avatar, " +
+            "a.role, " +
+            "a.locationRegion" +
+            ") " +
+            "FROM Account AS a " +
+            "WHERE a.email = ?1"
+    )
+    Optional<AccountDTO> findUserDTOByEmail(String email);
 
     Account findByBlockedIsFalseAndId(Long id);
 
@@ -173,6 +189,20 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByIdAndDeletedFalse(Long id);
 
+    @Query("SELECT new com.aso.model.dto.AccountDTO(" +
+            "a.id, " +
+            "a.username, " +
+            "a.fullName, " +
+            "a.email, " +
+            "a.phone, " +
+            "a.blocked, " +
+            "a.avatar, " +
+            "a.role, " +
+            "a.locationRegion" +
+            ") " +
+            "FROM Account AS a WHERE a.username = ?1")
+    AccountDTO findAccountByUsername(String createBy);
+
     void deleteById(Product id);
 
     @Query("SELECT NEW com.aso.model.dto.AccountDTO(" +
@@ -190,7 +220,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.avatar," +
             "a.role," +
             "a.locationRegion " +
-            ") FROM Account AS a WHERE a.fullName LIKE :keyword OR a.email LIKE :keyword AND a.deleted = false" +
+            ") FROM Account AS a WHERE a.fullName LIKE :keyword OR a.email LIKE :keyword OR a.role.code LIKE :keyword AND a.deleted = false" +
             " ORDER BY a.id DESC")
     Page<AccountDTO> findAllAccountss(Pageable pageable, @Param("keyword") String keyword);
 
@@ -211,4 +241,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.locationRegion " +
             ") FROM Account AS a WHERE a.deleted = false ORDER BY a.id DESC")
     Page<AccountDTO> findAllAccounts(Pageable pageable);
+
 }
