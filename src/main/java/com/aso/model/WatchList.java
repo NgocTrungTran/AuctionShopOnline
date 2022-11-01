@@ -1,5 +1,6 @@
 package com.aso.model;
 
+import com.aso.model.dto.WatchListDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,21 +22,25 @@ import java.util.Date;
 public class WatchList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "auction_id", referencedColumnName = "id")
-    private Auction auction;
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    public WatchListDTO toWatchListDTO() {
+        return new WatchListDTO ()
+                .setId ( id )
+                .setAccount ( account )
+                .setProduct ( product )
+                .setCreatedAt ( createdAt );
+    }
 }

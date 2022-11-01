@@ -65,20 +65,21 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "boolean default false")
     private Boolean moderation = false;
 
-    @OneToMany(mappedBy = "product", targetEntity = OrderDetail.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product")
     private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "product", targetEntity = CartItem.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product")
     private Set<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "product", targetEntity = ProductMedia.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product")
     private Set<ProductMedia> productMedia;
 
-    @OneToMany(mappedBy = "product", targetEntity = Auction.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product")
     private  Set<Auction> auctions;
 
-
-
+    @OneToMany(mappedBy = "product")
+    private  Set<WatchList> watchLists;
+    
     public ProductDTO toProductDTO() {
         return new ProductDTO ()
                 .setId ( id )

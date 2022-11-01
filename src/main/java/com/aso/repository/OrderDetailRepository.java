@@ -12,6 +12,19 @@ import java.util.List;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
+    @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
+            "od.id," +
+            "od.order," +
+            "od.product," +
+            "od.price," +
+            "od.quantity," +
+            "od.amountTransaction," +
+            "od.status,  " +
+            "od.createdAt ," +
+            "od.updatedAt " +
+            ") " +
+            "FROM OrderDetail od WHERE od.order.account.email = ?1 AND od.deleted = false ")
+    List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email);
 
     @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
             "od.id," +

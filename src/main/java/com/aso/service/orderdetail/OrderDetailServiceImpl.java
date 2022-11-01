@@ -82,6 +82,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
 
     @Override
+    public List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email) {
+        return orderDetailRepository.findAllOrderDetailByAccountEmail ( email );
+    }
+
+    @Override
     public List<OrderDetailDTO> findAllOrderDetailById(String id) {
         return orderDetailRepository.findAllOrderDetailId(id);
     }
