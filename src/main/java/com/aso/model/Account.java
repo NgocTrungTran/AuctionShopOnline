@@ -61,6 +61,9 @@ public class Account extends BaseEntity{
     @OneToMany(mappedBy = "account")
     private List<WatchList> watchLists;
 
+    @OneToMany(mappedBy = "account")
+    private List<Review> reviews;
+
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
                 .setId(id)

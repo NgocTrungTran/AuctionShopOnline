@@ -79,6 +79,9 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private  Set<WatchList> watchLists;
+
+    @OneToMany(mappedBy = "product")
+    private  Set<Review> reviews;
     
     public ProductDTO toProductDTO() {
         return new ProductDTO ()
