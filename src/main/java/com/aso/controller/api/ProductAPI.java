@@ -239,7 +239,6 @@ public class ProductAPI {
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
-//            productDTO.setCreatedBy("Phuoc");
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
             if (!productDTO.getAction()) {
@@ -312,7 +311,7 @@ public class ProductAPI {
         }
         try {
             p.get().setModeration(true);
-            p.get().setCreatedBy("Phuoc");
+            p.get().setUpdatedBy ("Admin");
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá

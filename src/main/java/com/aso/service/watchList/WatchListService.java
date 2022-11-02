@@ -6,6 +6,11 @@ import com.aso.model.WatchList;
 import com.aso.model.dto.WatchListDTO;
 import com.aso.service.IGeneralService;
 
+import java.util.List;
+
 public interface WatchListService extends IGeneralService<WatchList> {
     WatchListDTO doAddWatchList(Account account, Product product);
+    List<WatchListDTO> getWatchListDTOsByAccountId(Long accountId);
+
+    WatchListDTO getWatchListDTOsByAccountIdAndProductId(Long accountId, Long productId);
 }
