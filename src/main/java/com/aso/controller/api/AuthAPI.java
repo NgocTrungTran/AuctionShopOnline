@@ -79,15 +79,15 @@ public class AuthAPI {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken (account.getEmail(), account.getPassword()));
-            System.out.println("authentication => " + authentication);
+//            System.out.println("authentication => " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = jwtService.generateTokenLogin(authentication);
-            System.out.println("jwt => " + jwt);
+//            System.out.println("jwt => " + jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            System.out.println("userDetails => " + userDetails);
+//            System.out.println("userDetails => " + userDetails);
             Account currentUser = accountService.getByEmail(account.getEmail()).get ();
-            System.out.println("currentUser => " + currentUser);
+//            System.out.println("currentUser => " + currentUser);
 
             JwtResponse jwtResponse = new JwtResponse(
                     jwt,
@@ -102,7 +102,7 @@ public class AuthAPI {
                     .secure(false)
                     .path("/")
                     .maxAge(60 * 60 * 1000 * 2)
-//                    .domain("localhost")
+//                    .domain("http://localhost:3000")
                     .build();
 
             System.out.println(jwtResponse);

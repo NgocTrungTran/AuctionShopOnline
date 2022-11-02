@@ -43,7 +43,6 @@ public class JwtService {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty -> Message: {0}", e);
         }
-
         return false;
     }
 
@@ -53,6 +52,5 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
-
 }
 
