@@ -29,9 +29,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -76,21 +78,18 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
     @GetMapping("/auctions")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsAuctions() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTOAuctions ();
-
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");
         }
-
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
     @GetMapping("/the-shops")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsTheShop() {
         List<ProductDTO> productDTOList = productService.findAllProductsDTOTheShop ();
-
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");
         }
@@ -98,7 +97,7 @@ public class ProductAPI {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
     @GetMapping("/moderation")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsModeration() {
         List<ProductListDTO> productDTOList = productService.findAllProductListDTOModeration();
 
@@ -110,8 +109,9 @@ public class ProductAPI {
     }
 
     @GetMapping("/p")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable) {
+        String email = appUtil.getPrincipalEmail();
         Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
         if (productDTOList.isEmpty()) {
             throw new DataOutputException("No data");
@@ -120,7 +120,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/c")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Page<ProductDTO>> getAllProductsSort(Pageable pageable, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
         if (productDTOList.isEmpty()) {
@@ -135,7 +135,7 @@ public class ProductAPI {
 
     // For searching
     @GetMapping("/p/{keyword}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Page<ProductDTO>> getAllBookss(Pageable pageable, @PathVariable("keyword") String keyword) {
         try {
             keyword = "%" + keyword + "%";
@@ -163,14 +163,12 @@ public class ProductAPI {
 //        return new ResponseEntity<>(products, HttpStatus.OK);
 //    }
     @GetMapping("/trash")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAllProductsTrash() {
         List<ProductDTO> products = productService.findAllProductsDTOTrash();
-
         if (products.isEmpty()) {
             throw new DataOutputException("No data");
         }
-
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -181,13 +179,10 @@ public class ProductAPI {
             throw new DataInputException("Product ID invalid!");
         }
         Long product_id = Long.parseLong(productId);
-
         Optional<Product> productOptional = productService.findById(product_id);
-
         if ( productOptional.isEmpty () ) {
             throw new ResourceNotFoundException("Product invalid");
         }
-
         return new ResponseEntity<>(productOptional.get().toProductDTO(), HttpStatus.OK);
     }
     @GetMapping("/find-by-slug/{slug}")
@@ -234,6 +229,7 @@ public class ProductAPI {
     @PostMapping("/create")
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
+        String email = appUtil.getPrincipalEmail();
         if (bindingResult.hasErrors()) {
             return appUtil.mapErrorToResponse(bindingResult);
         }
@@ -241,7 +237,7 @@ public class ProductAPI {
         if (!checkPrice.toString().matches("\"(^$|[0-9]*$)\"")) {
             productDTO.setSlug(Validation.makeSlug(productDTO.getTitle()));
             productDTO.setId(0L);
-//            productDTO.setCreatedBy("Phuoc");
+            productDTO.setCreatedBy(email);
             productDTO.toProduct().setDeleted(false);
             productDTO.setImages(productDTO.getImages());
             if (!productDTO.getAction()) {
@@ -261,10 +257,10 @@ public class ProductAPI {
     }
 
     @PutMapping("/edit/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doEdit(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO,
                                     BindingResult bindingResult) {
-
+        String email = appUtil.getPrincipalEmail();
         if (bindingResult.hasErrors()) {
             return appUtil.mapErrorToResponse(bindingResult);
         }
@@ -278,6 +274,7 @@ public class ProductAPI {
 //            productDTO.setId(id);
             String slug = Validation.makeSlug(productDTO.getTitle());
             p.get().setUpdatedAt(new Date());
+            p.get().setCreatedBy(email);
             p.get().setAction(productDTO.getAction());
             p.get().setAvailable(productDTO.getAvailable());
             p.get().setImage(productDTO.getImage());
@@ -308,15 +305,16 @@ public class ProductAPI {
     }
 
     @PutMapping("/moderation/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doModeration(@PathVariable Long id) {
+        String email = appUtil.getPrincipalEmail();
         Optional<Product> p = productService.findById(id);
         if (!p.isPresent()) {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
         try {
             p.get().setModeration(true);
-            p.get().setCreatedBy("Phuoc");
+            p.get().setCreatedBy(email);
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
@@ -327,7 +325,7 @@ public class ProductAPI {
                 auction.setId(0L);
                 auction.setEmail(accountDTO.getEmail());
                 auction.setCreatedAt(new Date());
-                auction.setCreatedBy(accountDTO.getUsername());
+                auction.setCreatedBy(email);
                 auction.setAccount(accountDTO);
                 auction.setProduct(p.get().toProductDTO());
                 auction.setAuctionType(AuctionType.BIDDING);
@@ -345,7 +343,7 @@ public class ProductAPI {
                 auction.setDaysToEndTime(Integer.parseInt(p.get().getCountday()));
                 Auction auc = auctionService.createAuction(auction);
                 Bid bid = new Bid();
-                bid.setCreatedBy(accountDTO.getUsername());
+                bid.setCreatedBy(email);
                 bid.setAccount(accountDTO.toAccount());
                 bid.setAuction(auc);
                 bid.setBidPrice(p.get().getPrice());
@@ -360,7 +358,7 @@ public class ProductAPI {
     }
 
     @PutMapping("/delete-soft/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
 
 
@@ -377,7 +375,7 @@ public class ProductAPI {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
 
         Optional<Product> product = productService.findById(id);
@@ -392,7 +390,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/search/{title}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     // đã test ok (tìm kiếm theo tên title)
     public ResponseEntity<?> searchProductTitle(@PathVariable String title) {
         List<ProductDTO> productDTOList = productService.findAllBySearchTitle(title);
@@ -401,7 +399,7 @@ public class ProductAPI {
 
     // viết slug chưa test
     @PutMapping("/update/{slug}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> update(@PathVariable String slug, @Validated ProductDTO productDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return appUtil.mapErrorToResponse(bindingResult);
@@ -427,7 +425,7 @@ public class ProductAPI {
     }
 
     @GetMapping("/product-status-available")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     private ResponseEntity<?> findAllProductAvailable() {
         try {
             List<ProductDTO> productDTOS = productService.findAllProductDTOByAvailable("Sản phẩm hiện đang còn hàng");

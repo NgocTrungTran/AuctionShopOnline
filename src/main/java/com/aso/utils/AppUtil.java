@@ -24,13 +24,25 @@ public class AppUtil {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    public String getPrincipalUsername() {
+    public static String getPrincipalUsername() {
         String userName;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails ) {
             userName = ((UserDetails) principal).getUsername();
             userName = userName.substring(0, userName.indexOf("@"));
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
+    }
+
+    public String getPrincipalEmail() {
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails ) {
+            userName = ((UserDetails) principal).getUsername();
         } else {
             userName = principal.toString();
         }
