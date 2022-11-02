@@ -266,7 +266,7 @@ public class ProductAPI {
         }
 
         Optional<Product> p = productService.findById(id);
-        if (!p.isPresent()) {
+        if (p.isEmpty()) {
             return new ResponseEntity<>("Không tồn tại sản phẩm", HttpStatus.NOT_FOUND);
         }
 

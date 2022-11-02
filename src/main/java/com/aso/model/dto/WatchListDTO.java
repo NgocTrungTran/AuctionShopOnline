@@ -13,22 +13,27 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 public class WatchListDTO {
     private Long id;
 
-    private Account account;
+    private AccountDTO account;
 
-    private Product product;
+    private ProductDTO product;
 
     private Date createdAt;
+
+    public WatchListDTO(Long id, Product product, Date createdAt) {
+        this.id = id;
+        this.product = product.toProductDTO ();
+        this.createdAt = createdAt;
+    }
 
     public WatchList toWatchList(){
         return new WatchList ()
                 .setId ( id )
-                .setAccount ( account )
-                .setProduct ( product )
+                .setAccount ( account.toAccount () )
+                .setProduct ( product.toProduct () )
                 .setCreatedAt ( createdAt );
     }
 }
