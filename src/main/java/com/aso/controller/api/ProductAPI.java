@@ -49,21 +49,16 @@ public class ProductAPI {
     private AccountService accountService;
     @Autowired
     private ProductService productService;
-
     @Autowired
     private ProductMediaService productMediaService;
-
     @Autowired
     private AuctionService auctionService;
     @Autowired
     private Validation validation;
-
     @Autowired
     private AppUtil appUtil;
-
     @Autowired
     private BidService bidService;
-
     @Autowired
     private CategoryService categoryService;
 
@@ -113,9 +108,9 @@ public class ProductAPI {
     public ResponseEntity<Page<ProductDTO>> getAllBooks(Pageable pageable) {
         String email = appUtil.getPrincipalEmail();
         Page<ProductDTO> productDTOList = productService.findAllProducts(pageable);
-        if (productDTOList.isEmpty()) {
-            throw new DataOutputException("No data");
-        }
+//        if (productDTOList.isEmpty()) {
+//            throw new DataOutputException("No data");
+//        }
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
@@ -140,9 +135,9 @@ public class ProductAPI {
         try {
             keyword = "%" + keyword + "%";
             Page<ProductDTO> productDTOList = productService.findAllProductss(pageable, keyword);
-            if (productDTOList.isEmpty()) {
-                throw new DataOutputException("Danh sách sản phẩm trống");
-            }
+//            if (productDTOList.isEmpty()) {
+//                throw new DataOutputException("Danh sách sản phẩm trống");
+//            }
             return new ResponseEntity<>(productDTOList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -325,7 +320,7 @@ public class ProductAPI {
                 auction.setId(0L);
                 auction.setEmail(accountDTO.getEmail());
                 auction.setCreatedAt(new Date());
-                auction.setCreatedBy(email);
+                auction.setUpdateBy(email);
                 auction.setAccount(accountDTO);
                 auction.setProduct(p.get().toProductDTO());
                 auction.setAuctionType(AuctionType.BIDDING);

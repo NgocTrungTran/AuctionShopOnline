@@ -10,6 +10,7 @@ import com.aso.model.dto.BidDTO;
 import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
 import com.aso.service.account.AccountService;
+import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +35,16 @@ public class BidServiceImpl implements BidService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AppUtil appUtil;
+
     @Override
     public Bid createBid(BidDTO bidDTO) {
         Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
         if (account.isEmpty()) {
             throw new DataInputException("Tài khoản không tồn tại!");
         }
-
+        String email = appUtil.getPrincipalEmail();
         Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
         if ((auction.isEmpty())) {
             throw new DataInputException("Phiên đấu giá không tồn tại!");
@@ -66,7 +70,7 @@ public class BidServiceImpl implements BidService {
         auction.get().setCurrentPrice(bid.getBidPrice());
         auction.get().setAuctionType(AuctionType.BIDDING);
         auctionRepository.save(auction.get());
-        bid.setCreatedBy(account.get().getCreatedBy());
+        bid.setCreatedBy(email);
         bid.setAuction(auction.get());
         savedBid = bidRepository.save(bid);
 

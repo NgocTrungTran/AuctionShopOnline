@@ -220,7 +220,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.avatar," +
             "a.role," +
             "a.locationRegion " +
-            ") FROM Account AS a WHERE a.fullName LIKE :keyword OR a.email LIKE :keyword OR a.role.code LIKE :keyword AND a.deleted = false" +
+            ") FROM Account AS a WHERE (a.fullName LIKE :keyword OR a.email LIKE :keyword OR a.role.code LIKE :keyword) AND a.deleted = false" +
             " ORDER BY a.id DESC")
     Page<AccountDTO> findAllAccountss(Pageable pageable, @Param("keyword") String keyword);
 
