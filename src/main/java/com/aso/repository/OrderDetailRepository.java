@@ -37,6 +37,20 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "od.createdAt ," +
             "od.updatedAt " +
             ") " +
+            "FROM OrderDetail od WHERE od.product.createdBy = ?1 AND od.deleted = false")
+    List<OrderDetailDTO> findAllOrderDetailByProductCreatedBy(String createdBy);
+
+    @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
+            "od.id," +
+            "od.order," +
+            "od.product," +
+            "od.price," +
+            "od.quantity," +
+            "od.amountTransaction," +
+            "od.status,  " +
+            "od.createdAt ," +
+            "od.updatedAt " +
+            ") " +
             "FROM OrderDetail od WHERE od.id = ?1 ")
     List<OrderDetailDTO> findAllOrderDetailId(String id);
 

@@ -2,6 +2,7 @@ package com.aso.service.product;
 
 
 import com.aso.model.Product;
+import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.service.IGeneralService;
@@ -19,6 +20,8 @@ public interface ProductService extends IGeneralService<Product> {
     List<ProductListDTO> findAllProductListDTOModeration();
 
     List<ProductDTO> findAllProductsDTO();
+
+    List<ProductDTO> getProductsDTOModeratedByCreatedBy(String createdBy);
 
     List<ProductDTO> findAllProductsDTOAuctions();
 
