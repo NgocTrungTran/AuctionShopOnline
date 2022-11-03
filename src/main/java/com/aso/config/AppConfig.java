@@ -48,7 +48,7 @@ public class AppConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000", "http://localhost:3300", "http://localhost:8080")
+                        .allowedOrigins("http://localhost:3000", "http://localhost:3300", "http://localhost:8080", "https://vapi.vnappmob.com")
                         .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
             }
         };

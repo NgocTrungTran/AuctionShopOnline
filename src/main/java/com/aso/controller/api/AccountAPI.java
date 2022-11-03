@@ -75,7 +75,7 @@ public class AccountAPI {
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
 
         if (accountOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+            throw new ResourceNotFoundException("Tài khoản không tồn tại");
         }
 
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
@@ -85,17 +85,17 @@ public class AccountAPI {
     public ResponseEntity<?> getAccountById(@PathVariable String accountId) {
 
         if (!validation.isIntValid(accountId)) {
-            throw new DataInputException("Account ID invalid!");
+            throw new DataInputException("Tài khoản không tồn tại");
         }
         Long account_id = Long.parseLong(accountId);
 
-        Optional<AccountDTO> productOptional = accountService.findAccountByIdDTO(account_id);
+        Optional<AccountDTO> accountByIdDTO = accountService.findAccountByIdDTO(account_id);
 
-        if (productOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+        if (accountByIdDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Tài khoản không tồn tại");
         }
 
-        return new ResponseEntity<>(productOptional, HttpStatus.OK);
+        return new ResponseEntity<>(accountByIdDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
