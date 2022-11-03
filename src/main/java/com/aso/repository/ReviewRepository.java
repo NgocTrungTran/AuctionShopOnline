@@ -12,14 +12,14 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.ReviewDTO (" +
-            "c.id, " +
-            "c.account, " +
-            "c.product, " +
-            "c.review, " +
-            "c.vote, " +
-            "c.createdAt, " +
-            "c.createdBy, " +
-            "c.deleted)  " +
-            "FROM Review c  WHERE c.deleted = false ")
+            "r.id, " +
+            "r.account, " +
+            "r.product, " +
+            "r.review, " +
+            "r.vote, " +
+            "r.createdAt, " +
+            "r.createdBy, " +
+            "r.deleted)  " +
+            "FROM Review r  WHERE r.deleted = false ")
     List<ReviewDTO> findAllReviewsDTO();
 }
