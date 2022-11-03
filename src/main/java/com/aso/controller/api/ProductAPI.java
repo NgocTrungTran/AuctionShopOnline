@@ -269,7 +269,7 @@ public class ProductAPI {
 //            productDTO.setId(id);
             String slug = Validation.makeSlug(productDTO.getTitle());
             p.get().setUpdatedAt(new Date());
-            p.get().setCreatedBy(email);
+            p.get().setUpdatedBy(email);
             p.get().setAction(productDTO.getAction());
             p.get().setAvailable(productDTO.getAvailable());
             p.get().setImage(productDTO.getImage());
@@ -309,7 +309,7 @@ public class ProductAPI {
         }
         try {
             p.get().setModeration(true);
-            p.get().setCreatedBy(email);
+            p.get().setUpdatedBy(email);
             Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá

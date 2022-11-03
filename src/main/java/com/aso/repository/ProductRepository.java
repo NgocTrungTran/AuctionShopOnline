@@ -37,7 +37,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.image, " +
             "p.price " +
             ") " +
-            "FROM Product AS p WHERE p.moderation = false")
+            "FROM Product AS p WHERE p.deleted = false AND p.moderation = false")
     List<ProductListDTO> findAllProductListDTOModeration();
 
     @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
