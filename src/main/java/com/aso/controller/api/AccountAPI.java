@@ -31,7 +31,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
-@PreAuthorize("hasAnyAuthority('ADMIN')")
+//@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class AccountAPI {
 
     @Autowired
