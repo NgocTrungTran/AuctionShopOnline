@@ -138,6 +138,7 @@ public class AccountAPI {
     public ResponseEntity<?> editAccount(@PathVariable Long id,
                                          @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult) {
 
+        String email = appUtil.getPrincipalEmail();
         if ( bindingResult.hasErrors () )
             return appUtil.mapErrorToResponse ( bindingResult );
 
@@ -156,6 +157,7 @@ public class AccountAPI {
 //            accountOption.setCreatedAt(accountOption.getCreatedAt());
 //            accountOption.setCreatedBy(accountOption.getCreatedBy());
             accountOption.setUpdatedAt(new Date());
+            accountOption.setUpdatedBy(email);
             accountOption.setEmail(accountDTO.getEmail());
             accountOption.setAvatar(accountDTO.getAvatar());
             accountOption.setFullName(accountDTO.getFullName());
@@ -164,7 +166,7 @@ public class AccountAPI {
             accountOption.setLocationRegion(accountDTO.toLocationRegion());
             accountOption.setRole(accountDTO.getRole().toRole());
 
-            Account updatedAccount = accountService.save( accountOption );
+            Account updatedAccount = accountService.editAccount( accountOption );
             LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion();
             locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
@@ -198,7 +200,7 @@ public class AccountAPI {
         if ( account.isPresent () ) {
             try {
                 accountService.unblockUser ( id );
-                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
+                return new ResponseEntity<> ( HttpStatus.OK );
             } catch (Exception e) {
                 return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
@@ -223,9 +225,9 @@ public class AccountAPI {
     @GetMapping("/p")
     public ResponseEntity<Page<AccountDTO>> getAllBooks(Pageable pageable) {
         Page<AccountDTO> accountDTOPage = accountService.findAllAccounts(pageable);
-        if (accountDTOPage.isEmpty()) {
-            throw new DataOutputException("No data");
-        }
+//        if (accountDTOPage.isEmpty()) {
+//            throw new DataOutputException("No data");
+//        }
         return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
     }
 
@@ -235,9 +237,9 @@ public class AccountAPI {
         try {
             keyword = "%" + keyword + "%";
             Page<AccountDTO> accountDTOPage = accountService.findAllAccountss(pageable, keyword);
-            if (accountDTOPage.isEmpty()) {
-                throw new DataOutputException("Danh sách tài khoản trống");
-            }
+//            if (accountDTOPage.isEmpty()) {
+//                throw new DataOutputException("Danh sách tài khoản trống");
+//            }
             return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

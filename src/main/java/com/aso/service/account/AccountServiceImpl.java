@@ -282,4 +282,9 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO findAccountByUsername(String createBy) {
         return accountRepository.findAccountByUsername(createBy);
     }
+
+    @Override
+    public Account editAccount(Account account) {
+        return accountRepository.save ( account );
+    }
 }
