@@ -294,20 +294,20 @@ public class ProductAPI {
 
         try {
 //            productDTO.setId(id);
-            String slug = Validation.makeSlug ( productDTO.getTitle () );
-            p.get ().setUpdatedAt ( new Date () );
-            p.get ().setCreatedBy ( email );
-            p.get ().setAction ( productDTO.getAction () );
-            p.get ().setAvailable ( productDTO.getAvailable () );
-            p.get ().setImage ( productDTO.getImage () );
-            p.get ().setPrice ( productDTO.getPrice () );
-            p.get ().setSlug ( slug );
-            p.get ().setTitle ( productDTO.getTitle () );
-            p.get ().setCategory ( productDTO.toProduct ().getCategory () );
-            p.get ().setDescription ( productDTO.getDescription () );
-            p.get ().setCountday ( productDTO.getCountday () );
-            if ( productDTO.getAction () ) {
-                p.get ().setCountday ( null );
+            String slug = Validation.makeSlug(productDTO.getTitle());
+            p.get().setUpdatedAt(new Date());
+            p.get().setUpdatedBy(email);
+            p.get().setAction(productDTO.getAction());
+            p.get().setAvailable(productDTO.getAvailable());
+            p.get().setImage(productDTO.getImage());
+            p.get().setPrice(productDTO.getPrice());
+            p.get().setSlug(slug);
+            p.get().setTitle(productDTO.getTitle());
+            p.get().setCategory(productDTO.toProduct().getCategory());
+            p.get().setDescription(productDTO.getDescription());
+            p.get().setCountday(productDTO.getCountday());
+            if (productDTO.getAction()) {
+                p.get().setCountday(null);
             }
 
             for (String pr : productDTO.getImages ()) {
@@ -335,9 +335,9 @@ public class ProductAPI {
             return new ResponseEntity<> ( "Không tồn tại sản phẩm", HttpStatus.NOT_FOUND );
         }
         try {
-            p.get ().setModeration ( true );
-            p.get ().setUpdatedBy ( email );
-            Product newProduct = productService.save ( p.get () );
+            p.get().setModeration(true);
+            p.get().setUpdatedBy(email);
+            Product newProduct = productService.save(p.get());
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
 

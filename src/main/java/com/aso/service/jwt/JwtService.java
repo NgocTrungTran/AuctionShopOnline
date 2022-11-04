@@ -20,8 +20,13 @@ public class JwtService {
     public String generateTokenLogin(Authentication authentication) {
         AccountPrinciple userPrincipal = (AccountPrinciple) authentication.getPrincipal();
 
+        Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
+        claims.put("userId", userPrincipal.getId());
+        claims.put("role", userPrincipal.getAuthorities());
+
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+//                .setSubject((userPrincipal.getUsername()))
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + JWT_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

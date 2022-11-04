@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -56,6 +57,10 @@ public class AuthAPI {
 
         if (bindingResult.hasErrors())
             return appUtils.mapErrorToResponse(bindingResult);
+
+        if (accountDTO.getSurplus() == null) {
+            accountDTO.setSurplus(new BigDecimal(0));
+        }
 
         try {
             Account account = accountService.doRegister(accountDTO);
