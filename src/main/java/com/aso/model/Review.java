@@ -1,18 +1,12 @@
 package com.aso.model;
 
 import com.aso.model.dto.ReviewDTO;
-import com.aso.model.dto.WatchListDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor

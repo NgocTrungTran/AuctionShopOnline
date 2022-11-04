@@ -11,6 +11,8 @@ import java.util.List;
 public interface OrderDetailService extends IGeneralService<OrderDetail> {
 
     List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email);
+
+    List<OrderDetailDTO> findAllOrderDetailByProductCreatedBy(String createdBy);
     List<OrderDetailDTO> findAllOrderDetailById(String id);
     OrderDetail deliveryOrder(OrderDetail orderDetail, String title);
     OrderDetail checkOutOrder(OrderDetail orderDetail, String title);

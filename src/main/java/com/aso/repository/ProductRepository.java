@@ -58,7 +58,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.viewed, " +
             "p.category, " +
             "p.description," +
-            "p.countday " +
+            "p.countday, " +
+            "p.cheatMoney " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTO();
@@ -80,7 +81,31 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.viewed, " +
             "p.category, " +
             "p.description," +
-            "p.countday " +
+            "p.countday, " +
+            "p.cheatMoney " +
+            ") " +
+            "FROM Product AS p WHERE p.deleted = false AND p.createdBy = ?1 ORDER BY p.id DESC")
+    List<ProductDTO> getProductsDTOModeratedByCreatedBy(String createdBy);
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.estimatePrice, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description," +
+            "p.countday, " +
+            "p.cheatMoney " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true AND p.action = true ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTOAuctions();
@@ -102,7 +127,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.viewed, " +
             "p.category, " +
             "p.description," +
-            "p.countday " +
+            "p.countday, " +
+            "p.cheatMoney " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true AND p.action = false ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTOTheShop();
@@ -237,7 +263,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.viewed, " +
             "p.category, " +
             "p.description," +
-            "p.countday " +
+            "p.countday, " +
+            "p.cheatMoney " +
             ") " +
             "FROM Product AS p WHERE (p.title LIKE :keyword " +
             "OR p.category.slug LIKE :keyword) AND p.deleted = false AND p.moderation = true ORDER BY p.id DESC "
@@ -262,7 +289,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.viewed, " +
             "p.category, " +
             "p.description," +
-            "p.countday " +
+            "p.countday, " +
+            "p.cheatMoney " +
             ") " +
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.id DESC")
     Page<ProductDTO> findAllProducts(Pageable pageable);

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 @Builder
 @Entity
@@ -37,6 +38,9 @@ public class Account extends BaseEntity{
     private boolean blocked = false;
 
     private String avatar;
+
+    @Column(precision = 12, scale = 0)
+    private BigDecimal surplus;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -73,6 +77,7 @@ public class Account extends BaseEntity{
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )
+                .setSurplus(surplus)
                 .setBlocked ( blocked )
                 .setRole(role.toRoleDTO());
     }

@@ -21,8 +21,8 @@ public class JwtService {
         AccountPrinciple userPrincipal = (AccountPrinciple) authentication.getPrincipal();
 
         Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
-        claims.put("userId", "1");
-        claims.put("role", "admin");
+        claims.put("userId", userPrincipal.getId());
+        claims.put("role", userPrincipal.getAuthorities());
 
         return Jwts.builder()
 //                .setSubject((userPrincipal.getUsername()))

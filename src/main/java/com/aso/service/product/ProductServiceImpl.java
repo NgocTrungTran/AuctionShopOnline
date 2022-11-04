@@ -51,6 +51,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductDTO> getProductsDTOModeratedByCreatedBy(String createdBy) {
+        return productRepository.getProductsDTOModeratedByCreatedBy ( createdBy );
+    }
+
+    @Override
     public List<ProductDTO> findAllProductsDTOAuctions() {
         return productRepository.findAllProductsDTOAuctions ();
     }

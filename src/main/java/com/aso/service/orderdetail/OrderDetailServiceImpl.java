@@ -87,6 +87,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     }
 
     @Override
+    public List<OrderDetailDTO> findAllOrderDetailByProductCreatedBy(String createdBy) {
+        return orderDetailRepository.findAllOrderDetailByProductCreatedBy (createdBy);
+    }
+
+    @Override
     public List<OrderDetailDTO> findAllOrderDetailById(String id) {
         return orderDetailRepository.findAllOrderDetailId(id);
     }

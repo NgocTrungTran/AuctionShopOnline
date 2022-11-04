@@ -2,6 +2,7 @@ package com.aso.controller.api;
 
 import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.dto.CartItemDTO;
@@ -50,6 +51,20 @@ public class OrderDetailAPI {
             return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException("Không lấy được danh sách sản phảm trong giỏ hàng");
+        }
+    }
+    @GetMapping("/get-by-product-created-by/{createdBy}")
+    // đã test ok
+    public ResponseEntity<?> getOrderDetailByProductCreatedBy(@PathVariable String createdBy) {
+        try {
+            Optional<Account> accountOptional = accountService.getByEmail ( createdBy );
+            if ( accountOptional.isEmpty () ) {
+                throw new AccountInputException ( "Tài khoản không tồn tại!" );
+            }
+            List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findAllOrderDetailByProductCreatedBy (createdBy);
+            return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new DataOutputException ( e.getMessage () );
         }
     }
 
