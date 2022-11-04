@@ -31,6 +31,8 @@ public class OrderDetailDTO {
 
     private StatusDTO status;
 
+    private String createdBy;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Date createdAt;
 
@@ -50,7 +52,7 @@ public class OrderDetailDTO {
     }
 
     public OrderDetail toOrderDetail(){
-        return new OrderDetail()
+        return (OrderDetail) new OrderDetail()
                 .setId(id)
                 .setOrder(order.toOrder ())
                 .setProduct(product.toProduct ())
@@ -58,6 +60,7 @@ public class OrderDetailDTO {
                 .setQuantity(quantity)
                 .setAmountTransaction(amountTransaction)
                 .setStatus (status.toStatus ())
+                .setCreatedBy ( createdBy )
                 ;
     }
 }

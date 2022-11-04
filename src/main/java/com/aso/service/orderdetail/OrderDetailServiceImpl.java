@@ -1,9 +1,6 @@
 package com.aso.service.orderdetail;
 
-import com.aso.model.Chart;
-import com.aso.model.Order;
-import com.aso.model.OrderDetail;
-import com.aso.model.Product;
+import com.aso.model.*;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.StatusDTO;
@@ -116,11 +113,12 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
             long newAvailable = currentAvailable - orderDetailDTO.getQuantity ();
 
             productOptional.get ().setAvailable ( newAvailable );
-            StatusDTO status = statusRepository.findStatusDTOById ( 8L );
+            StatusDTO status = statusRepository.findStatusDTOById ( 7L );
 
             orderDetailDTO.setOrder (orderOptional.get ().toOrderDTO ());
             orderDetailDTO.setProduct (productOptional.get ().toProductDTO () );
             orderDetailDTO.setStatus ( status );
+            orderDetailDTO.setCreatedBy ( orderOptional.get ().getAccount ().getEmail () );
 
             OrderDetail orderDetail = orderDetailDTO.toOrderDetail ();
 
@@ -133,6 +131,13 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
         }
 
         return newOrderDetailDTOList;
+    }
+
+    @Override
+    public OrderDetailDTO doUpdateStatus(OrderDetail orderDetail, Status status) {
+        orderDetail.setStatus ( status );
+        OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+        return newOrderDetail.toOrderDetailDTO ();
     }
 
     @Override

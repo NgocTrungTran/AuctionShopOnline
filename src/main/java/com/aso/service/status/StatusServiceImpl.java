@@ -23,7 +23,7 @@ public class StatusServiceImpl implements StatusService{
 
     @Override
     public Optional<Status> findById(Long id) {
-        return Optional.empty ();
+        return statusRepository.findById ( id );
     }
 
     @Override

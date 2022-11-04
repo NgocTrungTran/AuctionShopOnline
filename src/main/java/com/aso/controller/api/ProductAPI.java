@@ -331,7 +331,7 @@ public class ProductAPI {
     public ResponseEntity<?> doModeration(@PathVariable Long id) {
         String email = appUtil.getPrincipalEmail ();
         Optional<Product> p = productService.findById ( id );
-        if ( !p.isPresent () ) {
+        if ( p.isEmpty () ) {
             return new ResponseEntity<> ( "Không tồn tại sản phẩm", HttpStatus.NOT_FOUND );
         }
         try {

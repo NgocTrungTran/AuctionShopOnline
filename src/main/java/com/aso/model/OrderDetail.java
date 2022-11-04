@@ -73,6 +73,7 @@ public class OrderDetail extends BaseEntity {
             .setQuantity(quantity)
             .setAmountTransaction(amountTransaction)
             .setStatus (status.toStatusDTO ())
+            .setCreatedBy ( getCreatedBy () )
             ;
     }
 }

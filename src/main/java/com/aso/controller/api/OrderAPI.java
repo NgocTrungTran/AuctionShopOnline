@@ -159,7 +159,7 @@ public class OrderAPI {
             OrderDTO newOrderDTO = orderService.doCheckoutOrder ( accountId, orderDTO );
             return new ResponseEntity<>(newOrderDTO, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>("Lỗi không xác định",HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(e.getMessage (),HttpStatus.NO_CONTENT);
         }
     }
     @PutMapping("/remove-order/{orderId}")

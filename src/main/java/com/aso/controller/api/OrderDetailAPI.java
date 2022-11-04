@@ -1,18 +1,24 @@
 package com.aso.controller.api;
 
 import com.aso.exception.AccountInputException;
+import com.aso.exception.AttributesExistsException;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
+import com.aso.model.OrderDetail;
 import com.aso.model.Product;
+import com.aso.model.Status;
 import com.aso.model.dto.CartItemDTO;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
+import com.aso.model.dto.StatusDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.order.OrderService;
 import com.aso.service.orderdetail.OrderDetailService;
 import com.aso.service.product.ProductService;
+import com.aso.service.status.StatusService;
 import com.aso.utils.AppUtil;
+import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/api/orders-detail")
@@ -36,6 +43,8 @@ public class OrderDetailAPI {
     private OrderService orderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private StatusService statusService;
     @Autowired
     private AppUtil appUtil;
 
@@ -70,6 +79,7 @@ public class OrderDetailAPI {
 
     @PostMapping("/create/{orderId}")
     public ResponseEntity<?> createOrderDetail(@PathVariable("orderId") Long orderId, @Validated @RequestBody List<OrderDetailDTO> orderDetailDTOList) {
+        String email = appUtil.getPrincipalEmail ();
         try {
 
            OrderDTO orderDTO = orderService.findOrderDTOById ( orderId );
@@ -96,6 +106,30 @@ public class OrderDetailAPI {
             return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
         }catch (Exception e){
             throw new RuntimeException (e);
+        }
+    }
+    @PutMapping("/update-status/{orderDetailId}")
+    public ResponseEntity<?> updateStatus(@PathVariable("orderDetailId") Long orderDetailId, @RequestBody StatusDTO statusDTO) {
+        String email = appUtil.getPrincipalEmail ();
+        try {
+            Optional<OrderDetail> optionalOrderDetail = orderDetailService.findById ( orderDetailId );
+            if ( optionalOrderDetail.isEmpty () ) {
+                throw new DataInputException ( "Đơn hàng không tồn tại" );
+            }
+
+            Optional<Status> statusOptional = statusService.findById ( statusDTO.getId () );
+            if ( statusOptional.isEmpty () ) {
+                throw new DataOutputException ( "Trạng thái không tồn tại" );
+            }
+
+            if ( statusDTO.getId ().equals ( optionalOrderDetail.get ().getStatus ().getId () ) ) {
+                throw new AttributesExistsException ( "Hãy chọn trạng thái cần thay đổi" );
+            }
+
+            OrderDetailDTO orderDetailDTO = orderDetailService.doUpdateStatus ( optionalOrderDetail.get (), statusOptional.get () );
+            return new ResponseEntity<>(orderDetailDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage (), HttpStatus.BAD_REQUEST);
         }
     }
 
