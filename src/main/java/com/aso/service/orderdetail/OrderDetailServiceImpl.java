@@ -147,6 +147,11 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     }
 
     @Override
+    public List<Chart> getTurnoverByMonth() {
+        return orderDetailRepository.getTurnoverByMonth();
+    }
+
+    @Override
     public OrderDetail checkOutOrder(OrderDetail orderDetail, String title) {
 //        List<OrderDTO> orderList = orderRepository.findAllOrderDTOByOrderDetailId(orderDetail.getId());
 //        for (OrderDTO orderDTO : orderList){

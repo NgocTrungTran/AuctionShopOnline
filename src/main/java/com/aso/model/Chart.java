@@ -15,4 +15,11 @@ public class Chart {
     private Long id;
     private BigDecimal auction;
     private BigDecimal buy;
+    private BigDecimal turnoverMonth;
+    private BigDecimal turnoverByYear;
+
+    public Chart(BigDecimal turnoverMonth) {
+        this.turnoverMonth = turnoverMonth;
+    }
+
 }

@@ -221,7 +221,7 @@ public class ProductAPI {
     }
 
 //    @PostMapping("/create")
-////    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> doAddProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult  ) {
 //        new ProductDTO().validate(productDTO, bindingResult);
 //
@@ -238,7 +238,7 @@ public class ProductAPI {
 //        try {
 //            Product product = productDTO.toProduct();
 //            product.setSlug(slug);
-////            product.setCreatedBy (productDTO.getCreatedBy());
+//            product.setCreatedBy (productDTO.getCreatedBy());
 //            Product newProduct = productService.save(product);
 //
 //            return new ResponseEntity<>( newProduct.toProductDTO(), HttpStatus.CREATED);
