@@ -71,6 +71,10 @@ public class Account extends BaseEntity{
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
                 .setId(id)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 .setUsername ( username )
                 .setFullName ( fullName )
                 .setLocationRegion( locationRegion.toLocationRegionDTO ())

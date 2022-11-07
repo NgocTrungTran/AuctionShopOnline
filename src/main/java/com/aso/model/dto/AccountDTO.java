@@ -20,8 +20,8 @@ public class AccountDTO {
     private Long id;
     private Date createdAt;
     private String createdBy;
-    private Date updateAt;
-    private String updateBy;
+    private Date updatedAt;
+    private String updatedBy;
     @NotBlank(message = "username not blank")
     @Size(min = 8, max = 20, message = "Username size between 8 and 20")
     private String username;
@@ -77,12 +77,12 @@ public class AccountDTO {
         this.locationRegion = locationregion.toLocationRegionDTO ();
     }
 
-    public AccountDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, BigDecimal surplus, Role role, LocationRegion locationregion) {
+    public AccountDTO(Long id, Date createdAt, String createdBy, Date updatedAt, String updatedBy, String username, String fullName, String email, String phone, String password, boolean blocked, String avatar, BigDecimal surplus, Role role, LocationRegion locationregion) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
-        this.updateAt = updateAt;
-        this.updateBy = updateBy;
+        this.updatedAt = updatedAt;
+        this.updatedBy = updatedBy;
         this.username = username;
         this.fullName = fullName;
         this.email = email;
@@ -101,7 +101,7 @@ public class AccountDTO {
     }
 
     public Account toAccount() {
-        return new Account()
+        return (Account) new Account()
                 .setId(id)
                 .setUsername(username)
                 .setPassword(password)
@@ -111,11 +111,16 @@ public class AccountDTO {
                 .setAvatar ( avatar )
                 .setSurplus(surplus)
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationRegion.toLocationRegion () );
+                .setLocationRegion ( locationRegion.toLocationRegion () )
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
+                ;
     }
 
     public Account toAccountAllAttribute() {
-        return new Account()
+        return (Account) new Account()
                 .setId(id)
                 .setUsername(username)
                 .setPassword(password)
@@ -125,7 +130,12 @@ public class AccountDTO {
                 .setAvatar ( avatar )
                 .setSurplus(surplus)
                 .setRole ( role.toRole () )
-                .setLocationRegion ( locationRegion.toLocationRegion () );
+                .setLocationRegion ( locationRegion.toLocationRegion () )
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
+                ;
     }
 
     public LocationRegion toLocationRegion() {

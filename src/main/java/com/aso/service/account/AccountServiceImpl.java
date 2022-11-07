@@ -2,13 +2,8 @@ package com.aso.service.account;
 
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
-import com.aso.model.Account;
-import com.aso.model.AccountPrinciple;
-import com.aso.model.LocationRegion;
-import com.aso.model.Role;
-import com.aso.model.Product;
+import com.aso.model.*;
 import com.aso.model.dto.AccountDTO;
-import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AccountRepository;
 import com.aso.service.gmail.MyConstants;
 import com.aso.service.location.LocationRegionService;
@@ -16,15 +11,17 @@ import com.aso.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,8 +54,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(Account user) {
-        user.setPassword ( passwordEncoder.encode ( user.getPassword () ) );
-        return accountRepository.save ( user );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return accountRepository.save(user);
     }
 
     @Override
@@ -279,12 +276,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO findAccountByUsername(String createBy) {
-        return accountRepository.findAccountByUsername(createBy);
+    public AccountDTO findAccountByEmail(String createBy) {
+        return accountRepository.findAccountByEmail(createBy);
     }
 
     @Override
     public Account editAccount(Account account) {
         return accountRepository.save ( account );
     }
+
+    @Override
+    public Account updatePasswordAccount(Account account) {
+        return accountRepository.save ( account );
+    }
+
 }

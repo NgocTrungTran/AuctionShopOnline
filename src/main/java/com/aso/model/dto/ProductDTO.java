@@ -1,5 +1,6 @@
 package com.aso.model.dto;
 
+import com.aso.model.BaseEntity;
 import com.aso.model.Category;
 import com.aso.model.Product;
 import com.aso.model.ProductMedia;
@@ -29,7 +30,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ProductDTO implements Validator {
+public class ProductDTO extends BaseEntity implements Validator {
     private Long id;
     private Date createdAt;
     private String createdBy;
@@ -109,7 +110,10 @@ public class ProductDTO implements Validator {
                 .setCheatMoney(cheatMoney)
                 .setAction(action)
                 .setCategory ( category.toCategory () )
-                .setCreatedBy(createdBy)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 ;
 
     }
