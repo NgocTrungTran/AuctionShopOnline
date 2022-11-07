@@ -5,8 +5,11 @@ import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.StatusDTO;
 import com.aso.repository.*;
+import com.aso.service.gmail.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +38,8 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
     @Autowired
     private StatusRepository statusRepository;
 
+    @Autowired
+    public JavaMailSender emailSender;
 
     @Override
     public List<OrderDetail> findAll() {
@@ -135,9 +140,31 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
     @Override
     public OrderDetailDTO doUpdateStatus(OrderDetail orderDetail, Status status) {
+        if ( status.getId () == 5 ) {
+            Product product = orderDetail.getProduct ();
+            Long currentSold = product.getSold ();
+            product.setSold ( currentSold + orderDetail.getQuantity () );
+            productRepository.save ( product );
+
+//            SimpleMailMessage message = new SimpleMailMessage();
+//            message.setFrom ( MyConstants.MY_EMAIL );
+//            message.setSubject ( "Chào mừng bạn đến với Auction Shop!" );
+//            message.setTo(orderDetail.getCreatedBy ());
+//            message.setSubject("Xin chào " + orderDetail.getOrder ().getAccount ().getFullName ());
+//            message.setText("Cám ơn bạn đã tin tưởng và đặt mua sản phẩm tại Auctions Shop! \n" +
+//                        "Đơn hàng " + orderDetail.getProduct ().getTitle () + " đã hoàn thành");
+//            this.emailSender.send(message);
+        }
+        if ( status.getId () == 10 ) {
+            Product product = orderDetail.getProduct ();
+            Long currentAvailable = product.getAvailable ();
+            product.setAvailable ( currentAvailable + orderDetail.getQuantity () );
+            productRepository.save ( product );
+        }
 
         orderDetail.setStatus ( status );
         OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
+
         return newOrderDetail.toOrderDetailDTO ();
     }
 

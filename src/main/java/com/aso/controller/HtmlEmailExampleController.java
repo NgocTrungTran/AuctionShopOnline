@@ -26,8 +26,20 @@ public class HtmlEmailExampleController {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
 
-        String htmlMsg = "<h3>AUCTIONS SHOP ONLINE</h3>"
-                +"<p>Chào mừng bạn đến với Auctions Shop</p>";
+        String htmlMsg = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "        <meta charset=\"utf-8\" />\n" +
+                "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" +
+                "        <meta name=\"theme-color\" content=\"#000000\" />\n" +
+                "        <meta name=\"description\" content=\"Web site created using create-react-app\" />\n" +
+                "</head>" +
+                "<body>\n" +
+                "<p style=\"color: red; font-weight: bold\" th:text=\"'Chào ' + Milo + ','\"></p>\n" +
+                "<p th:text=\"'Sản phẩm ' + Tv + ' của bạn đang được chuẩn bị.'\"></p>\n" +
+                "<p>Cám ơn bạn đã tham gia và ủng hộ!</p>\n" +
+                "</body>\n" +
+                "</html>";
 
         message.setContent(htmlMsg, "text/html");
 

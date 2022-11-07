@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface WatchListService extends IGeneralService<WatchList> {
     WatchListDTO doAddWatchList(Account account, Product product);
+    void doRemoveWatchList(Account account, Product product);
     List<WatchListDTO> getWatchListDTOsByAccountId(Long accountId);
 
     WatchListDTO getWatchListDTOsByAccountIdAndProductId(Long accountId, Long productId);
