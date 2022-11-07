@@ -64,7 +64,7 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     Page<AccountDTO> findAllAccounts(Pageable pageable);
     Page<AccountDTO> findAllAccountss(Pageable pageable, @Param("keyword") String keyword);
 
-    AccountDTO findAccountByUsername(String createBy);
+    AccountDTO findAccountByEmail(String createBy);
 
     Account editAccount(Account account);
 }

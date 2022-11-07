@@ -89,6 +89,10 @@ public class Product extends BaseEntity {
     public ProductDTO toProductDTO() {
         return new ProductDTO ()
                 .setId ( id )
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdateAt(getUpdatedAt())
+                .setUpdateBy(getUpdatedBy())
                 .setTitle ( title )
                 .setSlug ( slug )
                 .setImage ( image )

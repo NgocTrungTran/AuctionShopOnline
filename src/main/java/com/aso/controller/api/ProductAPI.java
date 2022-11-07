@@ -265,6 +265,9 @@ public class ProductAPI {
             if ( !productDTO.getAction () ) {
                 productDTO.setCountday ( null );
             }
+            if ( productDTO.getAction () ) {
+                productDTO.setAvailable ( 1L );
+            }
             // Note: thêm category vô đây
             Product newProduct = productService.save ( productDTO.toProduct () );
             for (String p : productDTO.getImages ()) {
@@ -341,13 +344,13 @@ public class ProductAPI {
 
             // thêm tạo đấu giá ở đây && sưa lại tạo đấu giá
 
-            AccountDTO accountDTO = accountService.findAccountByUsername(newProduct.getCreatedBy());
+            AccountDTO accountDTO = accountService.findAccountByEmail(email);
             if (p.get().getAction()) {
                 AuctionDTO auction = new AuctionDTO();
                 auction.setId(0L);
-                auction.setEmail(accountDTO.getEmail());
+                auction.setEmail(newProduct.getCreatedBy());
                 auction.setCreatedAt(new Date());
-                auction.setUpdateBy(email);
+                auction.setCreatedBy(newProduct.getCreatedBy());
                 auction.setAccount(accountDTO);
                 auction.setProduct(p.get().toProductDTO());
                 auction.setAuctionType(AuctionType.BIDDING);
@@ -365,11 +368,11 @@ public class ProductAPI {
                 auction.setDaysToEndTime ( Integer.parseInt ( p.get ().getCountday () ) );
                 Auction auc = auctionService.createAuction ( auction );
                 Bid bid = new Bid ();
-                bid.setCreatedBy ( email );
+                bid.setCreatedBy ( newProduct.getCreatedBy() );
                 bid.setAccount ( accountDTO.toAccount () );
                 bid.setAuction ( auc );
                 bid.setBidPrice ( p.get ().getPrice () );
-                bid.setEmail ( accountDTO.getEmail () );
+                bid.setEmail (newProduct.getCreatedBy());
                 bid.setEstimatePrice ( p.get ().getEstimatePrice () );
                 bidService.save ( bid );
             }

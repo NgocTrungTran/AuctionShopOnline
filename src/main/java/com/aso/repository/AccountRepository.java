@@ -130,10 +130,15 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.AccountDTO (" +
             "a.id, " +
+            "a.createdAt, " +
+            "a.createdBy, " +
+            "a.updatedAt, " +
+            "a.updatedBy, " +
             "a.username, " +
             "a.fullName, " +
             "a.email, " +
             "a.phone, " +
+            "a.password, " +
             "a.blocked, " +
             "a.avatar, " +
             "a.surplus, " +
@@ -210,8 +215,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "a.role, " +
             "a.locationRegion" +
             ") " +
-            "FROM Account AS a WHERE a.username = ?1")
-    AccountDTO findAccountByUsername(String createBy);
+            "FROM Account AS a WHERE a.email = ?1")
+    AccountDTO findAccountByEmail(String createBy);
 
     void deleteById(Product id);
 

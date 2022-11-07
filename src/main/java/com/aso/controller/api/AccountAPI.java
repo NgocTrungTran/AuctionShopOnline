@@ -252,8 +252,25 @@ public class AccountAPI {
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByEmail(email);
 
         if (accountOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+            throw new ResourceNotFoundException("Email không tồn tại");
         }
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
+    }
+
+    @PostMapping("/restartPassword")
+    public ResponseEntity<?> doRestartPassword(@RequestBody AccountDTO accountDTO) {
+        String email = appUtil.getPrincipalEmail();
+        Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
+        Account accountOption = accountOptional.get();
+
+        try {
+            accountOption.setUpdatedBy(email);
+            accountOption.setPassword(accountDTO.getPassword());
+
+            Account updatedAccount = accountService.save( accountOption );
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
+        } catch (Exception e) {
+            return new ResponseEntity<> ("Lỗi đổi không được mật khẩu! ",HttpStatus.INTERNAL_SERVER_ERROR );
+        }
     }
 }

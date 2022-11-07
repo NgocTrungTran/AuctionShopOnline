@@ -66,7 +66,10 @@ public class Auction extends BaseEntity{
     public AuctionDTO toAuctionDTO(){
         return  new AuctionDTO()
                 .setId(id)
-                .setCreatedBy(account.getUsername())
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdateAt(getUpdatedAt())
+                .setUpdateBy(getUpdatedBy())
                 .setEmail(email)
                 .setAccount(account.toAccountDTO())
                 .setProduct(product.toProductDTO())
