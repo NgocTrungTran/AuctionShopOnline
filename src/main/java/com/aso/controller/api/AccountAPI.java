@@ -274,13 +274,9 @@ public class AccountAPI {
     }
     
     // Update password
-    @PatchMapping("/update/password/{id}")
-    public ResponseEntity<?> updatePasswordAccount(@PathVariable Long id,
-                                         @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult) {
-        if ( bindingResult.hasErrors () )
-            return appUtil.mapErrorToResponse ( bindingResult );
-
-        Optional<Account> accountOptional = accountService.findById ( id );
+    @PostMapping("/update/password")
+    public ResponseEntity<?> updatePasswordAccount(@RequestBody AccountDTO accountDTO) {
+        Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
         if (accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Tài khoản không tồn tại!");
         }

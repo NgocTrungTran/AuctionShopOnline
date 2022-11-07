@@ -80,6 +80,16 @@ public class WatchListServiceImpl implements WatchListService{
     }
 
     @Override
+    public void doRemoveWatchList(Account account, Product product) {
+        WatchListDTO watchListDTO = watchListRepository.getWatchListDTOByAccountIdAndProductId ( account.getId (), product.getId () );
+        if ( watchListDTO == null ) {
+            throw new DataOutputException ( "Sản phẩm không tồn tại trong danh sách yêu thích" );
+        }
+
+        watchListRepository.delete ( watchListDTO.toWatchList () );
+    }
+
+    @Override
     public List<WatchListDTO> getWatchListDTOsByAccountId(Long accountId) {
         return watchListRepository.getWatchListDTOsByAccountId ( accountId );
     }
