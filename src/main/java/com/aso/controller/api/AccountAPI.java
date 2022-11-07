@@ -1,7 +1,6 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
-import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
@@ -19,12 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -255,5 +254,28 @@ public class AccountAPI {
             throw new ResourceNotFoundException("Account invalid");
         }
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
+    }
+
+    // Update password
+    @PatchMapping("/update/password/{id}")
+    public ResponseEntity<?> updatePasswordAccount(@PathVariable Long id,
+                                         @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult) {
+        if ( bindingResult.hasErrors () )
+            return appUtil.mapErrorToResponse ( bindingResult );
+
+        Optional<Account> accountOptional = accountService.findById ( id );
+        if (accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Tài khoản không tồn tại!");
+        }
+        try {
+            accountOptional.get().setUpdatedAt(new Date());
+            accountOptional.get().setPassword(accountDTO.getPassword());
+            Account updatedAccount = accountService.save(accountOptional.get());
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
+        } catch (DataIntegrityViolationException e) {
+            throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
+        } catch (Exception e) {
+            return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR );
+        }
     }
 }

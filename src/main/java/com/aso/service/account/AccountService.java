@@ -2,16 +2,12 @@ package com.aso.service.account;
 
 import com.aso.model.Account;
 import com.aso.model.dto.AccountDTO;
-import com.aso.model.dto.CategoryDTO;
-import com.aso.model.dto.ProductDTO;
 import com.aso.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,4 +63,5 @@ public interface AccountService extends IGeneralService<Account>, UserDetailsSer
     AccountDTO findAccountByUsername(String createBy);
 
     Account editAccount(Account account);
+    Account updatePasswordAccount(Account account);
 }
