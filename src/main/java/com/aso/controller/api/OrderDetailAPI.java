@@ -1,9 +1,6 @@
 package com.aso.controller.api;
 
-import com.aso.exception.AccountInputException;
-import com.aso.exception.AttributesExistsException;
-import com.aso.exception.DataInputException;
-import com.aso.exception.DataOutputException;
+import com.aso.exception.*;
 import com.aso.model.Account;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
@@ -115,6 +112,12 @@ public class OrderDetailAPI {
             Optional<OrderDetail> optionalOrderDetail = orderDetailService.findById ( orderDetailId );
             if ( optionalOrderDetail.isEmpty () ) {
                 throw new DataInputException ( "Đơn hàng không tồn tại" );
+            }
+
+            if ( statusDTO.getId () == 6 ) {
+                if ( optionalOrderDetail.get ().getStatus ().getId () != 7 && optionalOrderDetail.get ().getStatus ().getId () != 8) {
+                    throw new ResourceNotFoundException ( "Không thể hủy khi đơn hàng: " + optionalOrderDetail.get ().getStatus ().getName () );
+                }
             }
 
             Optional<Status> statusOptional = statusService.findById ( statusDTO.getId () );
