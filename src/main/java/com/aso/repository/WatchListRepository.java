@@ -13,6 +13,7 @@ public interface WatchListRepository extends JpaRepository<WatchList, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.WatchListDTO (" +
             "w.id, " +
+            "w.account, " +
             "w.product, " +
             "w.createdAt) " +
             "FROM WatchList w  WHERE w.account.id = ?1 ")
@@ -20,6 +21,7 @@ public interface WatchListRepository extends JpaRepository<WatchList, Long> {
 
     @Query("SELECT NEW com.aso.model.dto.WatchListDTO (" +
             "w.id, " +
+            "w.account, " +
             "w.product, " +
             "w.createdAt) " +
             "FROM WatchList w  WHERE w.account.id = ?1 AND w.product.id = ?2 ")

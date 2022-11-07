@@ -23,8 +23,9 @@ public class WatchListDTO {
 
     private Date createdAt;
 
-    public WatchListDTO(Long id, Product product, Date createdAt) {
+    public WatchListDTO(Long id, Account account, Product product, Date createdAt) {
         this.id = id;
+        this.account = account.toAccountDTO ();
         this.product = product.toProductDTO ();
         this.createdAt = createdAt;
     }

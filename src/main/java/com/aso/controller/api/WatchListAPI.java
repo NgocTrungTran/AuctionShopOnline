@@ -89,4 +89,25 @@ public class WatchListAPI {
             return new ResponseEntity<> (e.getMessage (), HttpStatus.BAD_GATEWAY);
         }
     }
+
+    @PostMapping("/remove/{accountId}")
+    public ResponseEntity<?> removeWatchedList(@PathVariable("accountId") Long accountId, @RequestBody ProductDTO productDTO) {
+        try {
+            Optional<Account> accountOptional = accountService.findById ( accountId );
+            if ( accountOptional.isEmpty () ) {
+                throw new AccountInputException ( "Tài khoản không tồn tại" );
+            }
+
+            Optional<Product> productOptional = productService.findProductBySlug ( productDTO.getSlug () ) ;
+            if (productOptional.isEmpty ()) {
+                throw new DataInputException ( "Sản phẩm không tồn tại" );
+            }
+
+            watchListService.doRemoveWatchList ( accountOptional.get (), productOptional.get () );
+
+            return new ResponseEntity<> (HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<> (e.getMessage (), HttpStatus.BAD_GATEWAY);
+        }
+    }
 }
