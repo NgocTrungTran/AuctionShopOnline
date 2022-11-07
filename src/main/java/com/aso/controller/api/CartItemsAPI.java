@@ -189,7 +189,7 @@ public class CartItemsAPI {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 
-            if ( Objects.equals ( accountOptional.get ().getUsername (), productOptional.get ().getCreatedBy () ) ) {
+            if ( Objects.equals ( accountOptional.get ().getEmail (), productOptional.get ().getCreatedBy () ) ) {
                 throw new AttributesExistsException ( "Không thể mua sản phẩm của bạn" );
             }
 

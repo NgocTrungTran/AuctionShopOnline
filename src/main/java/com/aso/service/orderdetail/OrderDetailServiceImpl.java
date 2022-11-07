@@ -135,6 +135,7 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
 
     @Override
     public OrderDetailDTO doUpdateStatus(OrderDetail orderDetail, Status status) {
+
         orderDetail.setStatus ( status );
         OrderDetail newOrderDetail = orderDetailRepository.save ( orderDetail );
         return newOrderDetail.toOrderDetailDTO ();
