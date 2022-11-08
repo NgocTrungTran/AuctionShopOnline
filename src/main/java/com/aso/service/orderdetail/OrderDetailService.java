@@ -25,4 +25,5 @@ public interface OrderDetailService extends IGeneralService<OrderDetail> {
 
     OrderDetailDTO doUpdateStatus (OrderDetail orderDetail, Status status);
     List<Chart> getListChart(String year);
+    List<Chart> getTurnoverByMonth();
 }

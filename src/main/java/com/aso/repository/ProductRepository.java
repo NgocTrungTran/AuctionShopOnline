@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -299,4 +298,28 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product AS p" )
     List<ProductDTO> isSlug();
+
+    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
+            "p.id, " +
+            "p.createdAt, " +
+            "p.createdBy, " +
+            "p.updatedAt, " +
+            "p.updatedBy, " +
+            "p.action, " +
+            "p.available, " +
+            "p.image, " +
+            "p.moderation, " +
+            "p.price, " +
+            "p.estimatePrice, " +
+            "p.slug, " +
+            "p.sold, " +
+            "p.title, " +
+            "p.viewed, " +
+            "p.category, " +
+            "p.description," +
+            "p.countday, " +
+            "p.cheatMoney " +
+            ") " +
+            "FROM Product AS p WHERE p.deleted = false AND p.moderation = true ORDER BY p.sold DESC")
+    List<ProductDTO> findTopProductBySold();
 }

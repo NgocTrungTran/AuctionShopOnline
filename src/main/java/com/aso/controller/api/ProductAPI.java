@@ -221,7 +221,7 @@ public class ProductAPI {
     }
 
 //    @PostMapping("/create")
-////    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
 //    public ResponseEntity<?> doAddProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult  ) {
 //        new ProductDTO().validate(productDTO, bindingResult);
 //
@@ -238,7 +238,7 @@ public class ProductAPI {
 //        try {
 //            Product product = productDTO.toProduct();
 //            product.setSlug(slug);
-////            product.setCreatedBy (productDTO.getCreatedBy());
+//            product.setCreatedBy (productDTO.getCreatedBy());
 //            Product newProduct = productService.save(product);
 //
 //            return new ResponseEntity<>( newProduct.toProductDTO(), HttpStatus.CREATED);
@@ -458,5 +458,21 @@ public class ProductAPI {
         } catch (Exception e) {
             return new ResponseEntity<> ( HttpStatus.BAD_REQUEST );
         }
+    }
+
+    @GetMapping("/find-by-sold")
+    public ResponseEntity<?> getTopProductBySold() {
+
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        List<ProductDTO> products = productService.findTopProductBySold();
+
+        if ( products.isEmpty () ) {
+            throw new ResourceNotFoundException ( "Sản phẩm không tồn tại!" );
+        }
+        for(int i =0; i<5; i++){
+            productDTOList.add(products.get(i));
+        }
+
+        return new ResponseEntity<> (productDTOList, HttpStatus.OK );
     }
 }

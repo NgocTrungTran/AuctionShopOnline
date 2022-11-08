@@ -2,7 +2,6 @@ package com.aso.service.product;
 
 
 import com.aso.model.Product;
-import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
 import com.aso.service.IGeneralService;
@@ -47,4 +46,5 @@ public interface ProductService extends IGeneralService<Product> {
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
     ResponseEntity<Page<ProductDTO>> findAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
     List<ProductDTO> isSlug();
+    List<ProductDTO> findTopProductBySold();
 }
