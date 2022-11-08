@@ -91,8 +91,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     @Query(name="sp_chart", nativeQuery = true)
     List<Chart> getListChart( @Param("sYear") String year);
 
-    //List<StockAkhirDto> findStockAkhirPerProductIn(
-    //      @Param("warehouseCode") String warehouseCode,
-    //      @Param("productCodes") Set<String> productCode
-    //   );
+    @Query(name="sp_turnoverByMonth", nativeQuery = true)
+    List<Chart> getTurnoverByMonth();
 }

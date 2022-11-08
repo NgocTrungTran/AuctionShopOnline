@@ -140,4 +140,9 @@ public class OrderDetailAPI {
     public ResponseEntity<?> doChart(@PathVariable String sYear) {
         return new ResponseEntity<>(orderDetailService.getListChart(sYear), HttpStatus.OK);
     }
+
+    @GetMapping("/turnoverByMonth")
+    public ResponseEntity<?> doTurnoverByMonth() {
+        return new ResponseEntity<>(orderDetailService.getTurnoverByMonth(), HttpStatus.OK);
+    }
 }
