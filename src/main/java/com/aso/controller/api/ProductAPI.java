@@ -459,4 +459,20 @@ public class ProductAPI {
             return new ResponseEntity<> ( HttpStatus.BAD_REQUEST );
         }
     }
+
+    @GetMapping("/find-by-sold")
+    public ResponseEntity<?> getTopProductBySold() {
+
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        List<ProductDTO> products = productService.findTopProductBySold();
+
+        if ( products.isEmpty () ) {
+            throw new ResourceNotFoundException ( "Sản phẩm không tồn tại!" );
+        }
+        for(int i =0; i<5; i++){
+            productDTOList.add(products.get(i));
+        }
+
+        return new ResponseEntity<> (productDTOList, HttpStatus.OK );
+    }
 }

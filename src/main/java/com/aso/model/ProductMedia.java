@@ -32,11 +32,6 @@ public class ProductMedia {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_tem_id")
-    private CartItem cartItem;
-
-
     public ProductMediaDTO toProductMediaDTO() {
         return new ProductMediaDTO()
                 .setId(id)

@@ -1,7 +1,6 @@
 package com.aso.service.product;
 
 
-import com.aso.exception.DataOutputException;
 import com.aso.model.Product;
 import com.aso.model.dto.ProductDTO;
 import com.aso.model.dto.ProductListDTO;
@@ -166,5 +165,10 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<ProductDTO> isSlug() {
         return productRepository.isSlug();
+    }
+
+    @Override
+    public List<ProductDTO> findTopProductBySold() {
+        return productRepository.findTopProductBySold();
     }
 }
