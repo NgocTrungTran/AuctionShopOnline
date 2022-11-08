@@ -2,7 +2,6 @@ package com.aso.model;
 
 import lombok.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -16,10 +15,10 @@ public class Chart {
     private BigDecimal auction;
     private BigDecimal buy;
     private BigDecimal turnoverMonth;
-    private BigDecimal turnoverByYear;
+    private BigDecimal turnoverYear;
 
-    public Chart(BigDecimal turnoverMonth) {
+    public Chart(BigDecimal turnoverMonth, BigDecimal turnoverYear) {
         this.turnoverMonth = turnoverMonth;
+        this.turnoverYear = turnoverYear;
     }
-
 }

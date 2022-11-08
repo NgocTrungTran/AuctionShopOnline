@@ -50,7 +50,8 @@ import java.math.BigDecimal;
         classes = @ConstructorResult(
                 targetClass = Chart.class,
                 columns = {
-                        @ColumnResult(name = "turnoverMonth", type = BigDecimal.class)
+                        @ColumnResult(name = "turnoverMonth", type = BigDecimal.class),
+                        @ColumnResult(name = "turnoverYear", type = BigDecimal.class)
                 }
         )
 )
