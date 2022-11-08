@@ -23,8 +23,22 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
             "od.createdAt ," +
             "od.updatedAt " +
             ") " +
-            "FROM OrderDetail od WHERE od.order.account.email = ?1 AND od.deleted = false ")
+            "FROM OrderDetail od WHERE od.order.account.email = ?1 AND od.deleted = false")
     List<OrderDetailDTO> findAllOrderDetailByAccountEmail(String email);
+
+    @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
+            "od.id," +
+            "od.order," +
+            "od.product," +
+            "od.price," +
+            "od.quantity," +
+            "od.amountTransaction," +
+            "od.status,  " +
+            "od.createdAt ," +
+            "od.updatedAt " +
+            ") " +
+            "FROM OrderDetail od WHERE od.product.createdBy = ?1 AND od.deleted = false")
+    List<OrderDetailDTO> findAllOrderDetailByProductCreatedBy(String createdBy);
 
     @Query("SELECT NEW com.aso.model.dto.OrderDetailDTO (" +
             "od.id," +
@@ -77,8 +91,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     @Query(name="sp_chart", nativeQuery = true)
     List<Chart> getListChart( @Param("sYear") String year);
 
-    //List<StockAkhirDto> findStockAkhirPerProductIn(
-    //      @Param("warehouseCode") String warehouseCode,
-    //      @Param("productCodes") Set<String> productCode
-    //   );
+    @Query(name="sp_turnoverByMonth", nativeQuery = true)
+    List<Chart> getTurnoverByMonth();
 }

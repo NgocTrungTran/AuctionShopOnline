@@ -101,7 +101,7 @@ public class BidAPI {
     }
 
     @GetMapping("/auction/{auctionId}")
-    public ResponseEntity<?> getBidByauctionId(@PathVariable Long auctionId) {
+    public ResponseEntity<?> getBidByAuctionId(@PathVariable Long auctionId) {
         List<BidDTO> bidDTO = bidService.findByRelatedOfferId(auctionId);
 
         if (bidDTO.isEmpty()) {

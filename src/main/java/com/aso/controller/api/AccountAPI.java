@@ -1,7 +1,6 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
-import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Account;
 import com.aso.model.LocationRegion;
@@ -24,12 +23,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
+//@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class AccountAPI {
 
     @Autowired
@@ -73,7 +74,7 @@ public class AccountAPI {
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
 
         if (accountOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+            throw new ResourceNotFoundException("Tài khoản không tồn tại");
         }
 
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
@@ -83,17 +84,17 @@ public class AccountAPI {
     public ResponseEntity<?> getAccountById(@PathVariable String accountId) {
 
         if (!validation.isIntValid(accountId)) {
-            throw new DataInputException("Account ID invalid!");
+            throw new DataInputException("Tài khoản không tồn tại");
         }
         Long account_id = Long.parseLong(accountId);
 
-        Optional<AccountDTO> productOptional = accountService.findAccountByIdDTO(account_id);
+        Optional<AccountDTO> accountByIdDTO = accountService.findAccountByIdDTO(account_id);
 
-        if (productOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+        if (accountByIdDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Tài khoản không tồn tại");
         }
 
-        return new ResponseEntity<>(productOptional, HttpStatus.OK);
+        return new ResponseEntity<>(accountByIdDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -136,6 +137,7 @@ public class AccountAPI {
     public ResponseEntity<?> editAccount(@PathVariable Long id,
                                          @Validated @RequestBody AccountDTO accountDTO, BindingResult bindingResult) {
 
+        String email = appUtil.getPrincipalEmail();
         if ( bindingResult.hasErrors () )
             return appUtil.mapErrorToResponse ( bindingResult );
 
@@ -154,6 +156,7 @@ public class AccountAPI {
 //            accountOption.setCreatedAt(accountOption.getCreatedAt());
 //            accountOption.setCreatedBy(accountOption.getCreatedBy());
             accountOption.setUpdatedAt(new Date());
+            accountOption.setUpdatedBy(email);
             accountOption.setEmail(accountDTO.getEmail());
             accountOption.setAvatar(accountDTO.getAvatar());
             accountOption.setFullName(accountDTO.getFullName());
@@ -162,7 +165,7 @@ public class AccountAPI {
             accountOption.setLocationRegion(accountDTO.toLocationRegion());
             accountOption.setRole(accountDTO.getRole().toRole());
 
-            Account updatedAccount = accountService.save( accountOption );
+            Account updatedAccount = accountService.editAccount( accountOption );
             LocationRegion locationRegion = accountDTO.getLocationRegion().toLocationRegion();
             locationRegionService.save(locationRegion);
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
@@ -196,7 +199,7 @@ public class AccountAPI {
         if ( account.isPresent () ) {
             try {
                 accountService.unblockUser ( id );
-                return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
+                return new ResponseEntity<> ( HttpStatus.OK );
             } catch (Exception e) {
                 return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
             }
@@ -221,9 +224,9 @@ public class AccountAPI {
     @GetMapping("/p")
     public ResponseEntity<Page<AccountDTO>> getAllBooks(Pageable pageable) {
         Page<AccountDTO> accountDTOPage = accountService.findAllAccounts(pageable);
-        if (accountDTOPage.isEmpty()) {
-            throw new DataOutputException("No data");
-        }
+//        if (accountDTOPage.isEmpty()) {
+//            throw new DataOutputException("No data");
+//        }
         return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
     }
 
@@ -233,9 +236,9 @@ public class AccountAPI {
         try {
             keyword = "%" + keyword + "%";
             Page<AccountDTO> accountDTOPage = accountService.findAllAccountss(pageable, keyword);
-            if (accountDTOPage.isEmpty()) {
-                throw new DataOutputException("Danh sách tài khoản trống");
-            }
+//            if (accountDTOPage.isEmpty()) {
+//                throw new DataOutputException("Danh sách tài khoản trống");
+//            }
             return new ResponseEntity<>(accountDTOPage, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -248,8 +251,44 @@ public class AccountAPI {
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByEmail(email);
 
         if (accountOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Account invalid");
+            throw new ResourceNotFoundException("Email không tồn tại");
         }
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
+    }
+
+    @PostMapping("/restartPassword")
+    public ResponseEntity<?> doRestartPassword(@RequestBody AccountDTO accountDTO) {
+        String email = appUtil.getPrincipalEmail();
+        Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
+        Account accountOption = accountOptional.get();
+
+        try {
+            accountOption.setUpdatedBy(email);
+            accountOption.setPassword(accountDTO.getPassword());
+
+            Account updatedAccount = accountService.save( accountOption );
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi đổi không được mật khẩu! ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    // Update password
+    @PostMapping("/update/password")
+    public ResponseEntity<?> updatePasswordAccount(@RequestBody AccountDTO accountDTO) {
+        Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
+        if (accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Tài khoản không tồn tại!");
+        }
+        try {
+            accountOptional.get().setUpdatedAt(new Date());
+            accountOptional.get().setPassword(accountDTO.getPassword());
+            Account updatedAccount = accountService.save(accountOptional.get());
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
+        } catch (DataIntegrityViolationException e) {
+            throw new DataInputException ( "Thông tin tài khoản không hợp lệ, vui lòng kiểm tra lại ! " );
+        } catch (Exception e) {
+            return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR );
+        }
     }
 }

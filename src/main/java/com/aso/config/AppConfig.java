@@ -3,6 +3,7 @@ package com.aso.config;
 
 //import com.cg.model.AuditorAwareImpl;
 //import com.cg.model.User;
+
 import com.aso.service.gmail.MyConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,13 +43,18 @@ public class AppConfig {
 
         return mailSender;
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000","http://localhost:3001", "http://localhost:3300", "http://localhost:8080")
+
+                        .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3300", "http://localhost:8080")
+
+                        .allowedOrigins("http://localhost:3000", "http://localhost:3300", "http://localhost:8080", "https://vapi.vnappmob.com")
+
                         .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
             }
         };

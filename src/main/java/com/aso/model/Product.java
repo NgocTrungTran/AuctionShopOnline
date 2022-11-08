@@ -62,6 +62,9 @@ public class Product extends BaseEntity {
     @NotNull
     private String description;
 
+    @Column(precision = 12, scale = 0)
+    private BigDecimal cheatMoney;
+
     @Column(columnDefinition = "boolean default false")
     private Boolean moderation = false;
 
@@ -79,10 +82,17 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product")
     private  Set<WatchList> watchLists;
+
+    @OneToMany(mappedBy = "product")
+    private  Set<Review> reviews;
     
     public ProductDTO toProductDTO() {
         return new ProductDTO ()
                 .setId ( id )
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdateAt(getUpdatedAt())
+                .setUpdateBy(getUpdatedBy())
                 .setTitle ( title )
                 .setSlug ( slug )
                 .setImage ( image )
@@ -96,6 +106,7 @@ public class Product extends BaseEntity {
                 .setAvailable(available)
                 .setAction(action)
                 .setCountday(countday)
+                .setCheatMoney(cheatMoney)
                 ;
     }
 }

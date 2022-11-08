@@ -46,8 +46,10 @@ public class Bid extends BaseEntity {
     public BidDTO toBidDTO(){
         return new BidDTO()
                 .setId(id)
-                .setCreatedAt(account.getCreatedAt())
-                .setCreatedBy(account.getUsername())
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdateAt(getUpdatedAt())
+                .setUpdateBy(getUpdatedBy())
                 .setEmail(email)
                 .setBidPrice(bidPrice)
                 .setEstimatePrice(estimatePrice)

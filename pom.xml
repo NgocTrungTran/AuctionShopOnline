@@ -152,6 +152,7 @@
             <version>3.0.0</version>
         </dependency>
 
+<!--        <dependency>-->
 <!--        Gửi mail -->
         <dependency>
             <groupId>javax.mail</groupId>
@@ -181,6 +182,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

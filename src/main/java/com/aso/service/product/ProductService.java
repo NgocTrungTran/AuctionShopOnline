@@ -20,6 +20,8 @@ public interface ProductService extends IGeneralService<Product> {
 
     List<ProductDTO> findAllProductsDTO();
 
+    List<ProductDTO> getProductsDTOModeratedByCreatedBy(String createdBy);
+
     List<ProductDTO> findAllProductsDTOAuctions();
 
     List<ProductDTO> findAllProductsDTOTheShop();
@@ -44,4 +46,5 @@ public interface ProductService extends IGeneralService<Product> {
     Page<ProductDTO> findAllProductss(Pageable pageable, @Param("keyword") String keyword);
     ResponseEntity<Page<ProductDTO>> findAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
     List<ProductDTO> isSlug();
+    List<ProductDTO> findTopProductBySold();
 }

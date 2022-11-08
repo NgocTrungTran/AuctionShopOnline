@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderDTO.setAccount ( accountOptional.get ().toAccountDTO () );
         orderDTO.setStatus ( status );
-        orderDTO.setCreatedBy ( accountOptional.get ().getUsername () );
+        orderDTO.setCreatedBy ( accountOptional.get ().getEmail () );
         Order order = orderRepository.save ( orderDTO.toOrder () );
 
         return order.toOrderDTO ();

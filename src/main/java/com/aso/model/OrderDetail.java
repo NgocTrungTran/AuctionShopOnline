@@ -37,6 +37,25 @@ import java.math.BigDecimal;
                 }
         )
 )
+
+// turnoverMonth
+@NamedNativeQuery(
+        name = "sp_turnoverByMonth",
+        query =
+                "call sp_turnoverByMonth();",
+        resultSetMapping = "result_turnoverByMonth"
+)
+@SqlResultSetMapping(
+        name = "result_turnoverByMonth",
+        classes = @ConstructorResult(
+                targetClass = Chart.class,
+                columns = {
+                        @ColumnResult(name = "turnoverMonth", type = BigDecimal.class),
+                        @ColumnResult(name = "turnoverYear", type = BigDecimal.class)
+                }
+        )
+)
+
 public class OrderDetail extends BaseEntity {
 
     @Id
@@ -73,6 +92,7 @@ public class OrderDetail extends BaseEntity {
             .setQuantity(quantity)
             .setAmountTransaction(amountTransaction)
             .setStatus (status.toStatusDTO ())
+            .setCreatedBy ( getCreatedBy () )
             ;
     }
 }

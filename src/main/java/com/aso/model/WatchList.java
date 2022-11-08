@@ -39,8 +39,8 @@ public class WatchList {
     public WatchListDTO toWatchListDTO() {
         return new WatchListDTO ()
                 .setId ( id )
-                .setAccount ( account )
-                .setProduct ( product )
+                .setAccount ( account.toAccountDTO () )
+                .setProduct ( product.toProductDTO () )
                 .setCreatedAt ( createdAt );
     }
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 @Builder
 @Entity
@@ -38,6 +39,9 @@ public class Account extends BaseEntity{
 
     private String avatar;
 
+    @Column(precision = 12, scale = 0)
+    private BigDecimal surplus;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -61,15 +65,23 @@ public class Account extends BaseEntity{
     @OneToMany(mappedBy = "account")
     private List<WatchList> watchLists;
 
+    @OneToMany(mappedBy = "account")
+    private List<Review> reviews;
+
     public AccountDTO toAccountDTO() {
         return new AccountDTO ()
                 .setId(id)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 .setUsername ( username )
                 .setFullName ( fullName )
                 .setLocationRegion( locationRegion.toLocationRegionDTO ())
                 .setEmail ( email )
                 .setPhone ( phone )
                 .setAvatar ( avatar )
+                .setSurplus(surplus)
                 .setBlocked ( blocked )
                 .setRole(role.toRoleDTO());
     }

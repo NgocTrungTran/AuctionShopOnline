@@ -105,9 +105,9 @@ public class CategoryAPI {
     @GetMapping("/g")
     public ResponseEntity<Page<CategoryDTO>> getAllCategory(Pageable pageable) {
         Page<CategoryDTO> categoryDTOPage = categoryService.findAllCategoryDTOPage(pageable);
-        if (categoryDTOPage.isEmpty()) {
-            throw new DataOutputException("No data");
-        }
+//        if (categoryDTOPage.isEmpty()) {
+//            throw new DataOutputException("No data");
+//        }
         return new ResponseEntity<>(categoryDTOPage, HttpStatus.OK);
     }
 
@@ -116,9 +116,9 @@ public class CategoryAPI {
         try {
             keyword = "%" + keyword + "%";
             Page<CategoryDTO> categoryDTOPage = categoryService.getAllCategroys(pageable, keyword);
-            if (categoryDTOPage.isEmpty()) {
-                throw new DataOutputException("Danh sách sản phẩm trống");
-            }
+//            if (categoryDTOPage.isEmpty()) {
+//                throw new DataOutputException("Danh sách sản phẩm trống");
+//            }
             return new ResponseEntity<>(categoryDTOPage, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

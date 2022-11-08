@@ -1,5 +1,6 @@
 package com.aso.service.watchList;
 
+import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.WatchList;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,7 +70,32 @@ public class WatchListServiceImpl implements WatchListService{
         watchList.setAccount ( account );
         watchList.setProduct ( product );
 
+        WatchListDTO watchListDTO = watchListRepository.getWatchListDTOByAccountIdAndProductId ( account.getId (), product.getId () );
+        if ( watchListDTO != null ) {
+            throw new DataOutputException ( "Sản phẩm đã tồn tại trong danh sách yêu thích" );
+        }
+
         WatchList newWatchList = watchListRepository.save ( watchList );
         return newWatchList.toWatchListDTO ();
+    }
+
+    @Override
+    public void doRemoveWatchList(Account account, Product product) {
+        WatchListDTO watchListDTO = watchListRepository.getWatchListDTOByAccountIdAndProductId ( account.getId (), product.getId () );
+        if ( watchListDTO == null ) {
+            throw new DataOutputException ( "Sản phẩm không tồn tại trong danh sách yêu thích" );
+        }
+
+        watchListRepository.delete ( watchListDTO.toWatchList () );
+    }
+
+    @Override
+    public List<WatchListDTO> getWatchListDTOsByAccountId(Long accountId) {
+        return watchListRepository.getWatchListDTOsByAccountId ( accountId );
+    }
+
+    @Override
+    public WatchListDTO getWatchListDTOsByAccountIdAndProductId(Long accountId, Long productId) {
+        return watchListRepository.getWatchListDTOByAccountIdAndProductId ( accountId, productId );
     }
 }

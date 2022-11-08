@@ -2,6 +2,7 @@ package com.aso.model.dto;
 
 import com.aso.model.Account;
 import com.aso.model.Auction;
+import com.aso.model.BaseEntity;
 import com.aso.model.Product;
 import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
@@ -25,7 +26,7 @@ import static com.aso.utils.AppConstants.MAX_AUCTION_LENGTH_IN_DAYS;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class AuctionDTO {
+public class AuctionDTO extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,7 +85,7 @@ public class AuctionDTO {
     }
 
     public Auction toAuction(){
-        return  new Auction()
+        return (Auction) new Auction()
                 .setId(id)
                 .setEmail(email)
                 .setAccount(account.toAccount())
@@ -96,6 +97,10 @@ public class AuctionDTO {
                 .setAuctionEndTime(auctionEndTime)
                 .setAuctionStartTime(auctionStartTime)
                 .setDaysToEndTime(daysToEndTime)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 ;
 
     }

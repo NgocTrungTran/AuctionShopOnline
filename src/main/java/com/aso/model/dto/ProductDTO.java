@@ -1,5 +1,6 @@
 package com.aso.model.dto;
 
+import com.aso.model.BaseEntity;
 import com.aso.model.Category;
 import com.aso.model.Product;
 import com.aso.model.ProductMedia;
@@ -29,7 +30,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ProductDTO implements Validator {
+public class ProductDTO extends BaseEntity implements Validator {
     private Long id;
     private Date createdAt;
     private String createdBy;
@@ -50,6 +51,7 @@ public class ProductDTO implements Validator {
     private CategoryDTO category;
     private String description;
     private String countday;
+    private BigDecimal cheatMoney;
 
     private List<String> images;
 
@@ -70,7 +72,7 @@ public class ProductDTO implements Validator {
         this.action = action;
     }
 
-    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, BigDecimal estimatePrice, String slug, Long sold, String title, Long viewed, Category category, String description, String countday) {
+    public ProductDTO(Long id, Date createdAt, String createdBy, Date updateAt, String updateBy, Boolean action, Long available, String image, Boolean moderation, BigDecimal price, BigDecimal estimatePrice, String slug, Long sold, String title, Long viewed, Category category, String description, String countday, BigDecimal cheatMoney) {
         this.id = id;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
@@ -89,6 +91,7 @@ public class ProductDTO implements Validator {
         this.category = category.toCategoryDTO();
         this.description = description;
         this.countday = countday;
+        this.cheatMoney = cheatMoney;
     }
 
     public Product toProduct() {
@@ -104,9 +107,13 @@ public class ProductDTO implements Validator {
                 .setDescription(description)
                 .setAvailable(available)
                 .setCountday(countday)
+                .setCheatMoney(cheatMoney)
                 .setAction(action)
                 .setCategory ( category.toCategory () )
-                .setCreatedBy(createdBy)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 ;
 
     }

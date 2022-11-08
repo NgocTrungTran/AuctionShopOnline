@@ -23,12 +23,14 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class BidDTO {
+public class BidDTO extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date createdAt;
     private String createdBy;
+    private Date updateAt;
+    private String updateBy;
 
     @Schema(example = "sample@mail.com")
     @Email(regexp = "[^@]+@[^@]+\\.[^@.]+", message = "Email is not valid")
@@ -58,7 +60,7 @@ public class BidDTO {
     }
 
     public Bid toBid(){
-        return new Bid()
+        return (Bid) new Bid()
                 .setId(id)
                 .setCreatedBy(account.getCreatedBy())
                 .setEmail(email)
@@ -67,6 +69,10 @@ public class BidDTO {
                 .setAccount(account.toAccount())
                 .setAuction(auction.toAuction())
                 .setDeleted(deleted)
+                .setCreatedAt(getCreatedAt())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedAt(getUpdatedAt())
+                .setUpdatedBy(getUpdatedBy())
                 ;
     }
 }

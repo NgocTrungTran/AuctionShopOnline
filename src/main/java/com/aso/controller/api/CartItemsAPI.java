@@ -1,6 +1,7 @@
 package com.aso.controller.api;
 
 import com.aso.exception.AccountInputException;
+import com.aso.exception.AttributesExistsException;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.model.Account;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -187,10 +189,14 @@ public class CartItemsAPI {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 
+            if ( Objects.equals ( accountOptional.get ().getEmail (), productOptional.get ().getCreatedBy () ) ) {
+                throw new AttributesExistsException ( "Không thể mua sản phẩm của bạn" );
+            }
+
             CartItem cartItem = cartItemService.doSaveCartItem ( accountId, cartItemsDTO );
             return new ResponseEntity<>(cartItem.toCartItemListDTO (), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new DataInputException("Lỗi không xác định, hãy liên hệ với quản trị viên!!");
+            throw new DataOutputException (e.getMessage ());
         }
     }
 }
