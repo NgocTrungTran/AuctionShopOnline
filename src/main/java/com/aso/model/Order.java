@@ -46,7 +46,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "status_id", referencedColumnName = "id", columnDefinition = "BIGINT default 1")
     private Status status;
 
-    @OneToMany(mappedBy = "order", targetEntity = OrderDetail.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetail;
 
     public OrderDTO toOrderDTO() {
