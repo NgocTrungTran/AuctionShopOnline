@@ -38,8 +38,12 @@ public class BidAPI {
     @PostMapping("/create")
     public ResponseEntity<?> createBid(
             @RequestBody @Valid BidDTO bidDTO) {
+        try {
+            return new ResponseEntity<>(bidService.createBid(bidDTO).toBidDTO(), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new DataOutputException (e.getMessage ());
+        }
 
-        return new ResponseEntity<>(bidService.createBid(bidDTO).toBidDTO(), HttpStatus.CREATED);
     }
 
     @PutMapping("/delete-soft/{bidId}")

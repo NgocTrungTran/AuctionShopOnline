@@ -40,41 +40,45 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Bid createBid(BidDTO bidDTO) {
-        Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
-        if (account.isEmpty()) {
-            throw new DataInputException("Tài khoản không tồn tại!");
-        }
-        String email = appUtil.getPrincipalEmail();
-        Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
-        if ((auction.isEmpty())) {
-            throw new DataInputException("Phiên đấu giá không tồn tại!");
-        }
-        bidDTO.setAccount(account.get().toAccountDTO());
-        bidDTO.setAuction(auction.get().toAuctionDTO());
+        try {
+            Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
+            if (account.isEmpty()) {
+                throw new DataInputException("Tài khoản không tồn tại!");
+            }
+            String email = appUtil.getPrincipalEmail();
+            Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
+            if ((auction.isEmpty())) {
+                throw new DataInputException("Phiên đấu giá không tồn tại!");
+            }
+            bidDTO.setAccount(account.get().toAccountDTO());
+            bidDTO.setAuction(auction.get().toAuctionDTO());
 
-        Bid bid = bidDTO.toBid();
+            Bid bid = bidDTO.toBid();
 
-        Bid savedBid = null;
+            Bid savedBid = null;
 
-        if (auction.get().getAuctionType().equals(AuctionType.BUY_NOW)) {
-            throw new IncorrectAuctionTypeException("Không thể đặt giá thầu trên đấu giá mua ngay bây giờ!");
+            if (auction.get().getAuctionType().equals(AuctionType.BUY_NOW)) {
+                throw new IncorrectAuctionTypeException("Không thể đặt giá thầu trên đấu giá mua ngay bây giờ!");
+            }
+            if (bid.getBidPrice().compareTo(auction.get().getCurrentPrice()) <= 0) {
+                throw new IncorrectPriceException(
+                        "Giá dự thầu phải lớn hơn giá chào!");
+            }
+            if (new Date().after(auction.get().getAuctionEndTime())) {
+                throw new IncorrectDateException("Phiên đấu giá đã kết thúc!");
+            }
+
+            auction.get().setCurrentPrice(bid.getBidPrice());
+            auction.get().setAuctionType(AuctionType.BIDDING);
+            auctionRepository.save(auction.get());
+            bid.setCreatedBy(email);
+            bid.setAuction(auction.get());
+            savedBid = bidRepository.save(bid);
+
+            return savedBid;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException ( "Hãy đăng nhập để thực hiện thao tác này" );
         }
-        if (bid.getBidPrice().compareTo(auction.get().getCurrentPrice()) <= 0) {
-            throw new IncorrectPriceException(
-                    "Giá dự thầu phải lớn hơn giá chào!");
-        }
-        if (new Date().after(auction.get().getAuctionEndTime())) {
-            throw new IncorrectDateException("Phiên đấu giá đã kết thúc!");
-        }
-
-        auction.get().setCurrentPrice(bid.getBidPrice());
-        auction.get().setAuctionType(AuctionType.BIDDING);
-        auctionRepository.save(auction.get());
-        bid.setCreatedBy(email);
-        bid.setAuction(auction.get());
-        savedBid = bidRepository.save(bid);
-
-        return savedBid;
     }
 
 
