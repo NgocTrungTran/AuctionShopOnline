@@ -29,8 +29,6 @@ public class SimpleEmailExampleController {
         System.out.println (emailSender);
 
         this.emailSender.send(message);
-        // Send Message!
-
         return "Email Sent!";
     }
 

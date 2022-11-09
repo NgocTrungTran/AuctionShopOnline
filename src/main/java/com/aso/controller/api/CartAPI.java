@@ -3,7 +3,6 @@ package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
 import com.aso.model.Account;
-import com.aso.model.Cart;
 import com.aso.model.dto.CartDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
@@ -49,28 +48,25 @@ public class CartAPI {
         Optional<Account> accountOptional = accountService.findById ( cartDTO.getAccount ().getId () );
 
         if ( accountOptional.isEmpty () ) {
-            return new ResponseEntity<>("Tài khoản không tồn tại",HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Tài khoản không tồn tại!",HttpStatus.NO_CONTENT);
         }
 
         try {
             cartDTO.setAccount ( accountOptional.get ().toAccountDTO () );
             cartService.save(cartDTO.toCart());
-            return new ResponseEntity<>("Tạo giỏ hàng thành công", HttpStatus.CREATED);
+            return new ResponseEntity<>("Tạo giỏ hàng thành công!", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("không thể tạo được đơn hàng",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("không thể tạo được đơn hàng!",HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/remove")
     public ResponseEntity<?> doRemove(Long accountId) {
 
-
-
         try {
-
-            return new ResponseEntity<>("Tạo giỏ hàng thành công", HttpStatus.CREATED);
+            return new ResponseEntity<>("Tạo giỏ hàng thành công!", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("không thể tạo được đơn hàng",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("không thể tạo được đơn hàng!",HttpStatus.BAD_REQUEST);
         }
     }
 }

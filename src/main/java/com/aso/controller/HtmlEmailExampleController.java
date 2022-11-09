@@ -50,6 +50,6 @@ public class HtmlEmailExampleController {
 
         this.emailSender.send(message);
 
-        return "Email Sent!";
+        return "Đã gửi email thành công!";
     }
 }

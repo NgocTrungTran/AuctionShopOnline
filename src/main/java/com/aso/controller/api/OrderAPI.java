@@ -5,8 +5,6 @@ import com.aso.model.Order;
 import com.aso.model.OrderDetail;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
-import com.aso.model.dto.StatusDTO;
-import com.aso.repository.CartRepository;
 import com.aso.service.order.OrderService;
 import com.aso.service.orderdetail.OrderDetailService;
 import com.aso.service.status.StatusService;
@@ -36,11 +34,8 @@ public class OrderAPI {
 
     @Autowired
     private OrderDetailService orderDetailService;
-    @Autowired
-    private StatusService statusService;
 
     @GetMapping()
-    // ok
     public ResponseEntity<?> findAllOrder(){
         List<OrderDTO> orderDTOS = orderService.findOrderDTO();
         if (orderDTOS.isEmpty()){
@@ -49,7 +44,6 @@ public class OrderAPI {
         return new ResponseEntity<>(orderDTOS,HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    // ok
     public ResponseEntity<?> findOrderByUserName(@PathVariable Long id) {
         OrderDTO orderList = orderService.findOrderDTOById(id);
 
@@ -65,7 +59,6 @@ public class OrderAPI {
         }
         return new ResponseEntity<>(orderDetailDTOS.get().toOrderDetailDTO(),HttpStatus.OK);
     }
-
 
     @GetMapping("/order-detail/findAll/")
     public ResponseEntity<?> findAllOrderDetail(){
@@ -119,7 +112,6 @@ public class OrderAPI {
     }
 
     @PutMapping("/order-detail/checkout/{title}")
-    // kiểm tra trạng thái đơn hàng dã duyệt hay chưa
     public ResponseEntity<?> checkOutOrder(@RequestBody OrderDetailDTO orderDetailDTO,@PathVariable String title, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
@@ -133,7 +125,6 @@ public class OrderAPI {
 
     }
     @PutMapping("/order-detail/delivery/{title}")
-    // kiểm tra trạng thái đơn hàng đã giao hay chưa
     public ResponseEntity<?> doDeliveryOrder(@RequestBody OrderDetailDTO orderDetailDTO,@PathVariable String title, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
@@ -175,8 +166,4 @@ public class OrderAPI {
             return new ResponseEntity<>("Lỗi không xác định",HttpStatus.NO_CONTENT);
         }
     }
-
-
-
-
 }

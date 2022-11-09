@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +42,6 @@ public class CartItemsAPI {
     private ProductService productService;
 
     @GetMapping("/{email}")
-    // đã test ok
     public ResponseEntity<?> getCartByAccountId(@PathVariable String email) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( email );
@@ -57,7 +55,6 @@ public class CartItemsAPI {
         }
     }
     @GetMapping("/get-by-cart-id/{cartId}")
-    // đã test ok
     public ResponseEntity<?> getCartItemByCartId(@PathVariable Long cartId) {
         List<CartItemDTO> cartItemDTOList = new ArrayList<> ();
         try {
@@ -76,7 +73,6 @@ public class CartItemsAPI {
     }
 
     @GetMapping("/id/{id}")
-    // đã test ok
     public ResponseEntity<?> getCartById(@PathVariable Long id) {
         try {
             Optional<CartItemDTO> cartItemsDTO = cartItemService.getCartItemDTOById(id);

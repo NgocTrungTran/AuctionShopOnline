@@ -33,6 +33,6 @@ public class ProductMediaAPI {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> doDelete(@PathVariable Long id) {
         productMediaService.deleteById(id);
-        return new ResponseEntity<>("delete success!", HttpStatus.OK);
+        return new ResponseEntity<>("Đã xóa thành công!", HttpStatus.OK);
     }
 }

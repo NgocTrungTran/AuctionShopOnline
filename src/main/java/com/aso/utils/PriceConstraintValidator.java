@@ -1,7 +1,5 @@
 package com.aso.utils;
 
-import com.aso.utils.PriceConstraint;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.math.BigDecimal;
