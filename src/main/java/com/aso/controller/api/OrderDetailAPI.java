@@ -5,7 +5,6 @@ import com.aso.model.Account;
 import com.aso.model.OrderDetail;
 import com.aso.model.Product;
 import com.aso.model.Status;
-import com.aso.model.dto.CartItemDTO;
 import com.aso.model.dto.OrderDTO;
 import com.aso.model.dto.OrderDetailDTO;
 import com.aso.model.dto.StatusDTO;
@@ -15,18 +14,14 @@ import com.aso.service.orderdetail.OrderDetailService;
 import com.aso.service.product.ProductService;
 import com.aso.service.status.StatusService;
 import com.aso.utils.AppUtil;
-import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/api/orders-detail")
@@ -46,7 +41,6 @@ public class OrderDetailAPI {
     private AppUtil appUtil;
 
     @GetMapping("/{email}")
-    // đã test ok
     public ResponseEntity<?> getOrderByAccountEmail(@PathVariable String email) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( email );
@@ -60,7 +54,6 @@ public class OrderDetailAPI {
         }
     }
     @GetMapping("/get-by-product-created-by/{createdBy}")
-    // đã test ok
     public ResponseEntity<?> getOrderDetailByProductCreatedBy(@PathVariable String createdBy) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( createdBy );
@@ -98,7 +91,6 @@ public class OrderDetailAPI {
             }
 
             List<OrderDetailDTO> orderDetailDTOS = orderDetailService.doCreateOrderDetail ( orderId, orderDetailDTOList );
-
 
             return new ResponseEntity<>(orderDetailDTOS, HttpStatus.OK);
         }catch (Exception e){

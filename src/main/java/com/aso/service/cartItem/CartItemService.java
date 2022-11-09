@@ -19,8 +19,6 @@ public interface CartItemService extends IGeneralService<CartItem> {
     BigDecimal getSumAmountByCartId(Long cartId);
 
     List<CartItemDTO> findAllCartItemsDTO(@Param("cartId") Long cartId);
-//
-//    void delete(Long cartItem);
 
     List<CartItemDTO> findCartItemDTOByEmail(String email);
 

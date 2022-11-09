@@ -2,7 +2,6 @@ package com.aso.utils;
 
 import com.aso.model.dto.ProductDTO;
 import com.aso.service.product.ProductService;
-import com.aso.utils.IValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

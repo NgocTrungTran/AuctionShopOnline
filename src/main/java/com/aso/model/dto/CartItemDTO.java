@@ -43,15 +43,7 @@ public class CartItemDTO {
         this.quantity = quantity;
         this.amountTransaction = amountTransaction;
     }
-    public CartItemDTO(Long id, Product product, String title, BigDecimal price, int quantity, BigDecimal amountTransaction, Cart cart) {
-        this.id = id;
-        this.product = product.toProductDTO ();
-        this.title = title;
-        this.price = price;
-        this.quantity = quantity;
-        this.amountTransaction = amountTransaction;
-        this.cart = cart.toCartDTO ();
-    }
+
     public CartItem toCartItem() {
         return new CartItem()
                 .setId(id)

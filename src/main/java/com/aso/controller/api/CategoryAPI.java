@@ -1,13 +1,10 @@
 package com.aso.controller.api;
 
 import com.aso.exception.DataInputException;
-import com.aso.exception.DataOutputException;
 import com.aso.exception.ResourceNotFoundException;
 import com.aso.model.Category;
 import com.aso.model.dto.CategoryDTO;
-import com.aso.repository.CategoryRepository;
 import com.aso.service.category.CategoryService;
-import com.aso.service.product.ProductService;
 import com.aso.utils.AppUtil;
 import com.aso.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +45,7 @@ public class CategoryAPI {
     public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
         Optional<CategoryDTO> categoryDTO = categoryService.findCategoryDTOById(id);
         if (categoryDTO.isEmpty()) {
-            throw new ResourceNotFoundException("Invalid category ID");
+            throw new ResourceNotFoundException("Danh sách thể loại trống!");
         }
         return new ResponseEntity<>(categoryDTO.get().toCategory(), HttpStatus.OK);
     }
@@ -72,9 +69,9 @@ public class CategoryAPI {
         Optional<Category> optionalCategory = categoryService.findById(id);
         if (optionalCategory.isPresent()) {
             categoryService.softDelete(optionalCategory.get());
-            return new ResponseEntity<>("Delete success!", HttpStatus.OK);
+            return new ResponseEntity<>("Đã xóa thành công!", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Delete error!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Xóa thất bại!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -98,16 +95,13 @@ public class CategoryAPI {
             Category newCategory = categoryService.save(category.get());
             return new ResponseEntity<>(newCategory.toCategoryDTO(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Lỗi của hệ thống!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/g")
     public ResponseEntity<Page<CategoryDTO>> getAllCategory(Pageable pageable) {
         Page<CategoryDTO> categoryDTOPage = categoryService.findAllCategoryDTOPage(pageable);
-//        if (categoryDTOPage.isEmpty()) {
-//            throw new DataOutputException("No data");
-//        }
         return new ResponseEntity<>(categoryDTOPage, HttpStatus.OK);
     }
 
@@ -116,9 +110,6 @@ public class CategoryAPI {
         try {
             keyword = "%" + keyword + "%";
             Page<CategoryDTO> categoryDTOPage = categoryService.getAllCategroys(pageable, keyword);
-//            if (categoryDTOPage.isEmpty()) {
-//                throw new DataOutputException("Danh sách sản phẩm trống");
-//            }
             return new ResponseEntity<>(categoryDTOPage, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -47,7 +47,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "c.price ," +
             "c.quantity, " +
             "c.amountTransaction " +
-//            "c.cart" +
             " )  " +
             "FROM CartItem AS c WHERE c.cart.account.email = ?1 AND c.deleted = false")
     List<CartItemDTO> findCartItemDTOByEmail(String email);

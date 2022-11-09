@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +59,7 @@ public class AuctionAPI {
         List<AuctionDTO> auctionDTOS = auctionService.getAllAuctions();
 
         if (auctionDTOS.isEmpty()) {
-            throw new DataOutputException("No data");
+            throw new DataOutputException("Danh sách đấu giá trống!");
         }
 
         return new ResponseEntity<>(auctionDTOS, HttpStatus.OK);
@@ -70,14 +69,14 @@ public class AuctionAPI {
     public ResponseEntity<?> getAuctionById(@PathVariable String auctionId) {
 
         if (!validation.isIntValid(auctionId)) {
-            throw new DataInputException("Auction ID invalid!");
+            throw new DataInputException("ID phiên đấu giá không tồn tại!");
         }
 
         Long auction_id = Long.parseLong(auctionId);
         Optional<Auction> auctionOptional = auctionService.findById(auction_id);
 
         if (auctionOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Auction invalid!");
+            throw new ResourceNotFoundException("Phiên đấu giá không tồn tại");
         }
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
     }
@@ -88,7 +87,7 @@ public class AuctionAPI {
         Optional<AuctionDTO> auctionDTO = auctionService.findByAuctionByProductId(productId);
 
         if (auctionDTO.isEmpty()) {
-            throw new ResourceNotFoundException("Auction invalid!");
+            throw new ResourceNotFoundException("Phiên đấu giấ không tồn tại!");
         }
         return new ResponseEntity<>(auctionDTO.get(), HttpStatus.OK);
     }
@@ -154,7 +153,7 @@ public class AuctionAPI {
             return new ResponseEntity<>(newAuction.toAuctionDTO(), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Lỗi của hệ thống!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -162,7 +161,7 @@ public class AuctionAPI {
     public ResponseEntity<Page<AuctionDTO>> getAllAuctions(Pageable pageable) {
         Page<AuctionDTO> auctionDTOPage = auctionService.findAllAuctions(pageable);
         if (auctionDTOPage.isEmpty()) {
-            throw new DataOutputException("No data");
+            throw new DataOutputException("Danh sách phiên đấu giá trống!");
         }
         return new ResponseEntity<>(auctionDTOPage, HttpStatus.OK);
     }
@@ -173,7 +172,7 @@ public class AuctionAPI {
             keyword = "%" + keyword + "%";
             Page<AuctionDTO> auctionDTOPage = auctionService.findAllAuctionss(pageable, keyword);
             if (auctionDTOPage.isEmpty()) {
-                throw new DataOutputException("Danh sách sản phẩm trống");
+                throw new DataOutputException("Danh sách phiên đấu giá trống!");
             }
             return new ResponseEntity<>(auctionDTOPage, HttpStatus.OK);
         } catch (Exception e) {

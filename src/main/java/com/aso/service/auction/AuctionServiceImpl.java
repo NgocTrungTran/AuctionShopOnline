@@ -3,9 +3,7 @@ package com.aso.service.auction;
 import com.aso.exception.*;
 import com.aso.model.Auction;
 import com.aso.model.Product;
-import com.aso.model.Review;
 import com.aso.model.dto.AuctionDTO;
-import com.aso.model.dto.ProductDTO;
 import com.aso.repository.AuctionRepository;
 import com.aso.repository.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +24,7 @@ public class AuctionServiceImpl implements AuctionService {
     private static final int PAGE_SIZE = 20;
     @Autowired
     private AuctionRepository auctionRepository;
-    @Autowired
-    private BidRepository bidRepository;
+
     @Override
     public Auction createAuction(AuctionDTO auctionDTO) {
         Auction auction = auctionRepository.save(auctionDTO.toAuction());

@@ -92,14 +92,14 @@ public class BidAPI {
     public ResponseEntity<?> getBidById(@PathVariable String bidId) {
 
         if (!validation.isIntValid(bidId)) {
-            throw new DataInputException("Auction ID invalid!");
+            throw new DataInputException("Id đấu thầu không tồn tại!!");
         }
 
         Long bid_id = Long.parseLong(bidId);
         Optional<Bid> bidOptional = bidService.findById(bid_id);
 
         if (bidOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Bid invalid!");
+            throw new ResourceNotFoundException("Danh sách đấu thầu trống!");
         }
         return new ResponseEntity<>(bidOptional.get().toBidDTO(), HttpStatus.OK);
     }
@@ -109,7 +109,7 @@ public class BidAPI {
         List<BidDTO> bidDTO = bidService.findByRelatedOfferId(auctionId);
 
         if (bidDTO.isEmpty()) {
-            throw new ResourceNotFoundException("Bid invalid!");
+            throw new ResourceNotFoundException("Danh sách đấu thầu trống!");
         }
         return new ResponseEntity<>(bidDTO, HttpStatus.OK);
     }

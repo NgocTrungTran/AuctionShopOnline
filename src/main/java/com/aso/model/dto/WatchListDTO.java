@@ -3,7 +3,6 @@ package com.aso.model.dto;
 import com.aso.model.Account;
 import com.aso.model.Product;
 import com.aso.model.WatchList;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

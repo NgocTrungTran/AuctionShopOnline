@@ -10,7 +10,6 @@ import com.aso.model.dto.WatchListDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.product.ProductService;
 import com.aso.service.watchList.WatchListService;
-import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
