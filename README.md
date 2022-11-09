@@ -6,5 +6,4 @@
 - Trần Hồng Phong
 
 ### 1. Dự án Auction Shop Online (Cửa hàng đấu giá trực tuyến)
-### 2. Kiến thức & Công nghệ áp dụng
-### 3. Link Backlog (tính năng)
+### 2. Kiến thức & Công nghệ áp dụng: Java, Spring Boot, React JS, HTML, CSS, JavaScript, JSX, My SQL, GitHub, Bootstrap,..
