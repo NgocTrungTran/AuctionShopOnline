@@ -313,6 +313,7 @@ public class ProductAPI {
                 p.get().setCountday(null);
             }
 
+
             for (String pr : productDTO.getImages ()) {
                 ProductMedia productMedia = new ProductMedia ();
                 productMedia.setId ( 0L );

@@ -23,6 +23,7 @@ public interface ProductMediaRepository extends JpaRepository<ProductMedia, Long
             ") FROM ProductMedia AS pm WHERE pm.product.id = ?1")
     List<ProductMediaDTO> findAllById(Long id);
 
+
 //    @Query("DELETE FROM ProductMedia WHERE id = ?1")
 //    Optional<ProductMediaDTO> dele(Long id);
 }
