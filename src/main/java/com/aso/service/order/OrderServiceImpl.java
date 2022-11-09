@@ -24,15 +24,6 @@ public class OrderServiceImpl implements OrderService {
     private StatusRepository statusRepository;
     @Autowired
     private LocationRegionRepository locationRegionRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private CartRepository cartRepoSitory;
-    @Autowired
-    private OrderDetailRepository orderDetailRepository;
-    @Autowired
-    private ProductRepository productRepository;
-
 
     @Override
     public List<Order> findAll() {
@@ -99,7 +90,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO doCheckoutOrder(Long accountId, OrderDTO orderDTO) {
-//        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<> ();
         Optional<Account> accountOptional = accountRepository.findById ( accountId );
         if ( accountOptional.isEmpty () ) {
             throw new AccountInputException ( "Tài khoản không tồn tại" );

@@ -1,7 +1,6 @@
 package com.aso.service.bid;
 
 
-import com.aso.model.Auction;
 import com.aso.model.Bid;
 import com.aso.model.dto.BidDTO;
 import com.aso.service.IGeneralService;

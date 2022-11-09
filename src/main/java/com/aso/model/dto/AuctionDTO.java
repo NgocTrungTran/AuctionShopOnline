@@ -16,7 +16,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.aso.utils.AppConstants.MAX_AUCTION_LENGTH_IN_DAYS;
@@ -40,7 +39,6 @@ public class AuctionDTO extends BaseEntity {
 
     private String updateBy;
 
-//    @Schema(example = "sample@mail.com")
     @Email(regexp = "[^@]+@[^@]+\\.[^@.]+", message = "Email không hợp lệ!")
     private String email;
 

@@ -1,11 +1,9 @@
 package com.aso.controller.api;
 
 
-import com.aso.model.Role;
 import com.aso.model.dto.RoleDTO;
 import com.aso.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
 package com.aso.model.dto;
 
-import com.aso.model.Product;
 import com.aso.model.ProductMedia;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,19 +25,6 @@ public class ProductMediaDTO {
     public ProductMediaDTO(Long id, String fileUrl) {
         this.id = id;
         this.fileUrl = fileUrl;
-    }
-
-    public ProductMediaDTO(Long id, Long ts , String fileUrl) {
-        this.id = id;
-        this.ts = ts;
-        this.fileUrl = fileUrl;
-    }
-
-    public ProductMediaDTO(Long id, String fileUrl, Long ts, Product product) {
-        this.id = id;
-        this.fileUrl = fileUrl;
-        this.ts = ts;
-        this.product = product.toProductDTO();
     }
 
     public ProductMedia toProductMedia() {
