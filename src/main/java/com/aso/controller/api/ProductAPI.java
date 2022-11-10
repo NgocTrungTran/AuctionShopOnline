@@ -181,8 +181,14 @@ public class ProductAPI {
     public ResponseEntity<?> doCreate(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
 
         String email = appUtil.getPrincipalEmail ();
+        Optional<Account> account = accountService.getByEmail(email);
         if ( bindingResult.hasErrors () ) {
             return appUtil.mapErrorToResponse ( bindingResult );
+        }
+        account.get().setSurplus(account.get().getSurplus().subtract(productDTO.getCheatMoney()));
+        accountService.save(account.get());
+        if (account.get().getSurplus().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ResourceNotFoundException("Số dư tài khoản không đủ! Vui lòng nạp thêm tiền");
         }
         String checkPrice = String.valueOf ( new BigDecimal ( String.valueOf ( productDTO.getPrice () ) ) );
         if ( !checkPrice.toString ().matches ( "\"(^$|[0-9]*$)\"" ) ) {
