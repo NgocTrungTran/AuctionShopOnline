@@ -12,6 +12,8 @@ import com.aso.repository.BidRepository;
 import com.aso.service.account.AccountService;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,17 +38,25 @@ public class BidServiceImpl implements BidService {
     @Override
     public Bid createBid(BidDTO bidDTO) {
         try {
+            String email = appUtil.getPrincipalEmail();
+            if (email.equals("anonymousUser")) {
+                throw new ResourceNotFoundException("Bạn phải đăng nhập để thực hiện thao tác này");
+            }
             Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
             if (account.isEmpty()) {
                 throw new DataInputException("Tài khoản không tồn tại!");
             }
-            String email = appUtil.getPrincipalEmail();
             Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
             if ((auction.isEmpty())) {
                 throw new DataInputException("Phiên đấu giá không tồn tại!");
             }
+            List<BidDTO> bidDTOList = bidRepository.findByRelatedOfferId(bidDTO.getAuction().getId());
+            bidDTOList.get(0);
+            if (bidDTOList.get(0).getCreatedBy().equals(email)) {
+                throw new RuntimeException("Bạn không được đấu giá 2 lần cùng một lúc!");
+            }
+
             bidDTO.setAccount(account.get().toAccountDTO());
-            bidDTO.setAuction(auction.get().toAuctionDTO());
 
             Bid bid = bidDTO.toBid();
 
@@ -57,7 +67,7 @@ public class BidServiceImpl implements BidService {
             }
             if (bid.getBidPrice().compareTo(auction.get().getCurrentPrice()) <= 0) {
                 throw new IncorrectPriceException(
-                        "Giá dự thầu phải lớn hơn giá chào!");
+                        "Giá đấu thầu phải lớn hơn giá hiện tại!");
             }
             if (new Date().after(auction.get().getAuctionEndTime())) {
                 throw new IncorrectDateException("Phiên đấu giá đã kết thúc!");
@@ -72,7 +82,7 @@ public class BidServiceImpl implements BidService {
 
             return savedBid;
         } catch (Exception e) {
-            throw new ResourceNotFoundException ( "Hãy đăng nhập để thực hiện thao tác này" );
+            throw new ResourceNotFoundException(e.getMessage());
         }
     }
 
@@ -124,7 +134,7 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public List<BidDTO> findByRelatedOfferId(long id) {
+    public List<BidDTO> findByRelatedOfferId(Long id) {
         return bidRepository.findByRelatedOfferId(id);
     }
 
