@@ -292,7 +292,7 @@ public class AccountAPI {
             Account updatedAccount = accountService.editAccount( accountOption );
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
         } catch (Exception e) {
-            return new ResponseEntity<>("Lỗi đổi không được mật khẩu! ", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Lỗi không nạp được tiền vào tài khoản! ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
