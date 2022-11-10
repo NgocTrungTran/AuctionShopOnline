@@ -57,7 +57,7 @@ public class CategoryAPI {
         }
         Boolean exitByCategory = categoryService.existsCategoryByTitle(categoryDTO.getTitle());
         if (exitByCategory) {
-            throw new DataInputException("Loại sản phẩm đã tồn tại! Vui lòng nhập loại khác");
+            throw new DataInputException("Loại sản phẩm đã tồn tại!");
         }
         categoryDTO.setSlug(Validation.makeSlug(categoryDTO.getTitle()));
         Category category = categoryService.save(categoryDTO.toCategory());
@@ -81,6 +81,10 @@ public class CategoryAPI {
 
         if (bindingResult.hasErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
+        }
+        Boolean exitByCategory = categoryService.existsCategoryByTitle(categoryDTO.getTitle());
+        if (exitByCategory) {
+            throw new DataInputException("Loại sản phẩm đã tồn tại!");
         }
         Optional<Category> category = categoryService.findById(id);
         if (category.isEmpty()) {
