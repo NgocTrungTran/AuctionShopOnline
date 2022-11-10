@@ -131,14 +131,15 @@ public class CartItemServiceImpl implements CartItemService {
         if ( cartItemDTOOptional.isPresent () ) {
             cartItemDTO.setId ( cartItemDTOOptional.get ().getId () );
             cartItemDTO.setQuantity ( cartItemDTOOptional.get ().getQuantity () + cartItemDTO.getQuantity () );
-        } else {
-            cartItemDTO.setPrice ( product.get ().getPrice () );
         }
 
+        if ( product.get ().getAction () ) {
+            cartItemDTO.setAmountTransaction (cartItemDTO.getPrice () );
+        } else {
+            cartItemDTO.setPrice ( product.get ().getPrice () );
+            cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
+        }
         cartItemDTO.setProduct ( product.get ().toProductDTO () );
-        cartItemDTO.setPrice ( product.get ().getPrice () );
-        cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
-
 
         try {
             return cartItemRepository.save ( cartItemDTO.toCartItem () );
