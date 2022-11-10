@@ -278,4 +278,21 @@ public class AccountAPI {
             return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR );
         }
     }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<?> doDeposit(@RequestBody AccountDTO accountDTO) {
+        String email = appUtil.getPrincipalEmail();
+        Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
+        Account accountOption = accountOptional.get();
+
+        try {
+            accountOption.setUpdatedBy(email);
+            accountOption.setSurplus(accountOption.getSurplus().add(accountDTO.getSurplus()));
+
+            Account updatedAccount = accountService.save( accountOption );
+            return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi đổi không được mật khẩu! ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
