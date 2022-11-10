@@ -17,6 +17,13 @@ public class Chart {
     private BigDecimal turnoverMonth;
     private BigDecimal turnoverYear;
 
+
+    public Chart(Long id, BigDecimal auction, BigDecimal buy) {
+        this.id = id;
+        this.auction = auction;
+        this.buy = buy;
+    }
+
     public Chart(BigDecimal turnoverMonth, BigDecimal turnoverYear) {
         this.turnoverMonth = turnoverMonth;
         this.turnoverYear = turnoverYear;
