@@ -286,7 +286,7 @@ public class ProductAPI {
                 Calendar c = Calendar.getInstance();
                 c.setTime(dt);
 //                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
-                c.add(Calendar.MINUTE, Integer.parseInt(p.get().getCountday()));
+                c.add(Calendar.MINUTE, 5);
                 dt = c.getTime ();
                 auction.setAuctionEndTime ( dt );
                 auction.setDaysToEndTime ( Integer.parseInt ( p.get ().getCountday () ) );

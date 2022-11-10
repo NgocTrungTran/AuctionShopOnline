@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,43 +37,56 @@ public class BidServiceImpl implements BidService {
     @Override
     public Bid createBid(BidDTO bidDTO) {
         try {
-            Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
-            if (account.isEmpty()) {
-                throw new DataInputException("Tài khoản không tồn tại!");
+            Optional<Account> account = accountService.findById ( bidDTO.getAccount ().getId () );
+            if ( account.isEmpty () ) {
+                throw new DataInputException ( "Tài khoản không tồn tại!" );
             }
-            String email = appUtil.getPrincipalEmail();
-            Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
-            if ((auction.isEmpty())) {
-                throw new DataInputException("Phiên đấu giá không tồn tại!");
-            }
-            bidDTO.setAccount(account.get().toAccountDTO());
-            bidDTO.setAuction(auction.get().toAuctionDTO());
 
-            Bid bid = bidDTO.toBid();
+            String email = appUtil.getPrincipalEmail ();
+            Optional<Auction> auction = auctionRepository.findById ( bidDTO.getAuction ().getId () );
+            if ( (auction.isEmpty ()) ) {
+                throw new DataInputException ( "Phiên đấu giá không tồn tại!" );
+            }
+
+            if ( account.get ().getEmail ().equals ( auction.get ().getProduct ().getCreatedBy () ) ) {
+                throw new DataInputException ( "Không thể tham gia đấu giá với sản phẩm của bạn!" );
+            }
+
+            BigDecimal myBidPrice = bidDTO.getBidPrice ();
+            BigDecimal maxBidPrice = bidRepository.getBidPriceMax ( auction.get ().getId () );
+
+            if ( myBidPrice.compareTo ( maxBidPrice ) < 0 ) {
+                
+            }
+
+            bidDTO.setAccount ( account.get ().toAccountDTO () );
+            bidDTO.setAuction ( auction.get ().toAuctionDTO () );
+
+            Bid bid = bidDTO.toBid ();
 
             Bid savedBid = null;
 
-            if (auction.get().getAuctionType().equals(AuctionType.BUY_NOW)) {
-                throw new IncorrectAuctionTypeException("Không thể đặt giá thầu trên đấu giá mua ngay bây giờ!");
+            if ( auction.get ().getAuctionType ().equals ( AuctionType.BUY_NOW ) ) {
+                throw new IncorrectAuctionTypeException ( "Không thể đặt giá thầu trên đấu giá mua ngay bây giờ!" );
             }
-            if (bid.getBidPrice().compareTo(auction.get().getCurrentPrice()) <= 0) {
-                throw new IncorrectPriceException(
-                        "Giá dự thầu phải lớn hơn giá chào!");
+            if ( bid.getBidPrice ().compareTo ( auction.get ().getCurrentPrice () ) <= 0 ) {
+                throw new IncorrectPriceException (
+                        "Giá dự thầu phải lớn hơn giá chào!" );
             }
-            if (new Date().after(auction.get().getAuctionEndTime())) {
-                throw new IncorrectDateException("Phiên đấu giá đã kết thúc!");
+            if ( new Date ().after ( auction.get ().getAuctionEndTime () ) ) {
+                throw new IncorrectDateException ( "Phiên đấu giá đã kết thúc!" );
             }
 
-            auction.get().setCurrentPrice(bid.getBidPrice());
-            auction.get().setAuctionType(AuctionType.BIDDING);
-            auctionRepository.save(auction.get());
-            bid.setCreatedBy(email);
-            bid.setAuction(auction.get());
-            savedBid = bidRepository.save(bid);
+            auction.get ().setCurrentPrice ( bid.getBidPrice () );
+            auction.get ().setAuctionType ( AuctionType.BIDDING );
+            auctionRepository.save ( auction.get () );
+            bid.setCreatedBy ( email );
+            bid.setAuction ( auction.get () );
+            savedBid = bidRepository.save ( bid );
 
             return savedBid;
         } catch (Exception e) {
-            throw new ResourceNotFoundException ( "Hãy đăng nhập để thực hiện thao tác này" );
+            throw new ResourceNotFoundException ( e.getMessage () );
         }
     }
 
@@ -84,7 +98,7 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Optional<Bid> findById(Long id) {
-        return Optional.empty();
+        return Optional.empty ();
     }
 
     @Override
@@ -94,7 +108,7 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Bid save(Bid bid) {
-        return bidRepository.save(bid);
+        return bidRepository.save ( bid );
     }
 
     @Override
@@ -114,8 +128,8 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public void softDelete(Bid bid) {
-        bid.setDeleted(true);
-        bidRepository.save(bid);
+        bid.setDeleted ( true );
+        bidRepository.save ( bid );
     }
 
     @Override
@@ -125,11 +139,11 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public List<BidDTO> findByRelatedOfferId(long id) {
-        return bidRepository.findByRelatedOfferId(id);
+        return bidRepository.findByRelatedOfferId ( id );
     }
 
     @Override
     public List<BidDTO> getAllBids() {
-        return bidRepository.getAllBids();
+        return bidRepository.getAllBids ();
     }
 }
