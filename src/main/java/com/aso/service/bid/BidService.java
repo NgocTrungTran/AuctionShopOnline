@@ -17,5 +17,5 @@ public interface BidService extends IGeneralService<Bid> {
 
     Bid deleteBid(Long auctionId, Long bidId);
 
-    List<BidDTO> findByRelatedOfferId(long id);
+    List<BidDTO> findByRelatedOfferId(Long id);
 }
