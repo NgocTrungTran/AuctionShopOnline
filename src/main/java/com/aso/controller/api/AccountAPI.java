@@ -289,7 +289,7 @@ public class AccountAPI {
             accountOption.setUpdatedBy(email);
             accountOption.setSurplus(accountOption.getSurplus().add(accountDTO.getSurplus()));
 
-            Account updatedAccount = accountService.save( accountOption );
+            Account updatedAccount = accountService.editAccount( accountOption );
             return new ResponseEntity<> ( updatedAccount.toAccountDTO (), HttpStatus.OK );
         } catch (Exception e) {
             return new ResponseEntity<>("Lỗi không nạp được tiền vào tài khoản! ", HttpStatus.INTERNAL_SERVER_ERROR);
