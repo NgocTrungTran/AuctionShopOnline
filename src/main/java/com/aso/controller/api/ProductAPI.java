@@ -186,13 +186,13 @@ public class ProductAPI {
             return appUtil.mapErrorToResponse ( bindingResult );
         }
         account.get().setSurplus(account.get().getSurplus().subtract(productDTO.getCheatMoney()));
-        accountService.save(account.get());
+        accountService.editAccount(account.get());
         if (account.get().getSurplus().compareTo(BigDecimal.ZERO) < 0) {
             throw new ResourceNotFoundException("Số dư tài khoản không đủ! Vui lòng nạp thêm tiền");
         }
         String checkPrice = String.valueOf ( new BigDecimal ( String.valueOf ( productDTO.getPrice () ) ) );
         if ( !checkPrice.toString ().matches ( "\"(^$|[0-9]*$)\"" ) ) {
-            productDTO.setSlug ( Validation.makeSlug ( productDTO.getTitle () + productDTO.getTs () ));
+            productDTO.setSlug ( Validation.makeSlug ( productDTO.getTitle ()) + "-" + productDTO.getTs () );
             productDTO.setId ( 0L );
             productDTO.setCreatedBy ( email );
             productDTO.toProduct ().setDeleted ( false );

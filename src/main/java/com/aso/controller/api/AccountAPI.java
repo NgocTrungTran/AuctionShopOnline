@@ -208,7 +208,7 @@ public class AccountAPI {
         if ( account.isPresent () ) {
             try {
                 account.get ().setDeleted ( true );
-                accountService.save ( account.get () );
+                accountService.editAccount ( account.get () );
                 return new ResponseEntity<> ( HttpStatus.OK );
             } catch (DataIntegrityViolationException e) {
                 return new ResponseEntity<> ( HttpStatus.NOT_FOUND );
