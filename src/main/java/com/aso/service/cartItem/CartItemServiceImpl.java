@@ -1,7 +1,6 @@
 package com.aso.service.cartItem;
 
 
-import com.aso.exception.AccountInputException;
 import com.aso.exception.DataInputException;
 import com.aso.exception.DataOutputException;
 import com.aso.model.*;
@@ -14,8 +13,6 @@ import com.aso.repository.StatusRepository;
 import com.aso.service.account.AccountService;
 import com.aso.service.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,11 +97,6 @@ public class CartItemServiceImpl implements CartItemService {
         return null;
     }
 
-//    @Override
-//    public void delete(Long cartItem) {
-//        cartItemRepository.delete(cartItem);
-//    }
-
     @Override
     public Optional<CartItemDTO> getCartItemDTOById(Long id) {
         return cartItemRepository.getCartItemDTOById ( id );
@@ -139,14 +131,15 @@ public class CartItemServiceImpl implements CartItemService {
         if ( cartItemDTOOptional.isPresent () ) {
             cartItemDTO.setId ( cartItemDTOOptional.get ().getId () );
             cartItemDTO.setQuantity ( cartItemDTOOptional.get ().getQuantity () + cartItemDTO.getQuantity () );
-        } else {
-            cartItemDTO.setPrice ( product.get ().getPrice () );
         }
 
+        if ( product.get ().getAction () ) {
+            cartItemDTO.setAmountTransaction (cartItemDTO.getPrice () );
+        } else {
+            cartItemDTO.setPrice ( product.get ().getPrice () );
+            cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
+        }
         cartItemDTO.setProduct ( product.get ().toProductDTO () );
-        cartItemDTO.setPrice ( product.get ().getPrice () );
-        cartItemDTO.setAmountTransaction ( product.get ().getPrice ().multiply ( BigDecimal.valueOf ( cartItemDTO.getQuantity () ) ) );
-
 
         try {
             return cartItemRepository.save ( cartItemDTO.toCartItem () );
@@ -154,8 +147,6 @@ public class CartItemServiceImpl implements CartItemService {
             throw new RuntimeException (e.getMessage ());
         }
     }
-
-
 
     @Override
     public void removeById(CartItem cartItem) {
@@ -185,8 +176,6 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem saveInDetail(CartItem cartItem) {
-//        Optional<CartItemDTO> cartItem1 = cartItemRepository.getCartItemDTOByCode(cartItem.getTitle(), cartItem.getProduct().getTitle());
-//        cartItem.setId(cartItem1.get().getId());
         return null;
     }
 

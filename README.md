@@ -1,10 +1,14 @@
-# AuctionShopOnline
-## C0322G1 - member:
-- Đinh Phan Thị Khánh Hằng
-- Mai Công Phước
-- Trần Ngọc Trung
-- Trần Hồng Phong
+# Dự án Tốt nghiệp: Cửa hàng đấu giá trực tuyến - Auctions Shop Online
+## Thực hiện bởi nhóm: HPTP Team 
+1. Trần Ngọc Trung: Trưởng nhóm
+2. Đinh Phan Thị Khánh Hằng
+3. Mai Công Phước
+4. Trần Hồng Phong
 
-### 1. Dự án Auction Shop Online (Cửa hàng đấu giá trực tuyến)
-### 2. Kiến thức & Công nghệ áp dụng
-### 3. Link Backlog (tính năng)
+### 1. Kiến thức & Công nghệ áp dụng: Java, Spring Boot, React JS, HTML, CSS, JavaScript, JSX, My SQL, GitHub, Bootstrap,..
+### 2. Link Trello: Phân chia công việc - Theo mô hình tổ chức SCRUM: 
+    https://trello.com/b/2Ea7U8mE/auction-online
+### 3. Link Use Case:
+    https://drive.google.com/file/d/1_sk80wn8JAM5hS417r_aXRw0_AtzHnG-/view?usp=share_link
+### 4. Link sản phẩm:
+

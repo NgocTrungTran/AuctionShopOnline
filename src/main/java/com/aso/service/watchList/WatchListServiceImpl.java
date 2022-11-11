@@ -20,10 +20,7 @@ import java.util.Optional;
 public class WatchListServiceImpl implements WatchListService{
     @Autowired
     private WatchListRepository watchListRepository;
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private ProductRepository productRepository;
+
     @Override
     public Iterable<WatchList> findAll() {
         return null;

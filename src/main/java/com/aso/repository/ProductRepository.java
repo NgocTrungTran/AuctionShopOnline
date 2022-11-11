@@ -132,20 +132,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM Product AS p WHERE p.deleted = false AND p.moderation = true AND p.action = false ORDER BY p.id DESC")
     List<ProductDTO> findAllProductsDTOTheShop();
 
-//    @Query("SELECT NEW com.aso.model.dto.ProductDTO (" +
-//            "p.id, " +
-//            "p.title, " +
-//            "p.slug, " +
-//            "p.image, " +
-//            "p.price, " +
-//            "p.sold, " +
-//            "p.viewed, " +
-//            "p.category, " +
-//            "p.available " +
-//            ") " +
-//            "FROM Product AS p WHERE p.deleted = true ")
-//    List<ProductDTO> findAllProductsDTOTrash();
-
     Boolean existsByTitle(String title);
 
     void deleteById(Product id);

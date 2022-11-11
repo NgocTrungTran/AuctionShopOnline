@@ -80,7 +80,6 @@ public class ReviewAPI {
     }
 
     @PutMapping("/delete-soft/{id}")
-    //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doDeleteReview(@PathVariable Long id) {
         Optional<Review> optionalReview = reviewService.findById(id);
         if (optionalReview.isPresent()) {

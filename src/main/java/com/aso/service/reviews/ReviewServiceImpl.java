@@ -1,6 +1,7 @@
 package com.aso.service.reviews;
 
 import com.aso.exception.DataInputException;
+import com.aso.exception.DataOutputException;
 import com.aso.model.*;
 import com.aso.model.dto.ReviewDTO;
 import com.aso.repository.ProductRepository;
@@ -68,27 +69,31 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review createReview(ReviewDTO reviewDTO) {
-        Optional<Account> account = accountService.findById(reviewDTO.getAccount().getId());
-        if (account.isEmpty()) {
-            throw new DataInputException("Tài khoản không tồn tại!");
+        try {
+            Optional<Account> account = accountService.findById(reviewDTO.getAccount().getId());
+            if (account.isEmpty()) {
+                throw new DataInputException("Tài khoản không tồn tại!");
+            }
+
+            Optional<Product> product = productRepository.findById(reviewDTO.getProduct().getId());
+            if ((product.isEmpty())) {
+                throw new DataInputException("Sản phẩm không tồn tại!");
+            }
+            reviewDTO.setAccount(account.get().toAccountDTO());
+            reviewDTO.setProduct(product.get().toProductDTO());
+
+            Review review = reviewDTO.toReview();
+            Review savedReview = null;
+
+            productRepository.save(product.get());
+            review.setCreatedBy(account.get().getCreatedBy());
+            review.setProduct(product.get());
+            savedReview = reviewRepository.save(review);
+
+            return savedReview;
+        } catch (Exception e) {
+            throw new DataOutputException ( "Hãy đăng nhập để thực hiện thao tác này" );
         }
-
-        Optional<Product> product = productRepository.findById(reviewDTO.getProduct().getId());
-        if ((product.isEmpty())) {
-            throw new DataInputException("Sản phẩm không tồn tại!");
-        }
-        reviewDTO.setAccount(account.get().toAccountDTO());
-        reviewDTO.setProduct(product.get().toProductDTO());
-
-        Review review = reviewDTO.toReview();
-        Review savedReview = null;
-
-        productRepository.save(product.get());
-        review.setCreatedBy(account.get().getCreatedBy());
-        review.setProduct(product.get());
-        savedReview = reviewRepository.save(review);
-
-        return savedReview;
     }
 
     @Override

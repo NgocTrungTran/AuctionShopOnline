@@ -2,22 +2,15 @@ package com.aso.model.dto;
 
 
 import com.aso.model.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 @NoArgsConstructor
-//@AllArgsConstructor
 @Getter
 @Setter
 @Accessors(chain = true)

@@ -25,7 +25,6 @@ public class JwtService {
         claims.put("role", userPrincipal.getAuthorities());
 
         return Jwts.builder()
-//                .setSubject((userPrincipal.getUsername()))
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + JWT_TOKEN_VALIDITY))

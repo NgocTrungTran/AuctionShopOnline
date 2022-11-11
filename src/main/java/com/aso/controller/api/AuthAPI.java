@@ -8,7 +8,6 @@ import com.aso.model.dto.AccountDTO;
 import com.aso.service.account.AccountService;
 import com.aso.service.gmail.MyConstants;
 import com.aso.service.jwt.JwtService;
-import com.aso.service.role.RoleService;
 import com.aso.utils.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,8 +45,6 @@ public class AuthAPI {
     private AccountService accountService;
 
     @Autowired
-    private RoleService roleService;
-    @Autowired
     public JavaMailSender emailSender;
     @Autowired
     private AppUtil appUtils;
@@ -84,15 +81,11 @@ public class AuthAPI {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken (account.getEmail(), account.getPassword()));
-//            System.out.println("authentication => " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = jwtService.generateTokenLogin(authentication);
-//            System.out.println("jwt => " + jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            System.out.println("userDetails => " + userDetails);
             Account currentUser = accountService.getByEmail(account.getEmail()).get ();
-//            System.out.println("currentUser => " + currentUser);
 
             JwtResponse jwtResponse = new JwtResponse(
                     jwt,
@@ -107,7 +100,6 @@ public class AuthAPI {
                     .secure(false)
                     .path("/")
                     .maxAge(60 * 60 * 1000 * 2)
-//                    .domain("http://localhost:3000")
                     .build();
 
             System.out.println(jwtResponse);
