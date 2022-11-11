@@ -192,7 +192,7 @@ public class ProductAPI {
         }
         String checkPrice = String.valueOf ( new BigDecimal ( String.valueOf ( productDTO.getPrice () ) ) );
         if ( !checkPrice.toString ().matches ( "\"(^$|[0-9]*$)\"" ) ) {
-            productDTO.setSlug ( Validation.makeSlug ( productDTO.getTitle () ) );
+            productDTO.setSlug ( Validation.makeSlug ( productDTO.getTitle () + productDTO.getTs () ));
             productDTO.setId ( 0L );
             productDTO.setCreatedBy ( email );
             productDTO.toProduct ().setDeleted ( false );
@@ -285,6 +285,7 @@ public class ProductAPI {
                 Date dt = new Date();
                 Calendar c = Calendar.getInstance();
                 c.setTime(dt);
+//                c.add(Calendar.DATE, Integer.parseInt(p.get().getCountday()));
                 c.add(Calendar.MINUTE, 5);
                 dt = c.getTime ();
                 auction.setAuctionEndTime ( dt );
