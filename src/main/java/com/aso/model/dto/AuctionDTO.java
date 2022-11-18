@@ -7,7 +7,7 @@ import com.aso.model.Product;
 import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
 import com.aso.utils.PriceConstraint;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -51,7 +51,7 @@ public class AuctionDTO extends BaseEntity {
     private ItemStatus itemStatus;
 
     @PriceConstraint
-    @Schema(example = "1.00")
+//    @Schema(example = "1.00")
     private BigDecimal startingPrice;
 
     private BigDecimal currentPrice;

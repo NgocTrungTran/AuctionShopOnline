@@ -5,7 +5,7 @@ import com.aso.model.Auction;
 import com.aso.model.BaseEntity;
 import com.aso.model.Bid;
 import com.aso.utils.PriceConstraint;
-import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -29,7 +29,7 @@ public class BidDTO extends BaseEntity {
     private Date updateAt;
     private String updateBy;
 
-    @Schema(example = "sample@mail.com")
+//    @Schema(example = "sample@mail.com")
     @Email(regexp = "[^@]+@[^@]+\\.[^@.]+", message = "Email is not valid")
     private String email;
     @PriceConstraint

@@ -44,7 +44,7 @@ public class CategoryAPI {
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
         Optional<CategoryDTO> categoryDTO = categoryService.findCategoryDTOById(id);
-        if (categoryDTO.isEmpty()) {
+        if (!categoryDTO.isPresent ()) {
             throw new ResourceNotFoundException("Danh sách thể loại trống!");
         }
         return new ResponseEntity<>(categoryDTO.get().toCategory(), HttpStatus.OK);
@@ -87,7 +87,7 @@ public class CategoryAPI {
             throw new DataInputException("Loại sản phẩm đã tồn tại!");
         }
         Optional<Category> category = categoryService.findById(id);
-        if (category.isEmpty()) {
+        if (!category.isPresent ()) {
             return new ResponseEntity<>("Không tồn tại danh mục!", HttpStatus.NOT_FOUND);
         }
         try {

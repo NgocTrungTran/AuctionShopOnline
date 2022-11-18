@@ -112,7 +112,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         Optional<CartDTO> cartDTOOptional = cartService.findCartDTOByIdAccountInfo ( accountId );
 
-        if ( cartDTOOptional.isEmpty () ) {
+        if ( !cartDTOOptional.isPresent () ) {
             Cart cart = new Cart ();
             StatusDTO status = statusRepository.findStatusDTOById ( 2L );
             cart.setAccount ( accountOptional.get () );
@@ -158,7 +158,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         for (CartItemDTO cartItem : cartItemsDTO) {
             Optional<CartItem> cartItemOptional = cartItemRepository.findById ( cartItem.getId () );
-            if ( cartItemOptional.isEmpty () ) {
+            if ( !cartItemOptional.isPresent () ) {
                 throw new Error ( "Sản phẩm " + cartItem.getTitle () + " không tồn tại trong giỏ hàng." );
             }
             CartItem newCartItem = cartItemOptional.get ();

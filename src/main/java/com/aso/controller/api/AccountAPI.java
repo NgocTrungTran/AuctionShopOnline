@@ -71,7 +71,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByUsername(username);
 
-        if (accountOptional.isEmpty()) {
+        if (!accountOptional.isPresent ()) {
             throw new ResourceNotFoundException("Tài khoản không tồn tại!");
         }
 
@@ -88,7 +88,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> accountByIdDTO = accountService.findAccountByIdDTO(account_id);
 
-        if (accountByIdDTO.isEmpty()) {
+        if (!accountByIdDTO.isPresent ()) {
             throw new ResourceNotFoundException("Tài khoản không tồn tại!");
         }
 
@@ -116,7 +116,7 @@ public class AccountAPI {
 
         Optional<Role> optionalRole = roleService.findById ( accountDTO.getRole ().getId () );
 
-        if (optionalRole.isEmpty()) {
+        if (!optionalRole.isPresent ()) {
             bindingResult.addError ( new FieldError ( "role", "role", " Chức năng Role không hợp lệ ! " ) );
         }
 
@@ -238,7 +238,7 @@ public class AccountAPI {
 
         Optional<AccountDTO> accountOptional = accountService.findUserDTOByEmail(email);
 
-        if (accountOptional.isEmpty()) {
+        if (!accountOptional.isPresent ()) {
             throw new ResourceNotFoundException("Email không tồn tại!");
         }
         return new ResponseEntity<>(accountOptional.get().toAccount(), HttpStatus.OK);
@@ -264,7 +264,7 @@ public class AccountAPI {
     @PostMapping("/update/password")
     public ResponseEntity<?> updatePasswordAccount(@RequestBody AccountDTO accountDTO) {
         Optional<Account> accountOptional = accountService.findById ( accountDTO.getId() );
-        if (accountOptional.isEmpty()) {
+        if (!accountOptional.isPresent ()) {
             throw new ResourceNotFoundException("Tài khoản không tồn tại!");
         }
         try {

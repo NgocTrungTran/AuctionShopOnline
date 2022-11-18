@@ -66,7 +66,7 @@ public class ProductAPI {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( createdBy );
 
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
 
@@ -160,7 +160,7 @@ public class ProductAPI {
         }
         Long product_id = Long.parseLong ( productId );
         Optional<Product> productOptional = productService.findById ( product_id );
-        if ( productOptional.isEmpty () ) {
+        if ( !productOptional.isPresent () ) {
             throw new ResourceNotFoundException ( "Danh sách sản phẩm trống!" );
         }
         return new ResponseEntity<> ( productOptional.get ().toProductDTO (), HttpStatus.OK );
@@ -171,7 +171,7 @@ public class ProductAPI {
 
         Optional<Product> productOptional = productService.findBySlug ( slug );
 
-        if ( productOptional.isEmpty () ) {
+        if ( !productOptional.isPresent () ) {
             throw new ResourceNotFoundException ( "Sản phẩm không tồn tại" );
         }
         return new ResponseEntity<> ( productOptional.get ().toProductDTO (), HttpStatus.OK );
@@ -224,7 +224,7 @@ public class ProductAPI {
         }
 
         Optional<Product> p = productService.findById ( id );
-        if ( p.isEmpty () ) {
+        if ( !p.isPresent () ) {
             return new ResponseEntity<> ( "Không tồn tại sản phẩm", HttpStatus.NOT_FOUND );
         }
         try {
@@ -260,7 +260,7 @@ public class ProductAPI {
     public ResponseEntity<?> doModeration(@PathVariable Long id) {
         String email = appUtil.getPrincipalEmail ();
         Optional<Product> p = productService.findById ( id );
-        if ( p.isEmpty () ) {
+        if ( !p.isPresent () ) {
             return new ResponseEntity<> ( "Không tồn tại sản phẩm", HttpStatus.NOT_FOUND );
         }
         try {
@@ -341,7 +341,7 @@ public class ProductAPI {
 
         Optional<Product> product = productService.findProductBySlug ( slug );
 
-        if ( product.isEmpty () ) {
+        if ( !product.isPresent () ) {
             throw new DataInputException ( "Id sản phẩm không tìm thấy!" );
         }
         productDTO.setId ( product.get ().getId () );

@@ -17,8 +17,8 @@ public class ItemStatusConverter implements AttributeConverter<ItemStatus, Strin
         }
         String itemStatusString = null;
         switch (itemStatus) {
-            case NEW -> itemStatusString = "NEW";
-            case USED -> itemStatusString = "USED";
+            case NEW : itemStatusString = "NEW";break;
+            case USED : itemStatusString = "USED";break;
         }
         return itemStatusString;
     }
@@ -30,8 +30,8 @@ public class ItemStatusConverter implements AttributeConverter<ItemStatus, Strin
         }
         ItemStatus itemStatus = null;
         switch (s) {
-            case "NEW" -> itemStatus = ItemStatus.NEW;
-            case "USED" -> itemStatus = ItemStatus.USED;
+            case "NEW" : itemStatus = ItemStatus.NEW;break;
+            case "USED" : itemStatus = ItemStatus.USED;break;
         }
         return itemStatus;
     }

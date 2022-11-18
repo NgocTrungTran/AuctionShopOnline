@@ -54,7 +54,7 @@ public class OrderAPI {
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> findAllOrderDetailById(@PathVariable Long id){
         Optional<OrderDetail> orderDetailDTOS = orderDetailService.findById(id);
-        if ( orderDetailDTOS.isEmpty () ){
+        if ( !orderDetailDTOS.isPresent () ){
             throw new RuntimeException("Không tìm thấy order");
         }
         return new ResponseEntity<>(orderDetailDTOS.get().toOrderDetailDTO(),HttpStatus.OK);
@@ -157,7 +157,7 @@ public class OrderAPI {
     public ResponseEntity<?> doRemoveOrder(@PathVariable Long orderId) {
         try {
             Optional<Order> orderOptional = orderService.findById ( orderId );
-            if ( orderOptional.isEmpty () ) {
+            if ( !orderOptional.isPresent () ) {
                 throw new RuntimeException ("Đơn hàng không tồn tại");
             }
             orderService.doRemoveOrder ( orderId );

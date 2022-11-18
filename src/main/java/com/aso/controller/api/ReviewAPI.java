@@ -46,7 +46,7 @@ public class ReviewAPI {
         }
         Long review_id = Long.parseLong(reviewId);
         Optional<Review> reviewOptional = reviewService.findById(review_id);
-        if (reviewOptional.isEmpty()) {
+        if (!reviewOptional.isPresent ()) {
             throw new ResourceNotFoundException("Không tồn tại đánh giá!");
         }
         return new ResponseEntity<>(reviewOptional.get().toReviewDTO(), HttpStatus.OK);
@@ -65,7 +65,7 @@ public class ReviewAPI {
             return appUtils.mapErrorToResponse(bindingResult);
         }
         Optional<Review> review = reviewService.findById(id);
-        if (review.isEmpty()) {
+        if (!review.isPresent ()) {
             return new ResponseEntity<>("Không tìm thấy đánh giá!", HttpStatus.NOT_FOUND);
         }
         try {

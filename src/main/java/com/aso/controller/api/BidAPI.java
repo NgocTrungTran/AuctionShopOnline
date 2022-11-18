@@ -98,7 +98,7 @@ public class BidAPI {
         Long bid_id = Long.parseLong(bidId);
         Optional<Bid> bidOptional = bidService.findById(bid_id);
 
-        if (bidOptional.isEmpty()) {
+        if (!bidOptional.isPresent ()) {
             throw new ResourceNotFoundException("Danh sách đấu thầu trống!");
         }
         return new ResponseEntity<>(bidOptional.get().toBidDTO(), HttpStatus.OK);

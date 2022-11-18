@@ -32,7 +32,7 @@ public class CartAPI {
     @GetMapping("/{accountId}")
     public ResponseEntity<?> getCartByUserName(@PathVariable Long accountId){
         Optional<CartDTO> cartDTO = cartService.findCartDTOByIdAccountInfo ( accountId );
-        if ( cartDTO.isEmpty () ) {
+        if ( !cartDTO.isPresent () ) {
             throw new DataInputException ( "Không tồn tại giỏ hàng!" );
         }
 
@@ -47,7 +47,7 @@ public class CartAPI {
 
         Optional<Account> accountOptional = accountService.findById ( cartDTO.getAccount ().getId () );
 
-        if ( accountOptional.isEmpty () ) {
+        if ( !accountOptional.isPresent () ) {
             return new ResponseEntity<>("Tài khoản không tồn tại!",HttpStatus.NO_CONTENT);
         }
 

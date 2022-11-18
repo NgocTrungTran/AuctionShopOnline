@@ -44,11 +44,11 @@ public class BidServiceImpl implements BidService {
                 throw new ResourceNotFoundException("Bạn phải đăng nhập để thực hiện thao tác này");
             }
             Optional<Account> account = accountService.findById(bidDTO.getAccount().getId());
-            if (account.isEmpty()) {
+            if (!account.isPresent ()) {
                 throw new DataInputException("Tài khoản không tồn tại!");
             }
             Optional<Auction> auction = auctionRepository.findById(bidDTO.getAuction().getId());
-            if ((auction.isEmpty())) {
+            if (!auction.isPresent ()) {
                 throw new DataInputException("Phiên đấu giá không tồn tại!");
             }
             List<BidDTO> bidDTOList = bidRepository.findByRelatedOfferId(bidDTO.getAuction().getId());

@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO doCheckoutOrder(Long accountId, OrderDTO orderDTO) {
         Optional<Account> accountOptional = accountRepository.findById ( accountId );
-        if ( accountOptional.isEmpty () ) {
+        if ( !accountOptional.isPresent () ) {
             throw new AccountInputException ( "Tài khoản không tồn tại" );
         }
         StatusDTO status = statusRepository.findStatusDTOById ( 7L );

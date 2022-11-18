@@ -45,7 +45,7 @@ public class CartItemsAPI {
     public ResponseEntity<?> getCartByAccountId(@PathVariable String email) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( email );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại!" );
             }
             List<CartItemDTO> cartItemsDTO = cartItemService.findCartItemDTOByEmail(email);
@@ -59,7 +59,7 @@ public class CartItemsAPI {
         List<CartItemDTO> cartItemDTOList = new ArrayList<> ();
         try {
             Optional<Cart> cartOptional = cartService.findById ( cartId );
-            if ( cartOptional.isEmpty () ) {
+            if ( !cartOptional.isPresent () ) {
                 throw new DataInputException ( "Giỏ hàng không tồn tại!" );
             }
             List<CartItem> cartItems = cartItemService.findAllByCart (cartOptional.get ());
@@ -86,7 +86,7 @@ public class CartItemsAPI {
         List<String> errors = new ArrayList<> ();
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
-            if ( cartItemOptional.isEmpty () ) {
+            if ( !cartItemOptional.isPresent () ) {
                 throw new DataOutputException ( "Không tồn tại sản phẩm này trong giỏ hàng" );
             }
 
@@ -109,7 +109,7 @@ public class CartItemsAPI {
     public ResponseEntity<?> increasingCartItem(@PathVariable Long cartItemId) {
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
-            if ( cartItemOptional.isEmpty () ) {
+            if ( !cartItemOptional.isPresent () ) {
                 throw new DataOutputException ( "Không tồn tại sản phẩm này trong giỏ hàng" );
             }
 
@@ -133,7 +133,7 @@ public class CartItemsAPI {
     public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
         try {
             Optional<CartItem> cartItemOptional = cartItemService.findById ( cartItemId );
-            if ( cartItemOptional.isEmpty () ) {
+            if ( !cartItemOptional.isPresent () ) {
                 throw new DataOutputException ( "Không tồn tại sản phẩm này trong giỏ hàng" );
             }
             CartItem newCartItem = cartItemOptional.get ();
@@ -153,7 +153,7 @@ public class CartItemsAPI {
     public ResponseEntity<?> removeCartItems(@PathVariable String email, @RequestBody List<CartItemDTO> cartItems) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( email );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 return new ResponseEntity<>("Tài khoản không tồn tại", HttpStatus.NO_CONTENT);
             }
             if ( cartItems.isEmpty () ) {
@@ -176,12 +176,12 @@ public class CartItemsAPI {
         }
         try {
             Optional<Account> accountOptional = accountService.findById ( accountId );
-            if(accountOptional.isEmpty ()) {
+            if(!accountOptional.isPresent ()) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
 
             Optional<Product> productOptional = productService.findProductBySlug ( cartItemsDTO.getProduct ().getSlug () );
-            if(productOptional.isEmpty ()) {
+            if(!productOptional.isPresent ()) {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 

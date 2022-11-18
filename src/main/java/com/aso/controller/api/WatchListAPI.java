@@ -34,7 +34,7 @@ public class WatchListAPI {
 
         try {
             Optional<Account> accountOptional = accountService.findById ( accountId );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
             List<WatchListDTO> watchListDTOS = watchListService.getWatchListDTOsByAccountId ( accountId );
@@ -52,12 +52,12 @@ public class WatchListAPI {
 
         try {
             Optional<Account> accountOptional = accountService.findById ( accountId );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
 
             Optional<Product> productOptional = productService.findProductBySlug ( productDTO.getSlug () ) ;
-            if (productOptional.isEmpty ()) {
+            if (!productOptional.isPresent ()) {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 
@@ -72,12 +72,12 @@ public class WatchListAPI {
     public ResponseEntity<?> addWatchedList(@PathVariable("accountId") Long accountId, @RequestBody ProductDTO productDTO) {
         try {
             Optional<Account> accountOptional = accountService.findById ( accountId );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
 
             Optional<Product> productOptional = productService.findProductBySlug ( productDTO.getSlug () ) ;
-            if (productOptional.isEmpty ()) {
+            if (!productOptional.isPresent ()) {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 
@@ -93,12 +93,12 @@ public class WatchListAPI {
     public ResponseEntity<?> removeWatchedList(@PathVariable("accountId") Long accountId, @RequestBody ProductDTO productDTO) {
         try {
             Optional<Account> accountOptional = accountService.findById ( accountId );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại" );
             }
 
             Optional<Product> productOptional = productService.findProductBySlug ( productDTO.getSlug () ) ;
-            if (productOptional.isEmpty ()) {
+            if (!productOptional.isPresent ()) {
                 throw new DataInputException ( "Sản phẩm không tồn tại" );
             }
 

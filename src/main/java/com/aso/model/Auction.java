@@ -5,7 +5,6 @@ import com.aso.model.enums.AuctionType;
 import com.aso.model.enums.ItemStatus;
 import com.aso.service.converter.AuctionTypeConverter;
 import com.aso.service.converter.ItemStatusConverter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,7 +21,7 @@ import java.util.List;
 @Table(name="auctions")
 @Builder
 @EqualsAndHashCode(of = "id")
-@Schema
+//@Schema
 @Accessors(chain = true)
 public class Auction extends BaseEntity{
 
@@ -40,11 +39,11 @@ public class Auction extends BaseEntity{
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    @Schema(description = "Auction type")
+//    @Schema(description = "Auction type")
     @Convert(converter = AuctionTypeConverter.class)
     private AuctionType auctionType;
 
-    @Schema(description = "Item status")
+//    @Schema(description = "Item status")
     @Convert(converter = ItemStatusConverter.class)
     private ItemStatus itemStatus;
 

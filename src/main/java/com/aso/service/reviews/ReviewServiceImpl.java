@@ -71,12 +71,12 @@ public class ReviewServiceImpl implements ReviewService{
     public Review createReview(ReviewDTO reviewDTO) {
         try {
             Optional<Account> account = accountService.findById(reviewDTO.getAccount().getId());
-            if (account.isEmpty()) {
+            if (!account.isPresent ()) {
                 throw new DataInputException("Tài khoản không tồn tại!");
             }
 
             Optional<Product> product = productRepository.findById(reviewDTO.getProduct().getId());
-            if ((product.isEmpty())) {
+            if (!product.isPresent ()) {
                 throw new DataInputException("Sản phẩm không tồn tại!");
             }
             reviewDTO.setAccount(account.get().toAccountDTO());

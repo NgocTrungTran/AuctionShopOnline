@@ -75,7 +75,7 @@ public class AuctionAPI {
         Long auction_id = Long.parseLong(auctionId);
         Optional<Auction> auctionOptional = auctionService.findById(auction_id);
 
-        if (auctionOptional.isEmpty()) {
+        if (!auctionOptional.isPresent ()) {
             throw new ResourceNotFoundException("Phiên đấu giá không tồn tại");
         }
         return new ResponseEntity<>(auctionOptional.get().toAuctionDTO(), HttpStatus.OK);
@@ -86,7 +86,7 @@ public class AuctionAPI {
     public ResponseEntity<?> getAuctionByProductId(@PathVariable Long productId) {
         Optional<AuctionDTO> auctionDTO = auctionService.findByAuctionByProductId(productId);
 
-        if (auctionDTO.isEmpty()) {
+        if (!auctionDTO.isPresent ()) {
             throw new ResourceNotFoundException("Phiên đấu giấ không tồn tại!");
         }
         return new ResponseEntity<>(auctionDTO.get(), HttpStatus.OK);
@@ -122,16 +122,16 @@ public class AuctionAPI {
         }
 
         Optional<Auction> auction = auctionService.findById(auctionId);
-        if (auction.isEmpty()) {
+        if (!auction.isPresent ()) {
             return new ResponseEntity<>("Phiên đấu giá không tồn tại!", HttpStatus.NOT_FOUND);
         }
 
         Optional<Account> account = accountService.findById(auctionDTO.getAccount().getId());
-        if (account.isEmpty()) {
+        if (!account.isPresent ()) {
             return new ResponseEntity<>("Tài khoản không tồn tại!", HttpStatus.NOT_FOUND);
         }
         Optional<Product> product = productService.findById(auctionDTO.getProduct().getId());
-        if (product.isEmpty()) {
+        if (!product.isPresent ()) {
             return new ResponseEntity<>("Sản phẩm không tồn tại!", HttpStatus.NOT_FOUND);
         }
 

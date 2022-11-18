@@ -44,7 +44,7 @@ public class OrderDetailAPI {
     public ResponseEntity<?> getOrderByAccountEmail(@PathVariable String email) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( email );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại!" );
             }
             List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findAllOrderDetailByAccountEmail (email);
@@ -57,7 +57,7 @@ public class OrderDetailAPI {
     public ResponseEntity<?> getOrderDetailByProductCreatedBy(@PathVariable String createdBy) {
         try {
             Optional<Account> accountOptional = accountService.getByEmail ( createdBy );
-            if ( accountOptional.isEmpty () ) {
+            if ( !accountOptional.isPresent () ) {
                 throw new AccountInputException ( "Tài khoản không tồn tại!" );
             }
             List<OrderDetailDTO> orderDetailDTOS = orderDetailService.findAllOrderDetailByProductCreatedBy (createdBy);
@@ -79,7 +79,7 @@ public class OrderDetailAPI {
 
             for (OrderDetailDTO orderDetailDTO: orderDetailDTOList) {
                 Optional<Product> productOptional = productService.findById ( orderDetailDTO.getProduct ().getId () );
-                if (productOptional.isEmpty ()) {
+                if (!productOptional.isPresent ()) {
                     throw new RuntimeException ("Không tồn tại " + orderDetailDTO.getProduct ().getTitle () + " trong dữ liệu");
                 }
                 Long currentAvailable = productOptional.get ().getAvailable ();
@@ -102,7 +102,7 @@ public class OrderDetailAPI {
         String email = appUtil.getPrincipalEmail ();
         try {
             Optional<OrderDetail> optionalOrderDetail = orderDetailService.findById ( orderDetailId );
-            if ( optionalOrderDetail.isEmpty () ) {
+            if ( !optionalOrderDetail.isPresent () ) {
                 throw new DataInputException ( "Đơn hàng không tồn tại" );
             }
 
@@ -113,7 +113,7 @@ public class OrderDetailAPI {
             }
 
             Optional<Status> statusOptional = statusService.findById ( statusDTO.getId () );
-            if ( statusOptional.isEmpty () ) {
+            if ( !statusOptional.isPresent () ) {
                 throw new DataOutputException ( "Trạng thái không tồn tại" );
             }
 
