@@ -1,4 +1,4 @@
-package com.aso.config;
+package com.aso.service.status.config;
 
 import com.aso.service.gmail.MyConstants;
 import org.springframework.context.annotation.Bean;
