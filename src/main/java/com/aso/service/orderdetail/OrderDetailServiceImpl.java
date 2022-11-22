@@ -133,6 +133,7 @@ public class OrderDetailServiceImpl  implements OrderDetailService{
             product.setSold ( currentSold + orderDetail.getQuantity () );
             productRepository.save ( product );
         }
+
         if ( status.getId () == 10 ) {
             Product product = orderDetail.getProduct ();
             Long currentAvailable = product.getAvailable ();
